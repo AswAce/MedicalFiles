@@ -20,6 +20,8 @@ public class ApplicationBeanConfiguration {
         return new ModelMapper();
     }
 
+
+
     @Bean
     public Validator validator(){
         return Validation.buildDefaultValidatorFactory().getValidator();

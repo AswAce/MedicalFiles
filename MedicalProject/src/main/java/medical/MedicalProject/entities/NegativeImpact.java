@@ -1,31 +1,31 @@
 package medical.MedicalProject.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.data.repository.cdi.Eager;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "negative_impacts")
 public class NegativeImpact extends IdBaseClass {
+    @NonNull
     private String type;
     @Column(name = "pain_level")
+    @NonNull
     private String painLevel;
     @Column(name = "danger_level")
+    @NonNull
     private int dangerLevel;
-    @ManyToMany(targetEntity = Disease.class, mappedBy = "negativeImpacts")
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Disease.class, mappedBy = "negativeImpacts")
     private Set<Disease> diseases;
 
-    @ManyToMany(targetEntity = Disease.class, mappedBy = "negativeImpacts")
-    private Set<Visitation> visitations;
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity = Disease.class, mappedBy = "negativeImpacts")
+    private Set<MedicalCheck> visitations;
 
 
 }

@@ -1,8 +1,6 @@
 package medical.MedicalProject.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,15 +12,15 @@ import java.util.Set;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "locations")
 public class Location extends IdBaseClass {
     @Column(name = "part_of_the_body")
+    @NonNull
     private String partOfTheBody;
-
-    @OneToMany(targetEntity = Visitation.class, mappedBy = "injuryLocation")
-    private Set<Visitation> visitations;
-
-    @OneToMany(targetEntity = Visitation.class, mappedBy = "injuryLocation")
+    @OneToMany(targetEntity = MedicalCheck.class, mappedBy = "injuryLocation")
+    private Set<MedicalCheck> visitations;
+    @OneToMany(targetEntity = MedicalCheck.class, mappedBy = "injuryLocation")
     private Set<Disease> diseases;
 
 }

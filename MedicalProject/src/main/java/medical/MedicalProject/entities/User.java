@@ -23,9 +23,8 @@ public class User extends IdBaseClass {
     private String firstName;
     @NonNull
     private String lastName;
-    @NonNull
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private HealthProfile healthProfile;
 

@@ -14,10 +14,9 @@ import java.time.LocalDateTime;
 public class BloodResult extends IdBaseClass {
 
     private LocalDateTime date;
+    private String result;
 
-    @ManyToOne(targetEntity = HealthProfile.class)
-    @JoinColumn(name = "profile_id")
-
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = HealthProfile.class)
     private HealthProfile healthProfile;
 
 }

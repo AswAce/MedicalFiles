@@ -10,10 +10,15 @@ import java.util.Set;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "visitations")
-public class Visitation extends IdBaseClass {
+@Table(name = "medical_checks")
+public class MedicalCheck extends IdBaseClass {
     private String name;
     private String diagnose;
+
+
+    @ManyToOne(targetEntity = MedicineBranch.class)
+//    @JoinColumn(name = "medicine_branch_id")
+    private MedicineBranch medicineBranch;
 
     private LocalDateTime date;
 

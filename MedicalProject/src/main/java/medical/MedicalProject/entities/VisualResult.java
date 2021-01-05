@@ -19,9 +19,5 @@ public class VisualResult extends IdBaseClass {
     private String type;
     private LocalDateTime date;
     private String picture;
-    @OneToOne
-    private Visitation visitation;
-    @OneToOne
-    private Disease disease;
 
 }

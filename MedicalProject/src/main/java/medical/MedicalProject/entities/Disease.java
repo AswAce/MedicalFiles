@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -33,8 +34,11 @@ public class Disease extends IdBaseClass {
     @JoinColumn(name = "disease_location_id")
     private Location diseaseLocation;
 
-    @OneToOne
+    @ManyToOne(targetEntity = MedicineBranch.class)
+    @JoinColumn(name = "medicine_branch_id")
+    private MedicineBranch medicineBranch;
 
+    @OneToOne(cascade = CascadeType.ALL)
     private VisualResult visualResult;
 
 }

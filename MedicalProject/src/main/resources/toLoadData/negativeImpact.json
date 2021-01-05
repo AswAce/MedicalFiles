@@ -1,0 +1,13 @@
+[
+  {"type":"lower blood pressure","painLevel": "1","dangerLevel": "5"},
+  {"type":"high blood pressure","painLevel": "2","dangerLevel": "5"},
+  {"type":"headache","painLevel": "5","dangerLevel": "1"},
+  {"type":"fever","painLevel": "4","dangerLevel": "3"},
+  {"type":"back pain","painLevel": "7","dangerLevel": "3"},
+  {"type":"numbness","painLevel": "3","dangerLevel": "3"},
+  {"type":"dizziness","painLevel": "3","dangerLevel": "4"},
+  {"type":"joint pain","painLevel": "6","dangerLevel": "6"},
+  {"type":"chest pain","painLevel": "6","dangerLevel": "6"},
+  {"type":"chest pain","painLevel": "6","dangerLevel": "6"},
+  {"type":"chest pain","painLevel": "6","dangerLevel": "22"}
+]
