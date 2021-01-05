@@ -64,7 +64,7 @@ public class DiseaseResultServiceImpl implements DiseaseResultService {
 
         diseaseForDb.setNegativeImpacts(getByType);
 
-        //set visual result for desease
+        //set visual result for deesease
         VisualResult visualResult = this.modelMapper.
                 map(diseaseDto.getVisualResultDto(), VisualResult.class);
         diseaseForDb.setVisualResult(visualResult);
