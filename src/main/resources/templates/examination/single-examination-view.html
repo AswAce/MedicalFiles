@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+
+<header>
+    <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+    <!-- // Header  -->
+
+
+    <!-- Navigation-->
+
+    <div class="content-wrapper">
+        <div class="container-fluid overflow-hidden">
+            <div class="row margin-tb-90px margin-lr-10px sm-mrl-0px">
+                <!-- Page Title -->
+
+                <!-- // Page Title -->
+
+                <div class="margin-tb-45px full-width">
+
+                    <div class="padding-30px background-white border-radius-20 box-shadow">
+                        <div id="page-title" class="padding-30px background-white full-width">
+                            <div class="container">
+                                <ol class="breadcrumb opacity-5 text-main-color">
+                                    <li><a href="/templates/home.html">Home</a><i
+                                            class="fas fa-arrow-right padding-left-10px text-main-color "></i></li>
+                                    <li><a href="/templates/doctor-profile/doctor-profile.html">Doctor profile</a><i
+                                            class="fas fa-arrow-right padding-left-10px text-main-color "></i></li>
+                                    <li><a href="/templates/doctor-profile/doctor-examinations.html">Doctor examinations</a><i
+                                            class="fas fa-arrow-right padding-left-10px text-main-color "></i></li>
+                                    <li class="active">Examination</li>
+                                </ol>
+                                <h1 class="font-weight-300"><i
+                                        class="fas fa-hand-holding-medical margin-right-10px text-main-color"></i>
+                                    Examination  Progress </h1>
+                            </div>
+                        </div>
+                        <div class="">
+                             
+                            <h4><i
+                                    class="fas fa-user-plus margin-right-10px margin-top-10px margin-bottom-10px text-main-color"></i>
+                                Patient name: </h4>
+
+
+                            <div class="form-group margin-bottom-20px">
+                                <div class="row">
+                                    <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i
+                                            class="fas fa-restroom margin-right-10px text-main-color"
+                                          ></i>
+                                          Sex</label
+                                        >
+                                         
+                                      </div>
+                                      <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i class="fas fa-hand-holding-medical margin-right-10px text-main-color"></i>
+                                          Age</label
+                                        >
+                                         
+                                      </div>
+                                      <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i
+                                            class="fas fa-arrows-alt-v margin-right-10px text-main-color"
+                                          ></i>
+                                          Height</label
+                                        >
+                                        
+                                      </div>
+                                      <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i class="fas fa-weight margin-right-10px"></i>
+                                          Weight</label
+                                        >
+                                        
+                                      </div>
+                                      <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i class="fas fa-book-medical margin-right-10px"></i>
+                                          BDI index</label
+                                        >
+                                        <!-- <input
+                                          type="text"
+                                          class="form-control form-control-sm"
+                                          placeholder="20.3"
+                                        /> -->
+                                      </div>
+                                      <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i class="fas fa-running margin-right-10px"></i>
+                                          Exercise</label
+                                        >
+                                       
+                                      </div>
+                                      <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i class="fas fa-wine-bottle margin-right-10px"></i>
+                                          Drinking habits</label
+                                        >
+                                         
+                                      </div>
+                                      <div class="col-md-6 margin-bottom-20px">
+                                        <label class="text-main-color" 
+                                          ><i class="fas fa-smoking margin-right-10px"></i>
+                                          Smoking habits</label
+                                        >
+                                     </div>
+                                        <div class="col-md-6"><label><i
+                                            class="fas fa-stethoscope margin-right-10px text-main-color"></i>
+                                        Department:</label>
+
+
+                                </div>
+                                <div class="col-md-6">
+                                    <label><i class="fas fa-user-md margin-right-10px text-main-color"></i> Doctor
+                                        name:</label>
+
+                                </div>
+                                      
+                                   
+                                
+                                   
+                                
+
+                            </div>
+                            
+
+
+                            <div class="margin-bottom-45px full-width">
+
+                                <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>  
+                                    Complain </h3>
+
+                                <div class="margin-bottom-20px">
+                                    <p class="form-control" placeholder="Enter  Admin Message  here"
+                                        id="exampleTextarea" rows="3"> Lorem ipsum dolor sit, amet consectetur
+                                        adipisicing elit. Eveniet omnis veniam dolorem quo perspiciatis culpa, dolore
+                                        quae quasi, fuga obcaecati hic necessitatibus laboriosam id quia inventore qui
+                                        vel voluptatum non!</p>
+
+                                </div>
+
+
+                            </div>
+                            <div class="form-group margin-bottom-20px">
+                                <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>  
+                                   Locations: part of the body side of the body exact locaiton  </h3>
+            
+                            </div>
+                            
+
+                                 
+
+
+
+                            
+
+                        </div>
+
+                        <div class="margin-tb-45px full-width">
+                            <h3><i class="fas fa-x-ray margin-right-10px text-main-color"></i> Additional data:
+                            </h3>
+                            <!-- Favorite item -->
+                            <div class="background-white thum-hover box-shadow hvr-float full-width  margin-bottom-45px">
+                                <a class="d-block text-grey-2 float-left margin-right-30px" href="#"><img src="http://placehold.it/200x200" class="height-100px" alt=""> </a>
+                                <h2>
+                                    <!-- //Todo  направи така че като
+                                         цъкнеш на снимката да се отваря в малко прозорче с х -->
+                                    <p   class="d-block text-dark text-capitalize text-medium margin-tb-15px">Type of additional data and date made</p>
+                                    <p   class="d-block text-dark text-capitalize text-medium margin-tb-15px">location</p>
+                                </h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- // Favorite item -->
+        
+        
+                            <!-- Favorite item -->
+                            <div class="background-white thum-hover box-shadow hvr-float full-width  margin-bottom-45px">
+                                <a class="d-block text-grey-2 float-left margin-right-30px" href="#"><img src="http://placehold.it/200x200" class="height-100px" alt=""> </a>
+                                <h2>
+                                    <a href="#" class="d-block text-dark text-capitalize text-medium margin-tb-15px">Alrayan Eye Clinic</a>
+                                    <a href="#" class="d-block text-grey-2 text-up-small"><i class="far fa-window-close"></i> Delete</a>
+                                </h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- // Favorite item -->
+        
+        
+                            <!-- Favorite item -->
+                            <div class="background-white thum-hover box-shadow hvr-float full-width  margin-bottom-45px">
+                                <a class="d-block text-grey-2 float-left margin-right-30px" href="#"><img src="http://placehold.it/200x200" class="height-100px" alt=""> </a>
+                                <h2>
+                                    <a href="#" class="d-block text-dark text-capitalize text-medium margin-tb-15px">Alrayan Eye Clinic</a>
+                                    <a href="#" class="d-block text-grey-2 text-up-small"><i class="far fa-window-close"></i> Delete</a>
+                                </h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- // Favorite item -->
+        
+        
+                            <!-- Favorite item -->
+                            <div class="background-white thum-hover box-shadow hvr-float full-width  margin-bottom-45px">
+                                <a class="d-block text-grey-2 float-left margin-right-30px" href="#"><img src="http://placehold.it/200x200" class="height-100px" alt=""> </a>
+                                <h2>
+                                    <a href="#" class="d-block text-dark text-capitalize text-medium margin-tb-15px">Alrayan Eye Clinic</a>
+                                    <a href="#" class="d-block text-grey-2 text-up-small"><i class="far fa-window-close"></i> Delete</a>
+                                </h2>
+                                <div class="clearfix"></div>
+                            </div>
+                            <!-- // Favorite item -->
+        
+                         
+        
+                        </div>
+
+                    </div>
+
+
+
+
+
+                </div>
+            </div>
+                <!-- /.container-fluid-->
+                <!-- /.content-wrapper-->
+                <div th:insert="fragments/fragments :: footer"></div>
+                <!-- Scroll to Top Button-->
+                <a class="scroll-to-top rounded" href="#page-top">
+                    <i class="fa fa-angle-up"></i>
+                </a>
+
+            </div>
+
+
+
+            <div th:insert="fragments/fragments :: js"></div>
+
+</body>
+
+</html>

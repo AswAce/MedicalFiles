@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+
+<header>
+  <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+    <!-- // Header  -->
+
+    <!-- Navigation-->
+
+    <div class="content-wrapper">
+      <div class="container-fluid overflow-hidden">
+        <div class="row margin-tb-90px margin-lr-10px sm-mrl-0px">
+          <!-- Page Title -->
+          <div id="page-title" class="padding-30px background-white full-width">
+            <div class="container">
+              <ol class="breadcrumb opacity-5">
+                <li><a href="/templates/home.html">Home</a><i class="fas fa-arrow-right padding-left-10px text-main-color " ></i></li>
+               
+                <li class="active">Doctor name Name</li>
+            </ol>
+              <h1 class="font-weight-300">Doctor Profile</h1>
+            </div>
+          </div>
+          <!-- // Page Title -->
+          <form action="" method="get">
+            <div class="row margin-tb-45px full-width">
+              <div class="col-md-4">
+                <div
+                  class="padding-15px background-white border-radius-20 box-shadow"
+                >
+                  <div class="col-lr-6 padding-20px left-20px right-0px">
+                    <img
+                      src="https://i.pinimg.com/originals/57/9e/d2/579ed2cedf82391c07ec8ca6d4812693.jpg"
+                      alt="placeholder 960"
+                      class="img-responsive"
+                    />
+                  </div>
+                  <label for="formFileSm" class="form-label text-main-color"><h3 class="text-bold">Change photo:</h3></label>
+                  <input class="form-control form-control-sm" id="formFileSm" type="file" />
+                  >
+                  <div class="background-second-color border-radius-10 margin-bottom-45px text-white box-shadow">
+                    <h3 class="padding-lr-30px padding-top-20px">
+                      <i class="far fa-clock margin-right-10px"></i>Working Time
+                    </h3>
+                    <div class="padding-bottom-30px">
+                      <ul class="padding-0px margin-0px">
+                        <li class="padding-lr-30px padding-tb-10px">
+                          Monday
+                          <input type="text" class="form-control form-control-sm" placeholder="9:00am-16:00pm" /> 
+                        </li>
+                        <li class="padding-lr-30px padding-tb-10px ba-2">
+                          Tuesday
+                          <input type="text" class="form-control form-control-sm" placeholder="9:00am-16:00pm" /> 
+                        </li>
+                        <li class="padding-lr-30px padding-tb-10px">
+                          Wednesday
+                          <input type="text" class="form-control form-control-sm" placeholder="9:00am-16:00pm" /> 
+                        </li>
+                        <li class="padding-lr-30px padding-tb-10px ba-2">
+                          Thursday
+                          <input type="text" class="form-control form-control-sm" placeholder="9:00am-16:00pm" /> 
+                        </li>
+                        <li class="padding-lr-30px padding-tb-10px">
+                          Friday
+                          <input type="text" class="form-control form-control-sm" placeholder="9:00am-16:00pm" /> 
+                        </li>
+
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <div class="margin-bottom-45px full-width">
+                  <div
+                    class="padding-30px background-white border-radius-20 box-shadow"
+                  >
+                    <div class="row">
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i class="fas fa-user-md margin-right-10px text-main-color"></i> Full
+                          name</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Doctor full name"
+                        />
+                      </div>
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i class="fas fa-user-md margin-right-10px text-main-color"></i>
+                          UserName</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Doctor Username"
+                        />
+                      </div>
+
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i
+                            class="far fa-envelope-open margin-right-10px text-main-color"
+                          ></i>
+                          Email</label
+                        >
+                        <input
+                          type="email"
+                          class="form-control form-control-sm"
+                          placeholder="info@yourname.com"
+                        />
+                      </div>
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i class="fas fa-mobile-alt margin-right-10px text-main-color"></i>
+                          Phone</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="002229456987"
+                        />
+                      </div>
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i
+                            class="fas fa-stethoscope margin-right-10px text-main-color"
+                          ></i>
+                          Specialty</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="info@yourname.com"
+                        />
+                      </div>
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i class="fas fa-hand-holding-medical margin-right-10px text-main-color"></i>
+                          Position</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="002229456987"
+                        />
+                      </div>
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i
+                            class="fas fa-clinic-medical margin-right-10px text-main-color"
+                          ></i>
+                          Room number</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="info@yourname.com"
+                        />
+                      </div>
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i class="fas fa-book-medical margin-right-10px"></i>
+                          Experience</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="002229456987"
+                        />
+                      </div>
+                    </div>
+                    <h3 class="text-main-color" >
+                      <i
+                        class="fas fa-heartbeat margin-right-10px text-main-color"
+                      ></i>
+                      Bio
+                    </h3>
+                    <hr />
+                    <div class="margin-bottom-20px">
+                      <textarea
+                        class="form-control"
+                        placeholder="Enter  Admin Message  here"
+                        id="exampleTextarea"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                    <div class="margin-bottom-20px">
+                      <label class="text-main-color" 
+                        ><i class="fas fa-biohazard margin-right-10px text-main-color"></i>
+                        Password</label
+                      >
+                      <input
+                        type="password"
+                        class="form-control form-control-sm"
+                        placeholder="002229456987"
+                      />
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i
+                            class="fas fa-biohazard margin-right-10px text-main-color"
+                          ></i>
+                          New Password</label
+                        >
+                        <input
+                          type="password"
+                          class="form-control form-control-sm"
+                          placeholder="info@yourname.com"
+                        />
+                      </div>
+                      <div class="col-md-6 margin-bottom-20px">
+                        <label class="text-main-color" 
+                          ><i class="fas fa-biohazard margin-right-10px text-main-color"></i>
+                          Repeat new password</label
+                        >
+                        <input
+                          type="password"
+                          class="form-control form-control-sm"
+                          placeholder="002229456987"
+                        />
+                      </div>
+                    </div>
+
+                    <a
+                            th:href="@{/doctors/doctor/Id/examinations}"
+                      class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
+                      >Examinations</a
+                    >
+                    <a
+                            th:href="@{/doctors/doctor/Id/comments}"
+                      class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
+                      >Comments</a
+                    >
+                    <a
+                            th:href="@{/doctors/doctor/Id/edit}"
+                      class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
+                      >Edit</a
+                    >
+                    <a
+                            th:href="@{/doctors/doctor/Id/delete}"
+                      class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
+                      >Delete</a
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.container-fluid-->
+      <!-- /.content-wrapper-->
+
+      <div th:insert="fragments/fragments :: footer"></div>
+
+      <!-- Scroll to Top Button-->
+      <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+      </a>
+
+
+    </div>
+
+<div th:insert="fragments/fragments :: js"></div>
+  </body>
+</html>

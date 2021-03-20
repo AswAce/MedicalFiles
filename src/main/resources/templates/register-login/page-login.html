@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+
+<header>
+    <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+<!-- // Header  -->
+
+<div id="page-title" class="padding-tb-30px gradient-white">
+    <div class="container text-center">
+        <ol class="breadcrumb opacity-5">
+            <li><a th:href="@{/home}">Home</a></li>
+            <li class="active">Login</li>
+        </ol>
+        <h1 class="font-weight-300">Login Page</h1>
+    </div>
+</div>
+
+<div class="container margin-bottom-100px">
+    <!--======= log_in_page =======-->
+    <div id="log-in" class="site-form log-in-form box-shadow border-radius-10">
+        <small th:if="${bad_credentials}" id="badCredentials"
+               class="text-light form-text bg-danger rounded">Wrong username or password </small>
+        <div class="form-output">
+            <form th:action="@{/users/login}"
+                  method="POST">
+                <div class="form-group label-floating">
+                    <label class="control-label"><h3>Your Username:</h3></label>
+                    <input class="form-control" type="text"
+                           minlength="3"
+                           maxlength="10"
+                           required
+                           name="username"
+                    >
+                </div>
+                <!--                    <div class="form-group label-floating">-->
+                <!--                        <label class="control-label"><h3>Your Email:</h3></label>-->
+                <!--                        <input class="form-control" placeholder="" type="email"-->
+
+                <!--                        >-->
+                <!--                    </div>-->
+                <div class="form-group label-floating">
+                    <label class="control-label"><h3>Your Password:</h3></label>
+                    <input class="form-control" placeholder="" type="password"
+                           minlength="8"
+                           required
+                           name="password"
+                    >
+                </div>
+
+                <div class="remember">
+                    <div class="checkbox">
+                        <label>
+                            <input name="optionsCheckboxes" type="checkbox">
+                            Remember Me
+                        </label>
+                    </div>
+
+                </div>
+
+                <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block"
+                        type="submit"> Log in
+                </button>
+
+                <!--                    <div class="or"></div>-->
+
+                <!--                    <a href="#" class="btn btn-md bg-facebook full-width btn-icon-left"><i class="fab fa-facebook margin-right-8px" aria-hidden="true"></i> Login with Facebook</a>-->
+
+                <!--                    <a href="#" class="btn btn-md bg-twitter full-width btn-icon-left"><i class="fab fa-twitter margin-right-8px" aria-hidden="true"></i> Login with Twitter</a>-->
+
+
+                <p>Don't you have an account? <a th:href="@{/users/register}">Register Now!</a></p>
+            </form>
+        </div>
+    </div>
+    <!--======= // log_in_page =======-->
+
+</div>
+<div th:insert="fragments/fragments :: footer"></div>
+<div th:insert="fragments/fragments :: js"></div>
+</body>
+
+</html>

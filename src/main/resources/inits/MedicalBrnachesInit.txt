@@ -1,0 +1,9 @@
+Cardiology - branch of medicine that deals with disorders of the heart and the blood vessels.
+Dermatology - branch of medicine that deals with the skin, hair, and nails.
+General practice - called (family medicine) is a branch of medicine that specializes in primary care.
+Neurology - branch of medicine that deals with the brain and the nervous system.
+Obstetrics - care of women during and after pregnancy
+Orthopaedics - a branch of medicine that deals with conditions involving the musculoskeletal system.
+Otorhinolaryngology - a branch of medicine that deals with the ears, nose, and throat.
+Pulmonology - a branch of medicine that deals with the respiratory system.
+Surgery - branch of medicine that uses operative techniques to investigate or treat both disease and injury, or to help improve bodily function or appearance.

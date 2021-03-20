@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+
+<header>
+    <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+<!-- // Header  -->
+
+<div id="page-title" class="padding-tb-30px gradient-white">
+    <div class="container text-center">
+        <ol class="breadcrumb opacity-5">
+            <li><a th:href="@{/home}">Home</a></li>
+            <li class="active">Sing Up</li>
+        </ol>
+        <h1 class="font-weight-300">Sing Up Page</h1>
+    </div>
+</div>
+
+<div class="container margin-bottom-100px">
+    <!--======= log_in_page =======-->
+    <div id="log-in" class="site-form log-in-form box-shadow border-radius-10">
+
+        <div class="form-output">
+
+            <form th:action="@{/users/register}"
+                  th:object="${registerUserBindingModel}"
+                  method="POST">
+
+                <div class="form-group label-floating">
+                    <label class="control-label"><h3>Your Username</h3></label>
+                    <input class="form-control" placeholder="Username" name="username" type="text"
+                           mixlength="3"
+                           maxlength="10"
+                           required
+                           th:field="*{username}"
+                           th:errorclass="is-invalid"
+                    >
+
+                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}" id="usernameError"
+                           class="text-light form-text bg-danger rounded">custom error</small>
+
+                    <small th:if="${userExist}" id="usernameUniqueError"
+                           class="text-light form-text bg-danger rounded">Username is already occupied</small>
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label"><h3>Your Email</h3></label>
+                    <input class="form-control" placeholder="" type="email"
+
+                           required
+                           th:field="*{email}"
+                           th:errorclass="is-invalid"
+
+                    >
+                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}" id="emailError"
+                           class="text-light form-text bg-danger rounded">custom error</small>
+
+                </div>
+                <div class="form-group label-floating">
+                    <label class="control-label"><h3>Your Password</h3></label>
+                    <input class="form-control" placeholder="" type="password"
+                           minlength="8"
+                           required
+                           th:field="*{password}"
+                           th:errorclass="is-invalid"
+                    >
+                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}" id="passwordError"
+                           class="text-light form-text bg-danger rounded">custom error</small>
+                </div>
+
+                <div class="form-group label-floating">
+                    <label class="control-label"><h3>Confirm Your Password</h3></label>
+                    <input class="form-control" placeholder="" name="repeatPassword" type="password"
+                           minlength="8"
+                           required
+                           th:field="*{repeatPassword}"
+                           th:errorclass="is-invalid">
+
+                    <small th:if="${#fields.hasErrors('repeatPassword')}" th:errors="*{repeatPassword}"
+                           id="confirmPasswordError"
+                           class="text-light form-text bg-danger rounded">custom error</small>
+                    <small th:if="${passwordDontMatch}" id="passwordMatchError"
+                           class="text-light form-text bg-danger rounded">Password does not match</small>
+                </div>
+
+                <div class="form-group label-floating is-select">
+                    <label class="control-label"><h3>Type of Account</h3></label>
+                    <select class="selectpicker form-control"
+                            th:field="*{role}"
+                            th:errorclass="is-invalid">
+                        <th:block th:each="role:${roles}">
+                            <option value="" th:value="${role.name}" th:text="${role.name}" selected>Select genre
+                            </option>
+                        </th:block>
+                    </select>
+
+                </div>
+
+
+                <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block"
+                        type="submit"> Register
+                </button>
+
+                <div class="or"></div>
+
+                <!--                <a href="#" class="btn  bg-facebook full-width btn-icon-left"><i-->
+                <!--                        class="fab fa-facebook margin-right-8px" aria-hidden="true"></i> Login with Facebook</a>-->
+
+
+                <p>you have an account? <a th:href="@{/users/login}"> Log in !</a></p>
+            </form>
+
+        </div>
+    </div>
+    <!--======= // log_in_page =======-->
+
+</div>
+
+<div th:insert="fragments/fragments :: footer"></div>
+<div th:insert="fragments/fragments :: js"></div>
+</body>
+
+</html>

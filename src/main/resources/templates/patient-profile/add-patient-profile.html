@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+
+<header>
+  <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+  <!-- // Header  -->
+
+  <!-- Navigation-->
+
+  <div class="content-wrapper">
+    <div class="container-fluid overflow-hidden">
+      <div class="row margin-tb-90px margin-lr-10px sm-mrl-0px">
+        <!-- Page Title -->
+        <div id="page-title" class="padding-30px background-white full-width">
+          <div class="container">
+            <ol class="breadcrumb opacity-5">
+              <li>
+                <a th:href="@{/home}">Home</a>
+                <i class="fas fa-arrow-right padding-left-10px"></i>
+              </li>
+
+              <li class="active">My profile</li>
+            </ol>
+            <h1 class="font-weight-300">Patient Profile</h1>
+          </div>
+        </div>
+        <!-- // Page Title -->
+        <form action="" method="get">
+          <div class="row margin-tb-45px full-width">
+           
+
+            <div class="col-md-8">
+              <div class="margin-bottom-45px full-width">
+                <div class="padding-30px background-white border-radius-20 box-shadow">
+                  <div class="row">
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i class="fas fa-user-plus margin-right-10px text-main-color"></i>
+                        Full name</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="Patient full name" />
+                    </div>
+                     
+
+                     
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i class="fas fa-mobile-alt margin-right-10px text-main-color"></i>
+                        Phone</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="002229456987" />
+                    </div>
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i class="fas fa-restroom margin-right-10px text-main-color"></i>
+                        Sex</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="info@yourname.com" />
+                    </div>
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i
+                          class="fas fa-hand-holding-medical margin-right-10px text-main-color"></i>
+                        Age</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="002229456987" />
+                    </div>
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i
+                          class="fas fa-arrows-alt-v margin-right-10px text-main-color"></i>
+                        Height</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="1.86 cm" />
+                    </div>
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i class="fas fa-weight margin-right-10px"></i>
+                        Weight</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="78kg" />
+                    </div>
+                    
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i class="fas fa-running margin-right-10px"></i>
+                        Exercise</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="20.3" />
+                    </div>
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i class="fas fa-wine-bottle margin-right-10px"></i>
+                        Drinking habits</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="20.3" />
+                    </div>
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label class="text-main-color"><i class="fas fa-smoking margin-right-10px"></i>
+                        Smoking habits</label>
+                      <input required type="text" class="form-control form-control-sm" placeholder="20.3" />
+                    </div>
+                    <div class="col-md-6 margin-bottom-20px">
+                      <label for="formFileSm" class="form-label text-main-color">Upload photo</label>
+                      <input required class="form-control form-control-sm" id="formFileSm" type="file" />
+                    </div>
+                  </div>
+                  <a href="#"
+                    class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block">Create</a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <div th:insert="fragments/fragments :: footer"></div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+
+  </div>
+
+
+
+<div th:insert="fragments/fragments :: js"></div>
+</body>
+
+</html>

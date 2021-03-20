@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+
+<header>
+  <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+    <!-- // Header  -->
+
+    <!-- Navigation-->
+    <nav
+      class="navbar navbar-expand-lg navbar-dark z-index-9 fixed-top"
+      id="mainNav"
+    >
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul
+          class="navbar-nav navbar-sidenav background-main-color admin-nav"
+          id="admin-nav"
+        >
+          <li class="nav-item">
+            <span class="nav-title-text">Main</span>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Dashboard"
+          >
+            <a class="nav-link" href="dashboard-home.html">
+              <i class="fas fa-fw fa-home"></i
+              ><span class="nav-link-text">Dashboard</span>
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="My items"
+          >
+            <a class="nav-link" href="dashboard-my-listings.html">
+              <i class="fa fa-fw fa-table"></i>
+              <span class="nav-link-text">My Listings</span>
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="My Favorites"
+          >
+            <a class="nav-link" href="dashboard-my-favorites.html">
+              <i class="fa fa-fw fa-heart"></i>
+              <span class="nav-link-text">My Favorites</span>
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Reviews"
+          >
+            <a class="nav-link" href="dashboard-reviews.html">
+              <i class="fa fa-fw fa-star"></i>
+              <span class="nav-link-text">Reviews</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <span class="nav-title-text">Example Pages</span>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Bookings"
+          >
+            <a class="nav-link" href="dashboard-bookings.html">
+              <i class="far fa-fw fa-bookmark"></i>
+              <span class="nav-link-text">Bookings</span>
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Add Listing"
+          >
+            <a class="nav-link active" href="dashboard-add-listing.html">
+              <i class="fa fa-fw fa-plus-circle"></i>
+              <span class="nav-link-text">Add Listing</span>
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Packages"
+          >
+            <a class="nav-link" href="dashboard-packages.html">
+              <i class="far fa-fw fa-list-alt"></i>
+              <span class="nav-link-text">Packages</span>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <span class="nav-title-text">User Area</span>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="My Profile"
+          >
+            <a class="nav-link" href="dashboard-my-profile.html">
+              <i class="fa fa-fw fa-user-circle"></i>
+              <span class="nav-link-text">My Profile</span>
+            </a>
+          </li>
+          <li
+            class="nav-item"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Sing Out"
+          >
+            <a
+              class="nav-link"
+              href="#"
+              data-toggle="modal"
+              data-target="#exampleModal"
+            >
+              <i class="fa fa-fw fa-sign-out-alt"></i>
+              <span class="nav-link-text">Sing Out</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <div class="content-wrapper">
+      <div class="container-fluid overflow-hidden">
+        <div class="row margin-tb-90px margin-lr-10px sm-mrl-0px">
+          <!-- Page Title -->
+
+          <!-- // Page Title -->
+          <!-- class="fas fa-hand-holding-medical -->
+          <div class="margin-tb-45px full-width">
+            <div
+              class="padding-30px background-white border-radius-20 box-shadow"
+            >
+              <div
+                id="page-title"
+                class="padding-30px background-white full-width"
+              >
+                <div class="container">
+                  <ol class="breadcrumb opacity-5">
+                    <li><a href="#">examinations</a><i class="fas fa-arrow-right padding-left-10px " ></i></li>
+                    <li><a href="#">examination id</a><i class="fas fa-arrow-right padding-left-10px"></i></li>
+                    <li class="active">Additional data</li>
+                  </ol>
+                  <h1 class="font-weight-300">
+                    <i
+                      class="fas fa-hand-holding-medical margin-right-10px text-main-color"
+                    ></i>
+                    Additional Data:
+                  </h1>
+                </div>
+              </div>
+              <h3>
+                <i
+                  class="fas fa-stethoscope margin-right-10px text-main-color"
+                ></i>
+                Examination
+              </h3>
+              
+              <form>
+                <div class="form-group margin-bottom-20px">
+                    <div class="form-group margin-bottom-20px">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label
+                              ><i
+                                class="fas fa-x-ray margin-right-10px text-main-color"
+                              ></i>
+                              Type:</label
+                            >
+                            <select class="form-control form-control-sm">
+                              <option>From the Enum</option>
+                              <option>From the Enum</option>
+                              <option>From the Enum</option>
+      
+                              <option>Pharmacies</option>
+                            </select>
+                          </div>
+                          <div class="col-md-6">
+                            <label
+                              ><i
+                                class="fas fa-file-medical margin-right-10px text-main-color"
+                              ></i>
+                             Upload file:</label
+                            >
+                           
+                          </div>
+                        </div>
+                      </div>
+                </div>
+                <div class="form-group margin-bottom-20px">
+                  <div class="row">
+                    <div class="col-md-6" class="form-group">
+                      <label
+                        ><i
+                          class="far fa-calendar-plus margin-right-10px text-main-color"
+                        ></i>
+                        Date:</label
+                      >
+                      <!-- Date input -->
+                      <label class="control-label" for="date"></label>
+                      <input
+                        class="form-control"
+                        id="date"
+                        name="date"
+                        placeholder="MM/DD/YYYY"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group margin-bottom-20px">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <label
+                        ><i
+                          class="fas fa-lungs-virus margin-right-10px text-main-color"
+                        ></i>
+                        Part of the body:</label
+                      >
+                      <select class="form-control form-control-sm">
+                        <option>From the Enum</option>
+                        <option>From the Enum</option>
+                        <option>From the Enum</option>
+
+                        <option>Pharmacies</option>
+                      </select>
+                    </div>
+                    <div class="col-md-6">
+                      <label
+                        ><i
+                          class="fas fa-user-injured margin-right-10px text-main-color"
+                        ></i>
+                        Side of the body:</label
+                      >
+                      <select class="form-control form-control-sm">
+                        <option>All Category</option>
+                        <option>Doctors</option>
+                        <option>Clinics</option>
+                        <option>Labs</option>
+                        <option>Pharmacies</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="margin-bottom-45px full-width">
+                  <div
+                    class="padding-30px background-white border-radius-20 box-shadow"
+                  >
+                    <h3>
+                      <i
+                        class="fas fa-heartbeat margin-right-10px text-main-color"
+                      ></i>
+                       Exact Location:
+                    </h3>
+                    <hr />
+                    <div class="margin-bottom-20px">
+                      <textarea
+                        class="form-control"
+                        placeholder="Enter  Admin Message  here"
+                        id="exampleTextarea"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </form>
+        
+              <a
+                href="#"
+                class="btn btn-lg border-2 btn-primary btn-block border-radius-15 padding-15px box-shadow"
+                ><i class="fas fa-hand-holding-medical"></i> Add Aditional Data</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid-->
+      <!-- /.content-wrapper-->
+      <div th:insert="fragments/fragments :: footer"></div>
+      <!-- Scroll to Top Button-->
+      <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+      </a>
+      <!-- Logout Modal-->
+
+    </div>
+
+    <div th:insert="fragments/fragments :: js"></div>
+
+  </body>
+</html>
