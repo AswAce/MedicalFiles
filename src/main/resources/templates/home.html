@@ -9,84 +9,170 @@
 <header>
     <nav th:replace="fragments/fragments :: header"></nav>
 </header>
-    <!-- // Header  -->
+<!-- // Header  -->
+<div th:insert="fragments/fragments :: alert"></div>
+<section class="banner padding-tb-100px sm-ptb-80px background-overlay"
+         style="background-image: url('http://placehold.it/1600x830');">
+    <div class="container z-index-2 position-relative">
+        <div class="title text-center">
+            <h1 class="text-title-large text-main-color font-weight-300 margin-bottom-15px">Hospital Happiness</h1>
+            <h4 class="font-weight-300 text-main-color text-up-small">A better Doctors , Clinic &amp; Departments .
+                We'll help you find it</h4>
+        </div>
+        <div class="row justify-content-center margin-tb-20px">
+            <div class="col-lg-8">
 
-    <section class="banner padding-tb-200px sm-ptb-80px background-overlay" style="background-image: url('http://placehold.it/1600x830');">
-        <div class="container z-index-2 position-relative">
-            <div class="title text-center">
-                <h1 class="text-title-large text-main-color font-weight-300 margin-bottom-15px">Hospital Happiness</h1>
-                <h4 class="font-weight-300 text-main-color text-up-small">A better Doctors , Clinic &amp; Departments . We'll help you find it</h4>
             </div>
-            <div class="row justify-content-center margin-tb-60px">
-                <div class="col-lg-8">
-                    
-                </div>
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-lg-7">
-                    <div   class="row" >
-                      
-                        <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
-                            <a th:href="@{/doctors/all}" class="d-block border-radius-15 hvr-float hvr-sh2">
-                                <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
-                                    <div class="icon margin-bottom-15px">
-                                        <img src="/img/icon/categorie-1.png" alt="">
-                                    </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="row">
 
-                                     Doctors
+                    <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
+                        <a th:href="@{/doctors/all}" class="d-block border-radius-15 hvr-float hvr-sh2">
+                            <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
+                                <div class="icon margin-bottom-15px">
+                                    <img src="/img/icon/categorie-1.png" alt="">
                                 </div>
-                            </a>
-                        </div>
-                        
-                        <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
-                            <a th:href="@{/departments/all}" class="d-block border-radius-15 hvr-float hvr-sh2">
-                                <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
-                                    <div class="icon margin-bottom-15px">
-                                        <img src="/img/icon/categorie-2.png" alt="">
-                                    </div>
-                                     Departments
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
-                            <a th:href="@{/comments/fromUserOr for user}" class="d-block border-radius-15 hvr-float hvr-sh2">
-                                <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
-                                    <div class="icon margin-bottom-15px">
-                                        <img src="/img/icon/categorie-3.png" alt="">
-                                    </div>
-                                    Comments
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.6s">
-                            <a th:href="@{/examinations/for user or from user}" class="d-block border-radius-15 hvr-float hvr-sh2">
-                                <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
-                                    <div class="icon margin-bottom-15px opacity-7">
-                                        <img src="/img/icon/categorie-4.png" alt="">
-                                    </div>
-                                    Examinations
-                                </div>
-                            </a>
-                        </div>
+
+                                Doctors
+                            </div>
+                        </a>
                     </div>
+
+                    <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
+                        <a th:href="@{/departments/all}" class="d-block border-radius-15 hvr-float hvr-sh2">
+                            <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
+                                <div class="icon margin-bottom-15px">
+                                    <img src="/img/icon/categorie-2.png" alt="">
+                                </div>
+                                Departments
+                            </div>
+                        </a>
+                    </div>
+                    <th:block sec:authorize="isAuthenticated()">
+
+                            <th:block th:if="isDoctor">
+                                <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
+                                <a th:href="@{patients/{id}/comments (id=${user.roleId})}"
+                                   class="d-block border-radius-15 hvr-float hvr-sh2">
+                                    <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
+                                        <div class="icon margin-bottom-15px pacity-7" >
+                                            <img src="/img/icon/categorie-3.png" alt="">
+                                        </div>
+                                        Reviews
+                                    </div>
+                                </a>
+                                </div>
+                                <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
+                                    <a th:href="@{doctors/doctor/{id}/examinations (id=${user.roleId})}"
+                                            class="d-block border-radius-15 hvr-float hvr-sh2">
+                                        <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
+                                            <div class="icon margin-bottom-15px opacity-7">
+                                                <img src="/img/icon/categorie-4.png" alt="">
+                                            </div>
+                                            Examinations
+                                        </div>
+                                    </a>
+                                </div>
+                            </th:block>
+                            <th:block th:unless="isDoctor">
+                                <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
+                                    <a th:href="@{doctors/doctor/{id}/reviews (id=${user.roleId})}"
+                                       class="d-block border-radius-15 hvr-float hvr-sh2">
+                                        <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
+                                            <div class="icon margin-bottom-15px">
+                                                <img src="/img/icon/categorie-3.png" alt="">
+                                            </div>
+                                            Reviews
+                                        </div>
+                                    </a>
+                                </div>
+                                    <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
+                                    <a
+                                       th:href="@{patient/patient/{id}/examinations (id=${user.roleId})}"
+                                       class="d-block border-radius-15 hvr-float hvr-sh2">
+                                        <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
+                                            <div class="icon margin-bottom-15px opacity-7">
+                                                <img src="/img/icon/categorie-4.png" alt="">
+                                            </div>
+                                            Examinations
+                                        </div>
+                                    </a>
+                                    </div>
+                            </th:block>
+
+
+
+
+                    </th:block>
+
                 </div>
             </div>
         </div>
-    </section>
+        <div class="row justify-content-center margin-tb-20px">
+            <div class="col-lg-8">
+
+            </div>
+
+            <div th:if="${doctorsCarousel!=null}"
+                 class="margin-bottom-30px box-shadow background-white padding-top: 25px">
+
+                <div class="title text-center">
+
+                    <h1 class="text-title-large text-main-color font-weight-300 margin-bottom-15px">Our doctors:</h1>
+                </div>
+
+                <div class="row"
+                >
+
+                    <!-- Doctor -->
+                    <div class="col-lg-4 col-md-6 hvr-bob margin-bottom-45px" th:each="doctor:${doctorsCarousel}"
+                         th:object="${doctor}">
+                        <div class="background-white box-shadow">
+                            <div class="thum">
+                                <!--
+                                                                 th:href="@{/doctors/doctor/{id}"-->
+                                <a th:href="@{/doctors/doctor/{id} (id=*{id})}">
+                                    <!-- //if no image ->img src="http://placehold.it/400x400" -->
 
 
+                                    <img th:src="*{photo}" alt="..."
+                                         class=" i   " style="">
+                                </a>
+                            </div>
+                            <div class="padding-30px">
+                                <span class="text-grey-2"
+                                      th:text="|Department: *{medicalBranchesEnum}| ">Department</span>
+                                <h5 class="margin-tb-15px"><a class="text-dark"
+
+                                                              th:href="@{/doctors/doctor/{id} (id=*{id})}"
+                                                              th:text="|Doctor: *{fullName}| ">Dr. Shahrzat Moh</a></h5>
+                                <div class="rating clearfix">
+                                    <ul class="float-left">
+                                        <li class="active"></li>
+                                        <li class="active"></li>
+                                        <li class="active"></li>
+                                        <li class="active"></li>
+                                        <li></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- // Doctor -->
 
 
+                </div>
+            </div>
 
-
-
-
-
-
+        </div>
+</section>
 
 
 <div th:insert="fragments/fragments :: footer"></div>
 <div th:insert="fragments/fragments :: js"></div>
+
 </body>
 
 </html>

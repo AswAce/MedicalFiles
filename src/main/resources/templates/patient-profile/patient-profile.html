@@ -23,13 +23,13 @@
                         <li><a th:href="@{/home}">Home</a><i
                                 class="fas fa-arrow-right padding-left-10px text-main-color "></i></li>
 
-                        <li class="active"> name Name</li>
+                        <li class="active" th:text="${patient.fullName}"> name Name</li>
                     </ol>
                     <h1 class="font-weight-300">Patient Profile</h1>
                 </div>
             </div>
             <!-- // Page Title -->
-            <form action="" method="get">
+            <form action="" method="get" th:object="${patient}">
                 <div class="row margin-tb-45px full-width">
                     <div class="col-md-4">
                         <div
@@ -37,7 +37,7 @@
                         >
                             <div class="col-lr-6 padding-20px left-20px right-0px">
                                 <img
-                                        src="https://i.pinimg.com/originals/57/9e/d2/579ed2cedf82391c07ec8ca6d4812693.jpg"
+                                        th:src="*{photo}"
                                         alt="placeholder 960"
                                         class="img-responsive"
                                 />
@@ -65,6 +65,7 @@
                                             name</label
                                         >
                                         <input
+                                                th:value="*{fullName}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="Patient full name"
@@ -76,6 +77,7 @@
                                             UserName</label
                                         >
                                         <input
+                                                th:value="${user.username}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="Patient Username"
@@ -90,6 +92,7 @@
                                             Email</label
                                         >
                                         <input
+                                                th:value="${user.email}"
                                                 type="email"
                                                 class="form-control form-control-sm"
                                                 placeholder="info@yourname.com"
@@ -101,6 +104,7 @@
                                             Phone</label
                                         >
                                         <input
+                                                th:value="*{phone}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="002229456987"
@@ -114,6 +118,7 @@
                                             Sex</label
                                         >
                                         <input
+                                                th:value="*{sex}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="info@yourname.com"
@@ -125,6 +130,7 @@
                                             Age</label
                                         >
                                         <input
+                                                th:value="*{age}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="002229456987"
@@ -138,6 +144,7 @@
                                             Height</label
                                         >
                                         <input
+                                                th:value="*{height}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="1.86 cm"
@@ -149,6 +156,7 @@
                                             Weight</label
                                         >
                                         <input
+                                                th:value="*{weight}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="78kg"
@@ -157,13 +165,13 @@
                                     <div class="col-md-6 margin-bottom-20px">
                                         <label class="text-main-color"
                                         ><i class="fas fa-book-medical margin-right-10px"></i>
-                                            BDI index</label
+                                            BMI index</label
                                         >
-                                        <input
-                                                type="text"
-                                                class="form-control form-control-sm"
-                                                placeholder="20.3"
-                                        />
+                                        <span type="text"
+                                              class="text-black-color bold "
+                                              th:text="*{bmi}"> Some longer sample text</span>
+
+
                                     </div>
                                     <div class="col-md-6 margin-bottom-20px">
                                         <label class="text-main-color"
@@ -171,6 +179,7 @@
                                             Exercise</label
                                         >
                                         <input
+                                                th:value="*{exercise}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="20.3"
@@ -182,6 +191,7 @@
                                             Drinking habits</label
                                         >
                                         <input
+                                                th:value="*{drinking}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="20.3"
@@ -193,6 +203,7 @@
                                             Smoking habits</label
                                         >
                                         <input
+                                                th:value="*{smoking}"
                                                 type="text"
                                                 class="form-control form-control-sm"
                                                 placeholder="20.3"
@@ -239,30 +250,32 @@
                                 </div>
 
                                 <a
-                                        th:href="@{/patients/id/diseases}"
-                      class=" btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
+                                        th:href="@{/patients/{id}/diseases(id=${user.roleId})}"
+                                        class=" btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
                                 >Diseases</a
-                                    >
+                                >
                                 <a
-                                        th:href="@{/patients/id/examinations}"
+                                        th:href="@{/patients/{id}/examinations(id=${user.roleId})}"
                                         class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
                                 >Examinations</a
                                 >
                                 <a
-                                        th:href="@{/patients/id/comments}"
+                                        th:href="@{/patients/{id}/comments (id=${user.roleId})}"
                                         class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
-                                >Comments</a
+                                >Reviews</a
                                 >
                                 <a
                                         th:href="@{/patients/id/edit}"
                                         class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
-                                >Edit</a
-                                >
-                                <a
-                                        th:href="@{/patients/id/delete}"
-                                        class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
-                                >Delete</a
-                                >
+                                >Edit</a>
+
+                                <div class="btn-group">
+                                    <a type="button" th:href="@{/patients/patient/{id}/delete (id=${user.id})}"
+
+                                       class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block">Delete</a>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>

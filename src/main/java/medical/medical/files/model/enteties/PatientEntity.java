@@ -27,7 +27,9 @@ public class PatientEntity extends BaseEntity {
     private String fullName;
     @Column(nullable = false)
     private int age;
-
+    private String phone;
+    @Column(name = "image_url")
+    private String imageUrl;
     @Column(nullable = false)
     private double height;
 
@@ -53,7 +55,18 @@ public class PatientEntity extends BaseEntity {
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private Set<DiseaseEntity> diseases = new LinkedHashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
-    private Set<ExaminationEntity> examinations = new LinkedHashSet<>();
 
+    @Override
+    public String toString() {
+        return "PatientEntity{" +
+                "fullName='" + fullName + '\'' +
+                ", age=" + age +
+                ", height=" + height +
+                ", weight=" + weight +
+                ", sex=" + sex +
+                ", smoking=" + smoking +
+                ", drinking=" + drinking +
+                ", exercise=" + exercise +
+                '}';
+    }
 }

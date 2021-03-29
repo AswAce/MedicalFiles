@@ -1,0 +1,12 @@
+package medical.medical.files.model.enums;
+
+public enum BmiResultsEnum {
+    VERY_SEVERELY_UNDERWEIGHT,
+    SEVERELY_UNDERWEIGHT,
+    UNDERWEIGHT,
+    NORMAL_HEALTHY_WEIGHT,
+    OVERWEIGHT,
+    MODERATELY_OBESE,
+    SEVERELY_OBESE,
+    VERY_SEVERELY_OBESE,
+}

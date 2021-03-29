@@ -17,5 +17,8 @@ public class UserViewModel {
     private String username;
     private String email;
     private String role;
-    private Map<String, String> errors=new LinkedHashMap<>();
+    private long roleId;
+    private String photo;
+    private String fullName;
+
 }

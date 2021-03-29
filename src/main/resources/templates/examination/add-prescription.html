@@ -9,180 +9,188 @@
 <header>
     <nav th:replace="fragments/fragments :: header"></nav>
 </header>
-    <!-- // Header  -->
+<!-- // Header  -->
 
 
-    <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-dark z-index-9  fixed-top" id="mainNav">
+<!-- Navigation-->
 
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+<div class="content-wrapper">
+    <div class="container-fluid overflow-hidden">
+        <div class="row margin-tb-90px margin-lr-10px sm-mrl-0px">
+            <!-- Page Title -->
 
-            <ul class="navbar-nav navbar-sidenav background-main-color admin-nav" id="admin-nav">
-                <li class="nav-item">
-                    <span class="nav-title-text">Main</span>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Dashboard">
-                    <a class="nav-link" href="dashboard-home.html">
-                        <i class="fas fa-fw fa-home"></i><span class="nav-link-text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My items">
-                    <a class="nav-link" href="dashboard-my-listings.html">
-                        <i class="fa fa-fw fa-table"></i>
-                        <span class="nav-link-text">My Listings</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Favorites">
-                    <a class="nav-link" href="dashboard-my-favorites.html">
-                        <i class="fa fa-fw fa-heart"></i>
-                        <span class="nav-link-text">My Favorites</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Reviews">
-                    <a class="nav-link" href="dashboard-reviews.html">
-                        <i class="fa fa-fw fa-star"></i>
-                        <span class="nav-link-text">Reviews</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <span class="nav-title-text">Example Pages</span>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Bookings">
-                    <a class="nav-link" href="dashboard-bookings.html">
-                        <i class="far fa-fw fa-bookmark"></i>
-                        <span class="nav-link-text">Bookings</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Add Listing">
-                    <a class="nav-link active" href="dashboard-add-listing.html">
-                        <i class="fa fa-fw fa-plus-circle"></i>
-                        <span class="nav-link-text">Add Listing</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Packages">
-                    <a class="nav-link" href="dashboard-packages.html">
-                        <i class="far fa-fw fa-list-alt"></i>
-                        <span class="nav-link-text">Packages</span>
-                    </a>
-                </li>
+            <!-- // Page Title -->
+            <!-- class="fas fa-hand-holding-medical -->
+            <div class="margin-tb-45px full-width">
 
-                <li class="nav-item">
-                    <span class="nav-title-text">User Area</span>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="My Profile">
-                    <a class="nav-link" href="dashboard-my-profile.html">
-                        <i class="fa fa-fw fa-user-circle"></i>
-                        <span class="nav-link-text">My Profile</span>
-                    </a>
-                </li>
-                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Sing Out">
-                    <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">
-                        <i class="fa fa-fw fa-sign-out-alt"></i>
-                        <span class="nav-link-text">Sing Out</span>
-                    </a>
-                </li>
-            </ul>
-
-        </div>
-    </nav>
-    <div class="content-wrapper">
-        <div class="container-fluid overflow-hidden">
-            <div class="row margin-tb-90px margin-lr-10px sm-mrl-0px">
-                <!-- Page Title -->
-
-                <!-- // Page Title -->
-                <!-- class="fas fa-hand-holding-medical -->
-                <div class="margin-tb-45px full-width">
-
-                    <div class="padding-30px background-white border-radius-20 box-shadow">
-                        <div id="page-title" class="padding-30px background-white full-width">
-                            <div class="container">
-                                <ol class="breadcrumb opacity-5">
-                                    <li><a href="#">examinations</a><i
-                                            class="fas fa-arrow-right padding-left-10px "></i></li>
-                                    <li><a href="#">examination id</a><i
-                                            class="fas fa-arrow-right padding-left-10px"></i></li>
-                                    <li class="active">Prescription</li>
-                                </ol>
-                                <h2><i class="fas fa-hand-holding-medical margin-right-10px text-main-color"></i> Examination id </h2>
-                            </div>
+                <div class="padding-30px background-white border-radius-20 box-shadow">
+                    <div id="page-title" class="padding-30px background-white full-width">
+                        <div class="container">
+                            <ol class="breadcrumb opacity-5">
+                                <li>
+                                    <a th:href="@{/doctors/doctor/{id}/examinations (id=${doctorId})}">examinations</a><i
+                                        class="fas fa-arrow-right padding-left-10px "></i></li>
+                                <li>
+                                    <a th:href="@{/examinations/examination/{id}(id=${examinationId})}">examination</a><i
+                                        class="fas fa-arrow-right padding-left-10px"></i></li>
+                                <li class="active">Prescription</li>
+                            </ol>
+                            <h2><i class="fas fa-hand-holding-medical margin-right-10px text-main-color"></i>
+                                Examination </h2>
                         </div>
-
-                        <div >
-                           
-                            <form>
-
-                                
-
-                                <div class="margin-bottom-45px full-width">
-                                    <div class="padding-30px background-white border-radius-20 box-shadow">
-                                       
-                                       
-                                        <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>
-                                            Prescrption: </h3>
-                                        <hr>
-                                        <div class="margin-bottom-20px">
-                                            <textarea class="form-control" placeholder="Enter  Admin Message  here"
-                                                id="exampleTextarea" rows="3"></textarea>
-                                        </div>
-                                        <div class="form-group margin-bottom-20px">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <label><i class="fas fa-user-md margin-right-10px text-main-color"></i>
-                                                        Days:</label>
-                                                    <input type="number" min="0" max="100" value="1"step="1">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                
-
-
-
-                            </form>
-                        </div>
-
-
-                        <a href="#"
-                            class="btn btn-lg border-2   btn-primary btn-block border-radius-15 padding-15px box-shadow"><i
-                                class=" fas fa-hand-holding-medical"></i> Finish Examination</a>
-                                <a href="#"
-                                class="btn btn-lg border-2   btn-primary btn-block border-radius-15 padding-15px box-shadow"><i
-                                    class=" fas fa-hand-holding-medical"></i> Add Disease to this Patient</a>
                     </div>
 
+                    <div>
+
+                        <form th:action="@{/examinations/examination/{id}/add-prescription(id=${examinationId})}"
+                              method="POST"
+                              th:object="${addPrescriptionBindingModel}">
+
+
+                            <div class="margin-bottom-45px full-width">
+                                <div class="padding-30px background-white border-radius-20 box-shadow">
+
+                                    <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>
+                                        Prescription: </h3>
+                                    <hr>
+                                    <div class="margin-bottom-20px">
+                                        <th:block th:if="${pastPrescriptionExist}">
+                                            <textarea
+
+                                                    th:value="*{doctorPrescription}"
+                                                    th:text="${pastPrescription.doctorPrescription}"
+                                                    required="required"
+                                                    name="doctorPrescription"
+                                                    placeholder="Enter prescription"
+                                                    minlength="10"
+                                                    maxlength="100"
+                                                    class="form-control"
+                                                    id="exampleTextarea" rows="3"></textarea>
+                                            <small th:if="${#fields.hasErrors('doctorPrescription')}"
+                                                   th:errors="*{doctorPrescription}"
+                                                   id="doctorPrescriptionError"
+                                                   class="text-light form-text bg-danger rounded">custom error</small>
+                                            <div class="form-group margin-bottom-20px">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label><i
+                                                                class="fas fa-user-md margin-right-10px text-main-color"></i>
+                                                            Days:</label>
+                                                        <input
+                                                                th:field="${pastPrescription.days}"
+                                                                name="days"
+                                                                th:value="*{days}"
+                                                                required="required"
+                                                                type="number" min="0" max="100" step="1">
+                                                    </div>
+                                                    <small th:if="${#fields.hasErrors('days')}"
+                                                           th:errors="*{days}"
+
+                                                           class="text-light form-text bg-danger rounded">custom
+                                                        error</small>
+                                                </div>
+                                            </div>
+
+
+                                        </th:block>
+                                        <th:block th:unless="${pastPrescriptionExist}">
+                                            <textarea
+
+                                                    th:field="*{doctorPrescription}"
+                                                    required="required"
+                                                    name="doctorPrescription"
+                                                    placeholder="Enter prescription"
+                                                    minlength="10"
+                                                    maxlength="100"
+                                                    class="form-control"
+                                                    rows="3"></textarea>
+                                            <small th:if="${#fields.hasErrors('doctorPrescription')}"
+                                                   th:errors="*{doctorPrescription}"
+
+                                                   class="text-light form-text bg-danger rounded">custom error</small>
+
+                                            <div class="form-group margin-bottom-20px">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label><i
+                                                                class="fas fa-user-md margin-right-10px text-main-color"></i>
+                                                            Days:</label>
+                                                        <input
+                                                                name="days"
+                                                                th:field="*{days}"
+                                                                required="required"
+                                                                type="number" min="0" value="1" max="100" step="1">
+                                                    </div>
+                                                    <small th:if="${#fields.hasErrors('days')}"
+                                                           th:errors="*{days}"
+
+                                                           class="text-light form-text bg-danger rounded">custom
+                                                        error</small>
+                                                </div>
+                                            </div>
+
+
+                                        </th:block>
+
+
+                                    </div>
+
+
+                                </div>
+
+                            </div>
+                            <a>
+                                <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block"
+                                        type="submit"><i
+                                        class=" fas fa-hand-holding-medical"></i> Save prescription
+                                </button>
+                            </a>
+
+
+                        </form>
+                        <a  th:href="@{/examinations/examination/{id}/add-disease (id=${examinationId})}">
+                            <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block"
+                            ><i
+                                    class=" fas fa-hand-holding-medical"></i> Add Disease
+                            </button>
+                        </a>
+                        <a th:href="@{/examinations/examination/{id}(id=${examinationId})}">
+                            <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block"
+                            ><i
+                                    class=" fas fa-hand-holding-medical"></i> Back to examination
+                            </button>
+                        </a>
+                        <a th:href="@{/examinations/examination/{id}/complete(id=${examinationId})}">
+                            <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block">
+                                <i
+                                        class=" fas fa-hand-holding-medical"></i> Finish examination
+                            </button>
+                        </a>
+                    </div>
+
+
+                    <!--                        <a href="#"-->
+                    <!--                            class="btn btn-lg border-2   btn-primary btn-block border-radius-15 padding-15px box-shadow"><i-->
+                    <!--                                class=" fas fa-hand-holding-medical"></i> Finish Examination</a>-->
+                    <!--                                <a href="#"-->
+                    <!--                                class="btn btn-lg border-2   btn-primary btn-block border-radius-15 padding-15px box-shadow"><i-->
+                    <!--                                    class=" fas fa-hand-holding-medical"></i> Add Disease to this Patient</a>-->
                 </div>
-
-
-
-
 
             </div>
         </div>
-        <!-- /.container-fluid-->
-        <!-- /.content-wrapper-->
-        <footer class="sticky-footer">
-            <div class="container">
-                <div class="text-center">
-                    <span>© 2018 tabib Health Directory | All Right Reserved <a class="text-grey-2 margin-left-15px"
-                            href="https://themeforest.net/user/nile-theme/portfolio" target="_blank">Powered by : Nile
-                            Theme</a></span>
-                </div>
-            </div>
-        </footer>
-        <!-- Scroll to Top Button-->
-        <div th:insert="fragments/fragments :: footer"></div>
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fa fa-angle-up"></i>
-        </a>
-        <!-- Logout Modal-->
-
     </div>
 
-    <div th:insert="fragments/fragments :: js"></div>
+    <div th:insert="fragments/fragments :: footer"></div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+
+
+</div>
+
+<div th:insert="fragments/fragments :: js"></div>
 </body>
 
 </html>

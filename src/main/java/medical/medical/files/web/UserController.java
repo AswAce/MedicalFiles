@@ -11,6 +11,9 @@ import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +24,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -41,10 +46,27 @@ public class UserController {
         this.validationConfig = validationConfig;
     }
 
+    @GetMapping("/profile")
+    private String userProfile() {
+
+        Authentication authentication = SecurityContextHolder.
+                getContext().getAuthentication();
+
+        if (userHasAuthority("ROLE_DOCTOR", (List<GrantedAuthority>) authentication.getAuthorities())) {
+
+            return "redirect:/doctors/doctor/profile";
+        } else if (userHasAuthority("ROLE_PATIENT", (List<GrantedAuthority>) authentication.getAuthorities())) {
+
+            return "redirect:/patients/patient/profile";
+        }
+
+        return null;
+    }
+
 
     @GetMapping("/login")
-    public String login() {
-        return FOLDER+"page-login";
+    private String login() {
+        return FOLDER + "page-login";
     }
 
     @GetMapping("/register")
@@ -110,4 +132,15 @@ public class UserController {
         return modelAndView;
     }
 
+    public boolean userHasAuthority(String authority, List<GrantedAuthority> getUserAuthorities) {
+        List<GrantedAuthority> authorities = getUserAuthorities;
+
+        for (GrantedAuthority grantedAuthority : authorities) {
+            if (authority.equals(grantedAuthority.getAuthority())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

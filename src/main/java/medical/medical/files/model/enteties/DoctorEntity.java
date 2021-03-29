@@ -23,7 +23,7 @@ public class DoctorEntity extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String bio;
     @Column(name = "picture_url")
-    private String pictureUrl;
+    private String photo;
     @Column(nullable = false)
     private String phone;
 
@@ -33,9 +33,21 @@ public class DoctorEntity extends BaseEntity {
     @Column(nullable = false)
     private int experience;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<FeedbackEntity> reviews;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ScheduleEntity schedule;
 
+    @Override
+    public String toString() {
+        return "DoctorEntity{" +
+                "medicalBranch=" + medicalBranch +
+                ", fullName='" + fullName + '\'' +
+                ", bio='" + bio + '\'' +
+                ", pictureUrl='" + photo + '\'' +
+                ", phone='" + phone + '\'' +
+                ", roomNumber='" + roomNumber + '\'' +
+                ", experience=" + experience +
+
+                '}';
+    }
 }

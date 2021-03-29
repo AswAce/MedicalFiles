@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+<!-- // Header  -->
+<header>
+    <!-- Navigation-->
+    <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+
+
+<div class="content-wrapper">
+    <div class="container-fluid overflow-hidden">
+        <div class="row margin-tb-60px margin-lr-10px sm-mrl-0px">
+            <!-- Page Title -->
+            <div id="page-title" class="padding-30px background-white full-width box-shadow">
+                <div class="container">
+                    <oi class="breadcrumb opacity-5">
+                        <li><a th:href="@{/home}">Home</a><i
+                                class="fas fa-arrow-right padding-left-10px text-main-color "></i></li>
+
+                        <li class="active">Reviews</li>
+                    </oi>
+                    <h1 class="font-weight-300 far fa-star margin-right-10px text-main-color">My Reviews and raiting</h1>
+
+                </div>
+            </div>
+            <th:block sec:authorize="hasRole('ROLE_PATIENT')">
+                <div class="padding-20px">
+                    <a
+                            href="#"
+                            class=" btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
+                    >Reviews for doctors</a
+                    >
+                    <a
+                            href="#"
+                            class="  btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
+                    >Revies for Clinics</a
+                    >
+                </div>
+            </th:block>
+
+            <!-- // Page Title -->
+
+        </div>
+        <th:block th:each="review : ${reviews}" th:object="${review}">
+
+            <div th:insert="fragments/fragments :: reviews"></div>
+        </th:block>
+
+    </div>
+
+
+    <div th:insert="fragments/fragments :: footer"></div>
+
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+</div>
+
+<div th:insert="fragments/fragments :: js"></div>
+
+
+</body>
+
+</html>

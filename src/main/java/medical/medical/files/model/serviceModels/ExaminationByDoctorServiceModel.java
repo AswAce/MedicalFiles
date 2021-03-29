@@ -14,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class ExaminationByDoctorServiceModel {
 
     private long doctorId;
+    private long examinationId;
 
     private PartOfTheBodyEnum partOfTheBody;
 

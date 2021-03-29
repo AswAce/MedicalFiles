@@ -1,24 +1,29 @@
 package medical.medical.files.service.impl;
 
-import jdk.jshell.spi.ExecutionControl;
-import medical.medical.files.model.bindingModels.UserRegisterBindingModel;
+import medical.medical.files.exeptions.DoctorNotFoundExeption;
+import medical.medical.files.model.enteties.DoctorEntity;
+import medical.medical.files.model.enteties.ExaminationEntity;
 import medical.medical.files.model.enteties.PatientEntity;
 import medical.medical.files.model.enteties.UserEntity;
+import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.enums.RoleEnum;
-import medical.medical.files.model.serviceModels.PatientServiceModel;
 import medical.medical.files.model.serviceModels.UserServiceRegisterModel;
 import medical.medical.files.model.viewModels.UserViewModel;
 import medical.medical.files.model.viewModels.UserViewPosition;
 import medical.medical.files.repositorie.UserRepository;
+import medical.medical.files.service.ExaminationService;
+import medical.medical.files.service.MedicalBranchesService;
 import medical.medical.files.service.RoleService;
 import medical.medical.files.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,12 +32,17 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private final MedicalBranchesService medicalBranchesService;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, RoleService roleService) {
+//
+
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, RoleService roleService, MedicalBranchesService medicalBranchesService ) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
         this.roleService = roleService;
+//
+        this.medicalBranchesService = medicalBranchesService;
     }
 
     @Override
@@ -111,19 +121,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void addPatient(PatientServiceModel patientServiceModel, long userId) {
-        UserEntity userEntity = this.userRepository.findById(userId);
-
-        if (userEntity.getRoles().contains(RoleEnum.USER)) {
-            PatientEntity patientEntity = this.modelMapper.map(patientServiceModel, PatientEntity.class);
-
-            userEntity.setPatientEntity(patientEntity);
-            this.userRepository.saveAndFlush(userEntity);
-        }
-    }
-
-    @Override
-    public UserViewPosition findByUsername(String username) {
+    public UserViewPosition findByUserNameForDoctorPatientFields(String username) {
         UserEntity byUsername = this.userRepository.findByUsername(username).orElse(null);
         UserViewPosition userViewPosition = new UserViewPosition();
         if (byUsername == null) {
@@ -143,10 +141,74 @@ public class UserServiceImpl implements UserService {
         return userViewPosition;
     }
 
+    @Override
+    public UserEntity findByUserName(String username) {
+
+        return this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("USER not found. Try again."));
+    }
+
+    @Override
+    public void saveDoctorOrPatientToUser(UserEntity byUsername) {
+        this.userRepository.saveAndFlush(byUsername);
+    }
+
+    @Override
+    public UserViewModel findByUserNameView(String username) {
+        UserEntity userEntity = this.userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        UserViewModel userViewModel = this.modelMapper.map(userEntity, UserViewModel.class);
+        DoctorEntity doctorEntity = userEntity.getDoctorEntity();
+        PatientEntity patientEntity = userEntity.getPatientEntity();
+        if (doctorEntity != null) {
+
+            userViewModel.setRoleId(doctorEntity.getId());
+            userViewModel.setPhoto(doctorEntity.getPhoto());
+            userViewModel.setFullName(doctorEntity.getFullName());
+            userViewModel.setRole("doctor");
+        } else if (patientEntity != null) {
+
+
+            userViewModel.setRoleId(patientEntity.getId());
+            userViewModel.setPhoto(patientEntity.getImageUrl());
+            userViewModel.setFullName(patientEntity.getFullName());
+            userViewModel.setRole("patient");
+        }
+
+        return userViewModel;
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        UserEntity byId = this.userRepository.findById(id);
+
+        if (byId.getDoctorEntity() != null) {
+            MedicalBranchesEnum medicalBranch = byId.getDoctorEntity().getMedicalBranch();
+            this.medicalBranchesService.removeDoctorFromBranch(medicalBranch, byId.getDoctorEntity());
+
+
+        }
+        this.userRepository.deleteById(id);
+
+
+    }
+
+    @Override
+    public void deleteDoctor(long id) {
+
+        UserEntity byId = this.userRepository.findByDoctorEntity_Id(id).orElseThrow(() -> new DoctorNotFoundExeption("Doctor not found"));
+
+        if (byId.getDoctorEntity() != null) {
+            MedicalBranchesEnum medicalBranch = byId.getDoctorEntity().getMedicalBranch();
+            this.medicalBranchesService.removeDoctorFromBranch(medicalBranch, byId.getDoctorEntity());
+
+        }
+        this.userRepository.deleteById(byId.getId());
+
+    }
+
     public boolean userExist(String email, String username) {
         UserEntity userEntity = this.userRepository.findByEmail(email).orElse(null);
         UserEntity userEntity1 = this.userRepository.findByUsername(username).orElse(null);
-        if (userEntity == null || userEntity1 == null) {
+        if (userEntity == null && userEntity1 == null) {
             return false;
         }
         return true;

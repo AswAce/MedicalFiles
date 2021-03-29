@@ -20,11 +20,19 @@ public class MedicalBranchEntity extends BaseEntity {
     private MedicalBranchesEnum name;
     @Column(name = "descriptions", columnDefinition = "TEXT")
     private String description;
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<FeedbackEntity> reviews;
-    @OneToMany
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<DoctorEntity> doctors = new LinkedHashSet<>();
     private String photo;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private ScheduleEntity schedule;
+
+    @Override
+    public String toString() {
+        return "MedicalBranchEntity{" +
+                "name=" + name +
+                ", description='" + description + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
+    }
 }

@@ -8,6 +8,7 @@ import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.enums.ProgressionEnum;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +17,13 @@ import java.util.List;
 @NoArgsConstructor
 public class ExaminationViewModel {
 
+    private long id;
     private MedicalBranchesEnum typeOfBranch;
-    private LocalDate date;
-
+    private LocalDateTime date;
+    private long patientId;
+    private long doctorId;
     private String doctorFullName;
+
 
 
     private String complain;
@@ -33,10 +37,6 @@ public class ExaminationViewModel {
 
     private List<AddAdditionalDataViewModel> additionalData = new ArrayList<>();
 
-
-    private FeedbackEntity feedback;
-
-
-    private ProgressionEnum progression;
+    private ProgressionEnum progressionEnum;
 
 }

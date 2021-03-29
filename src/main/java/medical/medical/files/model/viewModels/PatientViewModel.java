@@ -3,10 +3,7 @@ package medical.medical.files.model.viewModels;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import medical.medical.files.model.enums.DrinkingEnum;
-import medical.medical.files.model.enums.ExerciseEnum;
-import medical.medical.files.model.enums.SexEnum;
-import medical.medical.files.model.enums.SmokingEnum;
+import medical.medical.files.model.enums.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -21,11 +18,13 @@ public class PatientViewModel {
 
     private int age;
 
-
+    private String fullName;
     private double height;
 
-
+    private String photo;
     private double weight;
+    private String phone;
+    private String bmi;
 
 
     private SexEnum sex;
@@ -41,6 +40,7 @@ public class PatientViewModel {
 
     ArrayList<ExaminationViewModel> examinationViewModels = new ArrayList<>();
 
-    ArrayList<DiseaseViewModel> diseaseViewModels=new ArrayList<>();
+    ArrayList<DiseaseViewModel> diseaseViewModels = new ArrayList<>();
+
 
 }

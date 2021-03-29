@@ -6,12 +6,12 @@ import lombok.NoArgsConstructor;
 import medical.medical.files.model.enteties.*;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.enums.ProgressionEnum;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.FutureOrPresent;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,17 +20,17 @@ import java.util.List;
 @NoArgsConstructor
 public class AddExaminationBindingModel {
 
-    private long patientId;
-    @NotNull
+
+    @NotNull(message = "Choose departments")
     private MedicalBranchesEnum typeOfBranch;
-    @FutureOrPresent
-    private LocalDate date;
-    @NotBlank
+    @FutureOrPresent(message = "Date must be in future or present")
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime date;
+    @NotEmpty(message = "Choose doctor name")
     private String doctorName;
-    @NotBlank
+    @NotEmpty
+    @Size(min = 10,message = "enter your complain")
     private String complain;
-
-
 
 
 }

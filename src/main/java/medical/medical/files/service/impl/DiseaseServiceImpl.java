@@ -5,7 +5,8 @@ import medical.medical.files.repositorie.DiseaseRepository;
 import medical.medical.files.service.DiseaseService;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class DiseaseServiceImpl implements DiseaseService {
@@ -18,20 +19,28 @@ public class DiseaseServiceImpl implements DiseaseService {
     @Override
     public void save(DiseaseEntity diseaseEntity) {
 
-        if (this.findByName(diseaseEntity.getName()) == null) {
-            this.diseaseRepository.save(diseaseEntity);
-        }
-
     }
 
+
     @Override
-    public void deleteDisease(String name) {
-        DiseaseEntity byName = this.findByName(name);
-        this.diseaseRepository.delete(byName);
-    }
-    @Override
-    public DiseaseEntity findByName(String name) {
+    public Set<DiseaseEntity> findAllByName(String name) {
         return this.diseaseRepository.
-                findByName(name).orElse(null);
+                findAllByName(name);
+    }
+
+    @Override
+    public DiseaseEntity findByNameAndType(String name, String type) {
+        if (this.diseaseRepository.findByNameAndType(name, type).size()>0) {
+            return this.diseaseRepository.findByNameAndType(name, type).get(0);
+        }
+        return null;
+
+
+    }
+
+    @Override
+    public Set<String> getAllDiseasesNames() {
+        Set<String> collectDiseaseNames = this.diseaseRepository.findAll().stream().map(diseaseEntity -> diseaseEntity.getName()).collect(Collectors.toSet());
+        return collectDiseaseNames;
     }
 }

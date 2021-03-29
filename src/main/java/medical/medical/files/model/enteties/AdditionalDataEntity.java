@@ -22,4 +22,13 @@ public class AdditionalDataEntity extends BaseEntity {
     private String file;
     @OneToOne(cascade = CascadeType.ALL)
     private LocationEntity locationEntity;
+
+    @Override
+    public String toString() {
+        return "AdditionalDataEntity{" +
+                "date=" + date +
+                ", type=" + type +
+                ", file='" + file + '\'' +
+                '}';
+    }
 }

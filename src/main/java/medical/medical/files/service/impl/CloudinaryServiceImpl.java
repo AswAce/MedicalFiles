@@ -24,18 +24,27 @@ public class CloudinaryServiceImpl implements CloudinaryService {
 
     @Override
     public String uploadImage(MultipartFile multipartFile) throws IOException {
-        File file = File.createTempFile(TEMP_FILE, multipartFile.getOriginalFilename());
-        multipartFile.transferTo(file);
-        String toString = this.cloudinary
-                .uploader()
-                .upload(file, Collections.emptyMap())
-                .get(URL)
-                .toString();
-        return cloudinary.url().transformation(new Transformation()
-                .width(200).height(200).gravity("face").crop("thumb").chain()
-                .radius(20).border("5px_solid_black").chain()
-                .opacity(50).width(0.25).flags("relative").
-                        gravity("north_east").y(10).x(10)).imageTag(toString);
+        String originalFilename = multipartFile.getOriginalFilename();
+        if (!originalFilename.isEmpty()) {
 
+
+            File file = File.createTempFile(TEMP_FILE, originalFilename);
+            multipartFile.transferTo(file);
+
+            String toString = this.cloudinary
+                    .uploader()
+                    .upload(file, Collections.emptyMap())
+                    .get(URL)
+                    .toString();
+            return toString;
+        }
+//        String s = cloudinary.url().transformation(new Transformation()
+//                .width(200).height(200).gravity("face").crop("thumb").chain()
+//                .radius(20).border("5px_solid_black").chain()
+//                .opacity(50).width(0.25).flags("relative").
+//                        gravity("north_east").y(10).x(10)).imageTag(toString);
+
+
+        return "";
     }
 }

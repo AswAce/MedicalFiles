@@ -1,26 +1,25 @@
 package medical.medical.files.web;
 
-import medical.medical.files.config.validation.ValidationErrorConfigImpl;
-import medical.medical.files.exeptions.ExaminationNotFoundException;
-import medical.medical.files.model.bindingModels.FeedbackBindingModel;
-import medical.medical.files.model.bindingModels.PatientBindingModel;
-import medical.medical.files.model.serviceModels.FeedbackServiceModel;
+import medical.medical.files.model.bindingModels.AddPatientBindingModel;
 import medical.medical.files.model.serviceModels.PatientServiceModel;
-import medical.medical.files.model.viewModels.DiseaseViewModel;
-import medical.medical.files.model.viewModels.ExaminationViewModel;
 import medical.medical.files.model.viewModels.PatientViewModel;
-import medical.medical.files.service.ExaminationService;
-import medical.medical.files.service.PatientService;
-import medical.medical.files.service.UserService;
+import medical.medical.files.model.viewModels.ReviewViewModel;
+import medical.medical.files.model.viewModels.SetExaminationsForUserView;
+import medical.medical.files.model.viewModels.UserViewModel;
+import medical.medical.files.service.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/patients")
@@ -31,99 +30,109 @@ public class PatientController {
     private final UserService userService;
     private final PatientService patientService;
     private final ExaminationService examinationService;
-    private final ValidationErrorConfigImpl validationConfig;
+    private final ReviewService reviewService;
 
-    public PatientController(ModelMapper modelMapper, UserService userService, PatientService patientService, ExaminationService examinationService, ValidationErrorConfigImpl validationConfig) {
+
+    public PatientController(ModelMapper modelMapper, UserService userService, PatientService patientService, ExaminationService examinationService, ReviewService reviewService) {
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.patientService = patientService;
         this.examinationService = examinationService;
-        this.validationConfig = validationConfig;
+
+
+        this.reviewService = reviewService;
+    }
+
+
+    @GetMapping(value = "/patient/profile")
+    private String patientProfile(Model model) {
+        Authentication authentication = SecurityContextHolder.
+                getContext().getAuthentication();
+        String username = authentication.getName();
+        UserViewModel byUserNameView = this.userService.findByUserNameView(username);
+        model.addAttribute("user", byUserNameView);
+        PatientViewModel byId = this.patientService.findById(byUserNameView.getRoleId());
+        model.addAttribute("patient", byId);
+
+        return "patient-profile/patient-profile";
+    }
+
+    @GetMapping(value = "/create")
+    private String createPatient(Model model) {
+        if (!model.containsAttribute("patientBindingModel")) {
+            model.addAttribute("patientBindingModel", new AddPatientBindingModel());
+        }
+
+        return PATIENT_PROFILE + "add-patient-profile";
     }
 
     @PostMapping(value = "/create")
-    private ResponseEntity<PatientBindingModel> createPatient(@Valid @RequestBody PatientBindingModel patientBindingModel, BindingResult bindingResult) {
-//Working fine
-        if (bindingResult.hasErrors()) {
-            patientBindingModel.
-                    setErrors(this.validationConfig.getValidationMessages(bindingResult));
+    private String createPatientPost(@Valid @ModelAttribute("patientBindingModel") AddPatientBindingModel patientBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
 
-            return new ResponseEntity(patientBindingModel, HttpStatus.BAD_REQUEST);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("patientBindingModel", patientBindingModel);
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.patientBindingModel", bindingResult);
+
+            return "redirect:/create";
         }
-        PatientServiceModel patientServiceModel = this.modelMapper.
-                map(patientBindingModel, PatientServiceModel.class);
-        this.userService.addPatient(patientServiceModel, patientBindingModel.getUserId());
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        PatientServiceModel patientServiceModel = this.modelMapper.map(patientBindingModel, PatientServiceModel.class);
+        this.patientService.savePatient(patientServiceModel);
+        return "redirect:/home";
     }
 
     @PostMapping("/update")
-    private ResponseEntity<PatientBindingModel> updatePatient(@Valid @RequestBody PatientBindingModel patientBindingModel, BindingResult bindingResult) {
+    private String updatePatient(@Valid @RequestBody AddPatientBindingModel patientBindingModel, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            patientBindingModel.
-                    setErrors(this.validationConfig.getValidationMessages(bindingResult));
 
-            return new ResponseEntity(patientBindingModel, HttpStatus.BAD_REQUEST);
+
         }
-        PatientServiceModel patientServiceModel = this.modelMapper.
-                map(patientBindingModel, PatientServiceModel.class);
-        this.patientService.savePatient(patientServiceModel);
-        return new ResponseEntity("Patient " + patientBindingModel.getFullName() + " is updated", HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/{patientId}")
-    private ResponseEntity<PatientViewModel> getPatientData(@PathVariable long patientId) {
-        PatientViewModel byId = this.patientService.findById(patientId);
-        return new ResponseEntity<>(byId, HttpStatus.OK);
-        //Working OK
-    }
-
-    @GetMapping(value = "{patientId}/examination/{examinationId}")
-    private ResponseEntity<ExaminationViewModel> getPatientExaminationById(@PathVariable long patientId, @PathVariable long examinationId) throws ExaminationNotFoundException {
-//OK soso
-
-        try {
-            ExaminationViewModel patientExamination = this.patientService.getPatientExamination(patientId, examinationId);
-            return new ResponseEntity<>(patientExamination, HttpStatus.OK);
-        } catch (ExaminationNotFoundException e) {
-            return new ResponseEntity(e.getStatusCode(), HttpStatus.BAD_REQUEST);
-        }
-
-    }
-
-    @GetMapping("/id/diseases")
-    private String getPatientDisease() {
-
-        // TODO: 14-Mar-21
         return null;
+    }
+
+
+    @GetMapping("/{id}/diseases")
+    private String getPatientDisease(@PathVariable("id") long id, Model model) {
+        PatientViewModel byId = this.patientService.findById(id);
+
+        model.addAttribute("patientDiseases", byId.getDiseaseViewModels());
+
+        return PATIENT_PROFILE + "patient-diseases";
+
+
+    }
+
+    @GetMapping("/{id}/comments")
+    private String getPatientComments(@PathVariable("id") long id, Model model) {
+
+        Set<ReviewViewModel> allByPatientId = this.reviewService.findAllByPatientId(id);
+
+        model.addAttribute("reviews", allByPatientId);
+        return PATIENT_PROFILE + "user-comments.html";
         //OK soso
 
     }
 
-    @GetMapping("/id/comments")
-    private String getPatientComments() {
+    @GetMapping("/{id}/examinations")
+    private String getPatientExaminations(@PathVariable("id") long id, Model model) {
+        List<SetExaminationsForUserView> examinationFoThisPatient = this.examinationService.findAllExaminationsForThisUser(id);
+        model.addAttribute("examinations", examinationFoThisPatient);
 
-        // TODO: 14-Mar-21
-        return PATIENT_PROFILE+"patient-comments";
+        return "examination/user-examinations";
+
+    }
+
+    @GetMapping("/patient/{id}/delete")
+    private String deletePatient(@PathVariable("id") long id) {
+
+        this.userService.deleteUser(id);
+
+        return "/";
         //OK soso
 
     }
 
-    @GetMapping("/id/examinations")
-    private String getPatientExaminations() {
-
-        // TODO: 14-Mar-21
-        return "doctor-profile/doctor-examinations";
-        //OK soso
-
-    }
-    @GetMapping("/id/delete")
-    private String deletePatient() {
-
-        // TODO: 14-Mar-21
-        return "redirect:/home";
-        //OK soso
-
-    } @PostMapping("/id/edit")
+    @PostMapping("/id/edit")
     private String editPatient() {
 
         // TODO: 14-Mar-21
@@ -132,16 +141,5 @@ public class PatientController {
 
     }
 
-//    @PostMapping("/examination/{examinationId}/feedback")
-//    private ResponseEntity<FeedbackBindingModel> commentExamination(@Valid @RequestBody FeedbackBindingModel feedbackBindingModel, BindingResult bindingResult,
-//                                                                    @PathVariable long examinationId) throws ExaminationNotFoundException {
-//        if (bindingResult.hasErrors()) {
-//
-//
-//        }
-//        FeedbackServiceModel feedbackServiceModel = this.modelMapper.map(feedbackBindingModel, FeedbackServiceModel.class);
-//        FeedbackBindingModel addFeedback = this.examinationService.addFeedback(feedbackServiceModel, examinationId);
-//        return new ResponseEntity<>(addFeedback, HttpStatus.OK);
-//    }
-    //Ok SO SO
+
 }

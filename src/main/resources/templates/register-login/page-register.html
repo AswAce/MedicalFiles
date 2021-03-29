@@ -89,7 +89,8 @@
 
                 <div class="form-group label-floating is-select">
                     <label class="control-label"><h3>Type of Account</h3></label>
-                    <select class="selectpicker form-control"
+                    <select class="selectpicker form-control form-control-lg"
+                            type="text"
                             th:field="*{role}"
                             th:errorclass="is-invalid">
                         <th:block th:each="role:${roles}">

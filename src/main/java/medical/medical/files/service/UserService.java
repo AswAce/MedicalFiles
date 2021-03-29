@@ -24,7 +24,17 @@ public interface UserService {
 
     boolean userExist(String email,String username);
 
-    void addPatient(PatientServiceModel patientServiceModel, long UserId);
 
-   UserViewPosition findByUsername(String username);
+
+   UserViewPosition findByUserNameForDoctorPatientFields(String username);
+   UserEntity findByUserName(String username);
+
+    void saveDoctorOrPatientToUser(UserEntity byUsername);
+
+
+    UserViewModel findByUserNameView(String username);
+
+    void deleteUser(long id);
+
+    void deleteDoctor(long id);
 }

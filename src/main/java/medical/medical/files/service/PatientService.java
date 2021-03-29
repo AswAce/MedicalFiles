@@ -1,23 +1,31 @@
 package medical.medical.files.service;
 
 import medical.medical.files.exeptions.ExaminationNotFoundException;
-import medical.medical.files.model.bindingModels.PatientBindingModel;
+import medical.medical.files.model.enteties.PatientEntity;
+import medical.medical.files.model.enums.MedicalBranchesEnum;
+import medical.medical.files.model.serviceModels.AddDiseaseServiceModel;
 import medical.medical.files.model.serviceModels.AddExaminationServiceModel;
 import medical.medical.files.model.serviceModels.PatientServiceModel;
-import medical.medical.files.model.viewModels.DiseaseViewModel;
-import medical.medical.files.model.viewModels.ExaminationViewModel;
 import medical.medical.files.model.viewModels.PatientViewModel;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Set;
 
 public interface PatientService {
-    PatientBindingModel savePatient(PatientServiceModel createPatientServiceModel);
+    void savePatient(PatientServiceModel createPatientServiceModel) throws IOException;
 
     void addExaminationToThePatient(AddExaminationServiceModel examinationServiceModel);
 
     PatientViewModel findById(long patientId);
 
-    ExaminationViewModel getPatientExamination(long patientId, long examinationId) throws ExaminationNotFoundException;
+    void deletePatient(PatientEntity patientEntity);
 
-    ArrayList<DiseaseViewModel> getAllDiseasesByPatientId(long patientId);
+
+    void addDiseaseToThePatient(AddDiseaseServiceModel addDiseaseServiceModel) throws ExaminationNotFoundException;
+
+    boolean patientHasExaminationsInThisDepartment(MedicalBranchesEnum name);
+
+    Set<String> findPatientDoctorsForThisDepartment(MedicalBranchesEnum name);
+
+    int countAll();
 }

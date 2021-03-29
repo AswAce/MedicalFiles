@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="fragments/fragments :: head"></head>
+
+<body>
+
+<header>
+    <nav th:replace="fragments/fragments :: header"></nav>
+</header>
+<!-- // Header  -->
+
+
+<!-- Navigation-->
+
+<div class="content-wrapper">
+    <div class="container-fluid overflow-hidden">
+        <div class="row margin-tb-90px margin-lr-10px sm-mrl-0px">
+            <!-- Page Title -->
+
+            <!-- // Page Title -->
+            <!-- class="fas fa-hand-holding-medical -->
+            <div class="margin-tb-45px full-width">
+
+                <div class="padding-30px background-white border-radius-20 box-shadow">
+                    <div id="page-title" class="padding-30px background-white full-width">
+                        <div class="container">
+                            <ol class="breadcrumb opacity-5">
+                                <li>
+                                    <a th:href="@{/doctors/doctor/{id}/examinations (id=${doctorId})}">examinations</a><i
+                                        class="fas fa-arrow-right padding-left-10px "></i></li>
+                                <li>
+                                    <a th:href="@{/examinations/examination/{id}(id=${examinationId})}">examination</a><i
+                                        class="fas fa-arrow-right padding-left-10px"></i></li>
+                                <li class="active">Diseases</li>
+                            </ol>
+                            <h2><i class="fas fa-hand-holding-medical margin-right-10px text-main-color"></i>
+                                Diseases of the patient </h2>
+                        </div>
+                    </div>
+
+                    <div>
+
+                        <form th:action="@{/examinations/examination/{id}/add-disease(id=${examinationId})}"
+                              method="POST"
+                              th:object="${addDisease}">
+
+
+                            <div class="margin-bottom-45px full-width">
+                                <div class="row">
+                                    <div class="padding-30px background-white border-radius-20 box-shadow">
+
+                                        <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>
+                                            Name: </h3>
+                                        <input
+                                                th:field="*{name}"
+                                                name="name"
+
+                                                type="text">
+                                        <!--                                        <div class="margin-bottom-20px">-->
+                                        <!--                                            <select name="name"-->
+
+                                        <!--                                                    th:field="*{name}"-->
+                                        <!--                                                    type="text" class="form-control form-control-lg"-->
+                                        <!--                                            >-->
+
+                                        <!--                                                <option th:each="disease :${diseasesNames}"-->
+                                        <!--                                                        th:value="${disease}"-->
+                                        <!--                                                        th:text="${disease}"-->
+                                        <!--                                                >-->
+                                        <!--                                                </option>-->
+
+
+                                        <!--                                                <option th:value="*{name}"-->
+                                        <!--                                                >Add new Disease:-->
+                                        <!--                                                </option>-->
+                                        <!--                                                -->
+                                        <!--                                            </select>-->
+                                        <!--                                        </div>-->
+
+
+                                    </div>
+                                    <!--                                    <div class="padding-30px background-white border-radius-20 box-shadow">-->
+
+                                    <!--                                        <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>-->
+                                    <!--                                            Name: </h3>-->
+                                    <!--                                        <input-->
+                                    <!--                                                th:field="*{name}"-->
+                                    <!--                                                name="name"-->
+                                    <!--                                                required="required"-->
+                                    <!--                                                type="text">-->
+                                    <!--                                        <small th:if="${#fields.hasErrors('name')}"-->
+                                    <!--                                               th:errors="*{name}"-->
+                                    <!--                                               id="doctorPrescriptionError"-->
+                                    <!--                                               class="text-light form-text bg-danger rounded">custom error</small>-->
+
+
+                                    <!--                                    </div>-->
+                                    <div class="padding-30px background-white border-radius-20 box-shadow">
+                                        <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>
+                                            Type: </h3>
+                                        <hr>
+
+                                        <input
+                                                th:field="*{type}"
+                                                name="type"
+                                                type="text">
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="padding-30px background-white border-radius-20 box-shadow">
+
+                                        <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>
+                                            Is the disease curable ?: </h3>
+                                        <hr>
+                                        <div class="margin-bottom-20px">
+                                            <select name="isCurable"
+                                                    required="required"
+                                                    th:field="*{isCurable}"
+                                                    type="text" class="form-control form-control-lg"
+                                            >
+                                                <option value="true"
+                                                >True
+                                                </option>
+
+                                                <option value="false"
+                                                >False
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="padding-30px background-white border-radius-20 box-shadow">
+
+                                        <h3><i class="fas fa-heartbeat margin-right-10px text-main-color"></i>
+                                            Is the disease chronic ?: </h3>
+                                        <hr>
+                                        <div class="margin-bottom-20px">
+                                            <select name="isChronic"
+                                                    required="required"
+                                                    th:field="*{isChronic}"
+                                                    type="text" class="form-control form-control-lg"
+                                            >
+                                                <option value="true"
+                                                >True
+                                                </option>
+
+                                                <option value="false"
+                                                >False
+                                                </option>
+                                            </select>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-main-color">
+                                    <i class="fas fa-heartbeat margin-right-10px text-main-color"></i>
+                                    Description
+                                </h3>
+                                <hr/>
+                                <div class="margin-bottom-20px">
+                    <textarea class="form-control" placeholder="Enter  Admin Message  here" id="exampleTextArea"
+                              name="description"
+                              required="required"
+                              minlength="3"
+
+                              rows="3" th:field="*{description}"
+                              th:errorclass="is-invalid"></textarea>
+                                </div>
+                                <small th:if="${#fields.hasErrors('description')}" th:errors="*{description}" id="bioError"
+                                       class="text-light form-text bg-danger rounded">custom error</small>
+                            </div>
+                            <a>
+                                <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block"
+                                        type="submit"><i
+                                        class=" fas fa-hand-holding-medical"></i> Save Disease
+                                </button>
+                            </a>
+                        </form>
+                        <a th:href="@{/examinations/examination/{id}(id=${examinationId})}">
+                            <button class="btn btn-sm padding-sm-20px text-white background-main-color btn-inline-block"
+                            ><i
+                                    class=" fas fa-hand-holding-medical"></i> Back to examination
+                            </button>
+                        </a>
+                    </div>
+
+
+                    <!--                        <a href="#"-->
+                    <!--                            class="btn btn-lg border-2   btn-primary btn-block border-radius-15 padding-15px box-shadow"><i-->
+                    <!--                                class=" fas fa-hand-holding-medical"></i> Finish Examination</a>-->
+                    <!--                                <a href="#"-->
+                    <!--                                class="btn btn-lg border-2   btn-primary btn-block border-radius-15 padding-15px box-shadow"><i-->
+                    <!--                                    class=" fas fa-hand-holding-medical"></i> Add Disease to this Patient</a>-->
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:insert="fragments/fragments :: footer"></div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+
+
+</div>
+
+<div th:insert="fragments/fragments :: js"></div>
+</body>
+
+</html>

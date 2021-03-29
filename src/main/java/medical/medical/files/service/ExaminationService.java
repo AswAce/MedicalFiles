@@ -1,25 +1,29 @@
 package medical.medical.files.service;
 
 import medical.medical.files.exeptions.ExaminationNotFoundException;
-import medical.medical.files.model.bindingModels.FeedbackBindingModel;
+import medical.medical.files.exeptions.WrongDoctorException;
+import medical.medical.files.model.enteties.DoctorEntity;
 import medical.medical.files.model.enteties.ExaminationEntity;
+import medical.medical.files.model.enteties.PatientEntity;
+import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.serviceModels.*;
 import medical.medical.files.model.viewModels.ExaminationViewModel;
+import medical.medical.files.model.viewModels.SetExaminationsForUserView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ExaminationService {
-    void editExamination(AddExaminationServiceModel examinationServiceModel, Long id);
 
-    void deleteExamination(long id);
 
-    void addDoctorPart(ExaminationByDoctorServiceModel examinationByDoctorServiceModel, long id) throws ExaminationNotFoundException;
 
-    void addPrescription(PrescriptionServiceModel prescriptionServiceModel, long id) throws ExaminationNotFoundException;
 
-    void addAdditionalData(AdditionalDataServiceModel additionalDataServiceModel, long examinationId) throws ExaminationNotFoundException;
+    void addPrescription(AddPrescriptionServiceModel prescriptionServiceModel ) throws ExaminationNotFoundException;
 
-    void completeExamination(long doctorId, long examinationId) throws ExaminationNotFoundException;
+    void addAdditionalData(AdditionalDataServiceModel additionalDataServiceModel ) throws ExaminationNotFoundException, WrongDoctorException, IOException;
+
+    void completeExamination ( long examinationId) throws ExaminationNotFoundException;
 
     ExaminationEntity findByExaminationId(long examinationId) throws ExaminationNotFoundException;
 
@@ -27,7 +31,24 @@ public interface ExaminationService {
 
     ArrayList<ExaminationViewModel> findByDoctorId(long doctorId);
 
-    FeedbackBindingModel addFeedback(FeedbackServiceModel feedbackServiceModel, long examinationId) throws ExaminationNotFoundException;
+
 
     ExaminationEntity addExamination(AddExaminationServiceModel examinationServiceModel);
+
+    List<SetExaminationsForUserView> findAllExaminationsForThisUser(long id);
+
+    ExaminationViewModel getExaminationView(long id) throws ExaminationNotFoundException;
+
+    void addLocationDetails(ExaminationByDoctorServiceModel examinationByDoctorServiceModel) throws ExaminationNotFoundException;
+
+    ArrayList<ExaminationViewModel> findExaminationFoThisPatient(long patientId);
+
+    ArrayList<ExaminationViewModel> findAllByPatientIdAndDepartment(long id, MedicalBranchesEnum name);
+
+
+    int countAll();
+
+    void deleteExamiantionsForDoctor(DoctorEntity doctorEntity);
+
+    ArrayList<SetExaminationsForUserView> getAll();
 }

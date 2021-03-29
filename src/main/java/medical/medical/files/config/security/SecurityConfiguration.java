@@ -38,8 +38,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                         antMatchers("/", "/users/login", "/users/register", "/home").permitAll().
                 // protect all other pages
-                        antMatchers("/**").permitAll().
-                and().
+                        antMatchers("/examinations/**").authenticated().
+                antMatchers("/admin/**").hasRole("ADMIN").
+
+//TODO ADD /examinations/examination/1/add-additional-data САМО ЗА ДОКТОРИ
+        and().
                 // configure login with HTML form
                         formLogin().
                 // our login page will be served by the controller with mapping /users/login

@@ -1,24 +1,23 @@
 package medical.medical.files.service.impl;
 
 import medical.medical.files.exeptions.ExaminationNotFoundException;
-import medical.medical.files.model.bindingModels.FeedbackBindingModel;
+import medical.medical.files.exeptions.WrongDoctorException;
 import medical.medical.files.model.enteties.*;
-import medical.medical.files.model.enums.PartOfTheBodyEnum;
+import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.enums.ProgressionEnum;
-import medical.medical.files.model.enums.SideOfTheBodyEnum;
 import medical.medical.files.model.serviceModels.*;
-import medical.medical.files.model.viewModels.AddAdditionalDataViewModel;
-import medical.medical.files.model.viewModels.ExaminationViewModel;
-import medical.medical.files.model.viewModels.PrescriptionViewModel;
+import medical.medical.files.model.viewModels.*;
 import medical.medical.files.repositorie.ExaminationRepository;
-import medical.medical.files.service.ExaminationService;
+import medical.medical.files.service.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,81 +25,56 @@ import java.util.stream.Collectors;
 public class ExaminationServiceImpl implements ExaminationService {
     private final ModelMapper modelMapper;
     private final ExaminationRepository examinationRepository;
+    private final DoctorService doctorService;
+    private final UserService userService;
+    private final CloudinaryService cloudinaryService;
 
-    public ExaminationServiceImpl(ModelMapper modelMapper, ExaminationRepository examinationRepository) {
+    public ExaminationServiceImpl(ModelMapper modelMapper, ExaminationRepository examinationRepository, DoctorService doctorService, UserService userService, CloudinaryService cloudinaryService) {
         this.modelMapper = modelMapper;
         this.examinationRepository = examinationRepository;
-    }
-
-    @Override
-    public void editExamination(AddExaminationServiceModel examinationServiceModel, Long id) {
-        ExaminationEntity examinationEntity = this.modelMapper.
-                map(examinationServiceModel, ExaminationEntity.class);
-        Optional<ExaminationEntity> byId = this.examinationRepository.findById(id);
-        ExaminationEntity fromDB = modelMapper.map(byId, ExaminationEntity.class);
-        examinationEntity.setId(id);
-        examinationEntity.setDoctor(fromDB.getDoctor());
-        examinationEntity.setProgression(fromDB.getProgression());
-        this.examinationRepository.save(examinationEntity);
-
+        this.doctorService = doctorService;
+        this.userService = userService;
+        this.cloudinaryService = cloudinaryService;
 
     }
 
-    @Override
-    public void deleteExamination(long id) {
-        this.examinationRepository.deleteById(id);
-    }
 
     @Override
-    public void addDoctorPart(ExaminationByDoctorServiceModel examinationByDoctorServiceModel, long examinationId) throws ExaminationNotFoundException {
-        ExaminationEntity examinationEntity = this.examinationRepository.findById(examinationId).orElseThrow(ExaminationNotFoundException::new);
-        if (examinationEntity.getDoctor().getId() == examinationByDoctorServiceModel.getDoctorId()) {
+    public void addPrescription(AddPrescriptionServiceModel prescriptionServiceModel) throws ExaminationNotFoundException {
+        ExaminationEntity examinationEntity = this.examinationRepository.findById(prescriptionServiceModel.getExaminationId()).orElseThrow(ExaminationNotFoundException::new);
+        PrescriptionEntity prescription = examinationEntity.getPrescription();
+        if (prescription != null) {
+            prescription.setDays(prescriptionServiceModel.getDays());
+            prescription.setDoctorPrescription(prescriptionServiceModel.getDoctorPrescription());
+            examinationEntity.setPrescription(prescription);
+        } else {
 
-            examinationEntity.setProgression(ProgressionEnum.CURRENT);
-            String exactLocation = examinationByDoctorServiceModel.getExactLocation();
-            PartOfTheBodyEnum partOfTheBody = examinationByDoctorServiceModel.getPartOfTheBody();
-            SideOfTheBodyEnum sideOfTheBody = examinationByDoctorServiceModel.getSideOfTheBody();
-            LocationEntity locationEntity = new LocationEntity(partOfTheBody, sideOfTheBody, exactLocation);
-
-            examinationEntity.setLocation(locationEntity);
+            PrescriptionEntity newPrescription = new PrescriptionEntity(prescriptionServiceModel.getDoctorPrescription(), prescriptionServiceModel.getDays());
+            examinationEntity.setPrescription(newPrescription);
+        }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        ;
+        UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+        ;
+        if (byUserName.getDoctorEntity() != null &&
+                byUserName.getDoctorEntity().getId() == examinationEntity.getDoctor().getId()) {
             this.examinationRepository.save(examinationEntity);
         }
-    }
-
-    @Override
-    public void addPrescription(PrescriptionServiceModel prescriptionServiceModel, long id) throws ExaminationNotFoundException {
-        ExaminationEntity examinationEntity = this.examinationRepository.findById(id).orElseThrow(ExaminationNotFoundException::new);
-        PrescriptionEntity prescriptionEntity = this.modelMapper.map(prescriptionServiceModel, PrescriptionEntity.class);
-        if (examinationEntity.getDoctor().getId() == prescriptionServiceModel.getDoctorId()) {
-            examinationEntity.setPrescription(prescriptionEntity);
-        }
-
 
     }
 
-    @Override
-    public void addAdditionalData(AdditionalDataServiceModel additionalDataServiceModel, long examinationId) throws ExaminationNotFoundException {
-
-        LocationEntity locationEntity = new LocationEntity(additionalDataServiceModel.getPartOfTheBody(),
-                additionalDataServiceModel.getSideOfTheBody(),
-                additionalDataServiceModel.getExactLocation());
-        AdditionalDataEntity additionalDataEntity = this.modelMapper.map(additionalDataServiceModel,
-                AdditionalDataEntity.class);
-        additionalDataEntity.setLocationEntity(locationEntity);
-        ExaminationEntity examinationRepositoryById = this.examinationRepository.findById(examinationId).orElseThrow(ExaminationNotFoundException::new);
-        if (examinationRepositoryById.getDoctor().getId()
-                == additionalDataServiceModel.getDoctorId()) {
-            examinationRepositoryById.getAdditionalData().add(additionalDataEntity);
-        }
-    }
 
     @Override
-    public void completeExamination(long doctorId, long examinationId) throws ExaminationNotFoundException {
+    public void completeExamination(long examinationId) throws ExaminationNotFoundException {
         ExaminationEntity examinationEntity = this.examinationRepository.findById(examinationId).orElseThrow(ExaminationNotFoundException::new);
-        if (examinationEntity.getDoctor().getId() == doctorId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String name = authentication.getName();
+        UserEntity byUserName = this.userService.findByUserName(name);
+        if (byUserName.getDoctorEntity() != null && byUserName.getDoctorEntity().getId() == examinationEntity.getDoctor().getId()) {
             examinationEntity.setProgression(ProgressionEnum.DONE);
             this.examinationRepository.save(examinationEntity);
         }
+
     }
 
     @Override
@@ -135,26 +109,176 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     }
 
+
     @Override
-    public FeedbackBindingModel addFeedback(FeedbackServiceModel feedbackServiceModel, long examinationId) throws ExaminationNotFoundException {
-        FeedbackEntity feedback = this.modelMapper.map(feedbackServiceModel, FeedbackEntity.class);
-        ExaminationEntity examinationEntity = this.examinationRepository.findById(examinationId).orElseThrow(ExaminationNotFoundException::new);
-        if (examinationEntity.getProgression()!=null&&examinationEntity.getProgression().equals(ProgressionEnum.DONE)) {
-
-            ExaminationEntity examinationEntity1 = this.examinationRepository.saveAndFlush(examinationEntity);
-            return this.modelMapper.map(examinationEntity1, FeedbackBindingModel.class);
-
+    public List<SetExaminationsForUserView> findAllExaminationsForThisUser(long id) {
+        Set<ExaminationEntity> examinations = new LinkedHashSet<>();
+        if (isUserDoctorTrueOrPatientFalse()) {
+            examinations = this.examinationRepository.findAllByDoctorId(id);
+        } else {
+            examinations = this.examinationRepository.findAllByPatientId(id);
         }
-        return null;
 
+        List<SetExaminationsForUserView> setExaminations = new ArrayList<>();
+        for (ExaminationEntity examination : examinations) {
+            SetExaminationsForUserView map = this.modelMapper.map(examination, SetExaminationsForUserView.class);
+            map.setPhone(examination.getPatient().getPhone());
+            map.setPatientName(examination.getPatient().getFullName());
+            map.setPatientPhoto(examination.getPatient().getImageUrl());
+            setExaminations.add(map);
+        }
+
+        return setExaminations;
     }
 
     @Override
+    public ExaminationViewModel getExaminationView(long id) throws ExaminationNotFoundException {
+        ExaminationEntity examinationEntity = this.examinationRepository.findById(id).orElseThrow(() -> new ExaminationNotFoundException("examination not found"));
+        examinationEntity.getPatient().getId();
+
+        ExaminationViewModel examinationViewModel = this.modelMapper.map(examinationEntity, ExaminationViewModel.class);
+        examinationViewModel.setPatientId(examinationEntity.getPatient().getId());
+        examinationViewModel.setDoctorId(examinationEntity.getDoctor().getId());
+
+        return examinationViewModel;
+    }
+
+
+    //Examination creation
+    @Override
     public ExaminationEntity addExamination(AddExaminationServiceModel examinationServiceModel) {
         ExaminationEntity examinationEntity = this.modelMapper.map(examinationServiceModel, ExaminationEntity.class);
+        String[] split = examinationServiceModel.getDoctorName().split("-");
+        DoctorEntity byIdEntity = this.doctorService.findByIdEntity(Long.valueOf(split[1]));
+        if (!isUserDoctorTrueOrPatientFalse()) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            ;
+            UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+
+            PatientEntity patientEntity = byUserName.getPatientEntity();
+            examinationEntity.setPatient(patientEntity);
+        }
+        examinationEntity.setDoctor(byIdEntity);
+
+        examinationEntity.setProgression(ProgressionEnum.BOOKED);
         return this.examinationRepository.save(examinationEntity);
 
     }
 
+    @Override
+    public void addLocationDetails(ExaminationByDoctorServiceModel examinationByDoctorServiceModel) throws ExaminationNotFoundException {
+        ExaminationEntity examinationEntity = this.examinationRepository.findById(examinationByDoctorServiceModel.getExaminationId()).orElseThrow(() -> new ExaminationNotFoundException("Examination not found"));
+        if (examinationEntity.getProgression() == ProgressionEnum.BOOKED) {
+            examinationEntity.setProgression(ProgressionEnum.CURRENT);
+        }
+        if (examinationEntity.getLocation() != null) {
+            LocationEntity locationEntity = examinationEntity.getLocation();
+            locationEntity.setExactLocation(examinationByDoctorServiceModel.getExactLocation());
+            locationEntity.setPartOfTheBody(examinationByDoctorServiceModel.getPartOfTheBody());
+            locationEntity.setSideOfTheBody(examinationByDoctorServiceModel.getSideOfTheBody());
+        } else {
+            LocationEntity locationEntity = new LocationEntity(examinationByDoctorServiceModel.getPartOfTheBody(),
+                    examinationByDoctorServiceModel.getSideOfTheBody(),
+                    examinationByDoctorServiceModel.getExactLocation());
+            examinationEntity.setLocation(locationEntity);
+        }
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserViewModel byUserNameView = this.userService.findByUserNameView(authentication.getName());
+        ;
+        if (byUserNameView.getRoleId() == examinationEntity.getDoctor().getId()) {
+            this.examinationRepository.save(examinationEntity);
+
+        }
+    }
+
+    @Override
+    public ArrayList<ExaminationViewModel> findExaminationFoThisPatient(long patientId) {
+        List<ExaminationViewModel> examinationViewModels = this.examinationRepository.findAllByPatientIdOrderByDateDesc(patientId).
+                stream().
+                map(examinationEntity -> modelMapper.map(examinationEntity, ExaminationViewModel.class)).
+                collect(Collectors.toList());
+        return (ArrayList) examinationViewModels;
+    }
+
+    @Override
+    public ArrayList<ExaminationViewModel> findAllByPatientIdAndDepartment(long id, MedicalBranchesEnum name) {
+        List<ExaminationEntity> allByPatientIdAndMedicalBranch = this.examinationRepository.
+                findAllByPatientIdAndTypeOfBranch(id, name);
+        List<ExaminationViewModel> examinationViewModels = allByPatientIdAndMedicalBranch.stream().
+                map(examinationEntity -> modelMapper.map(examinationEntity, ExaminationViewModel.class)).
+                collect(Collectors.toList());
+        return (ArrayList<ExaminationViewModel>) examinationViewModels;
+    }
+
+    @Override
+    public int countAll() {
+        return (int) this.examinationRepository.count();
+    }
+
+    @Override
+    public void deleteExamiantionsForDoctor(DoctorEntity doctorEntity) {
+        Set<ExaminationEntity> allByDoctorId = this.examinationRepository.findAllByDoctorId(doctorEntity.getId());
+        allByDoctorId.stream().forEach(examinationEntity -> this.examinationRepository.delete(examinationEntity));
+    }
+
+    @Override
+    public ArrayList<SetExaminationsForUserView> getAll() {
+        List<ExaminationEntity> examinations = this.examinationRepository.
+                findAll();
+
+
+        List<SetExaminationsForUserView> setExaminations = new ArrayList<>();
+        for (ExaminationEntity examination : examinations) {
+            SetExaminationsForUserView map = this.modelMapper.map(examination, SetExaminationsForUserView.class);
+            map.setPhone(examination.getPatient().getPhone());
+            map.setPatientName(examination.getPatient().getFullName());
+            map.setPatientPhoto(examination.getPatient().getImageUrl());
+            setExaminations.add(map);
+        }
+
+
+        return (ArrayList<SetExaminationsForUserView>) setExaminations;
+
+    }
+
+
+    @Override
+    public void addAdditionalData(AdditionalDataServiceModel additionalDataServiceModel) throws ExaminationNotFoundException, WrongDoctorException, IOException {
+
+        LocationEntity locationEntity = new LocationEntity(additionalDataServiceModel.getPartOfTheBody(),
+                additionalDataServiceModel.getSideOfTheBody(),
+                additionalDataServiceModel.getExactLocation());
+        AdditionalDataEntity additionalDataEntity = new AdditionalDataEntity();
+        additionalDataEntity.setType(additionalDataServiceModel.getType());
+        additionalDataEntity.setDate(additionalDataServiceModel.getDate());
+        additionalDataEntity.setLocationEntity(locationEntity);
+        if (additionalDataServiceModel.getFile() != null) {
+            String fileLink = this.cloudinaryService.uploadImage(additionalDataServiceModel.getFile());
+            additionalDataEntity.setFile(fileLink);
+        }
+
+
+        ExaminationEntity examinationEntity = this.examinationRepository.findById(additionalDataServiceModel.getExaminationId()).orElseThrow(ExaminationNotFoundException::new);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (this.userService.findByUserName(authentication.getName()).getDoctorEntity().getId() == examinationEntity.getDoctor().getId()) {
+
+
+            examinationEntity.getAdditionalData().add(additionalDataEntity);
+            this.examinationRepository.save(examinationEntity);
+        } else {
+            throw new WrongDoctorException("Doctor who don't work on this examination can't add additional data");
+        }
+
+    }
+
+    private boolean isUserDoctorTrueOrPatientFalse() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+        if (byUserName.getDoctorEntity() != null) {
+            return true;
+        }
+        return false;
+
+    }
 }

@@ -3,11 +3,14 @@ package medical.medical.files.web;
 import medical.medical.files.model.bindingModels.AddDoctorProfileBindingModel;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.serviceModels.AddDoctorProfileServiceModel;
+import medical.medical.files.model.viewModels.*;
 import medical.medical.files.service.DoctorService;
 import medical.medical.files.service.ExaminationService;
+import medical.medical.files.service.ReviewService;
+import medical.medical.files.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,20 +19,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping("/doctors")
 @Controller
 public class DoctorController {
+    private static final String DOCTOR_PROFILE_FOLDER = "doctor-profile/";
     private final ExaminationService examinationService;
     private final ModelMapper modelMapper;
     private final DoctorService doctorService;
-    private static final String DOCTOR_PROFILE_FOLDER = "doctor-profile/";
+    private final UserService userService;
+    private final ReviewService reviewService;
 
-    public DoctorController(ExaminationService examinationService, ModelMapper modelMapper, DoctorService doctorService) {
+
+    public DoctorController(ExaminationService examinationService, ModelMapper modelMapper, DoctorService doctorService, UserService userService, ReviewService reviewService) {
         this.examinationService = examinationService;
         this.modelMapper = modelMapper;
         this.doctorService = doctorService;
+        this.userService = userService;
+        this.reviewService = reviewService;
     }
+
 
     @GetMapping("/create")
     private String createDoctor(Model model) {
@@ -40,10 +52,11 @@ public class DoctorController {
         return DOCTOR_PROFILE_FOLDER + "add-doctor-profile";
     }
 
+    //// TODO: 21-Mar-21  finish picture to cloud and for user
     @PostMapping("/create")
     private String createDoctorPost(@Valid @ModelAttribute("addDoctorProfile") AddDoctorProfileBindingModel addDoctorProfileBindingModel
             , BindingResult bindingResult,
-                                    RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails principalUser) throws IOException {
+                                    RedirectAttributes redirectAttributes) throws IOException {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("addDoctorProfile", addDoctorProfileBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addDoctorProfile", bindingResult);
@@ -51,34 +64,73 @@ public class DoctorController {
             return "redirect:/doctors/create";
         }
         AddDoctorProfileServiceModel addDoctorProfileServiceModel = this.modelMapper.map(addDoctorProfileBindingModel, AddDoctorProfileServiceModel.class);
+        addDoctorProfileServiceModel.setImg(addDoctorProfileBindingModel.getImg());
         this.doctorService.saveDoctorToProfile(addDoctorProfileServiceModel);
 
-        return "redirect:home";
+        return "redirect:/home";
     }
 
     @GetMapping("/all")
-    private String getAllDoctors() {
-
+    private String getAllDoctors(Model model) {
+        model.addAttribute("allDoctors", this.doctorService.getAll());
 
         return "hospital-doctors/doctors-list";
     }
 
+    @GetMapping("/doctor/profile")
+    private String getProfileDoctor(Model model) {
+        Authentication authentication = SecurityContextHolder.
+                getContext().getAuthentication();
+        String username = authentication.getName();
+        UserViewModel byUserNameView = this.userService.findByUserNameView(username);
+        model.addAttribute("user", byUserNameView);
+        SingleDoctorView singleDoctorView = this.doctorService.findById(byUserNameView.getRoleId());
+        model.addAttribute("doctor", singleDoctorView);
+        model.addAttribute("monday", singleDoctorView.getWorkingDays().get("MONDAY"));
+        model.addAttribute("tuesday", singleDoctorView.getWorkingDays().get("TUESDAY"));
+        model.addAttribute("wednesday", singleDoctorView.getWorkingDays().get("WEDNESDAY"));
+        model.addAttribute("thursday", singleDoctorView.getWorkingDays().get("THURSDAY"));
+        model.addAttribute("friday", singleDoctorView.getWorkingDays().get("FRIDAY"));
+        return "doctor-profile/doctor-profile";
+    }
+
+
     @GetMapping("/doctor/{id}")
-    private String getAllDoctorById(Model model) {
-//        @PathVariable("id") long id, IMPLEMENT
+    private String getViewDoctorById(@PathVariable("id") long id, Model model) {
+        SingleDoctorView byId = this.doctorService.findById(id);
+        Set<ReviewViewModel> allForDepartments = this.reviewService.findAllByDoctorId(id);
+        AllReviewStartView allReviewsForDoctor = this.reviewService.getAllReviewsForDoctor(id);
+        byId.setId(id);
+        byId.setReviews(allForDepartments.stream().limit(5).collect(Collectors.toSet()));
+        model.addAttribute("rating", allReviewsForDoctor);
+        model.addAttribute("doctor", byId);
+        model.addAttribute("monday", byId.getWorkingDays().get("MONDAY"));
+        model.addAttribute("tuesday", byId.getWorkingDays().get("TUESDAY"));
+        model.addAttribute("wednesday", byId.getWorkingDays().get("WEDNESDAY"));
+        model.addAttribute("thursday", byId.getWorkingDays().get("THURSDAY"));
+        model.addAttribute("friday", byId.getWorkingDays().get("FRIDAY"));
+
+
         return "hospital-doctors/single-doctor";
     }
 
-    @GetMapping("/doctor/Id/examinations")
-    private String getDoctorByIdExaminations(Model model) {
-//        @PathVariable("id") long id, IMPLEMENT
-        return DOCTOR_PROFILE_FOLDER + "doctor-examinations";
+    @GetMapping("/doctor/{id}/examinations")
+    private String getDoctorByIdExaminations(@PathVariable("id") long id, Model model) {
+
+        List<SetExaminationsForUserView> setExaminations = this.examinationService.findAllExaminationsForThisUser(id);
+        model.addAttribute("examinations", setExaminations);
+
+
+
+        return "examination/user-examinations";
     }
 
-    @GetMapping("/doctor/Id/comments")
-    private String getDoctorByIdComments(Model model) {
-//        @PathVariable("id") long id, IMPLEMENT
-        return DOCTOR_PROFILE_FOLDER + "comments-for-doctor";
+    @GetMapping("/doctor/{id}/reviews")
+    private String getDoctorByIdReviews(@PathVariable("id") long id, Model model) {
+//
+
+        model.addAttribute("reviews", this.reviewService.findAllByDoctorId(id));
+        return "patient-profile/user-comments";
     }
 
     @GetMapping("/doctor/Id/edit")
@@ -88,8 +140,12 @@ public class DoctorController {
         return DOCTOR_PROFILE_FOLDER + "doctor-profile";
     }
 
-    @GetMapping("/doctor/Id/delete")
+    @GetMapping("/doctor/{id}/delete")
     private String getDoctorByIdDelete(@PathVariable("id") long id) {
-        return "home";
+
+
+        this.userService.deleteUser(id);
+
+        return "redirect:/home";
     }
 }

@@ -14,6 +14,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +24,12 @@ import java.util.List;
 @NoArgsConstructor
 public class ExaminationByDoctorBindingModel {
 
-    private long doctorId;
 
-    @NotBlank
+    @NotNull
     private PartOfTheBodyEnum partOfTheBody;
-    @NotBlank
+    @NotNull
     private SideOfTheBodyEnum sideOfTheBody;
 
-    @NotBlank
     private String exactLocation;
 
 
