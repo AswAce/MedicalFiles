@@ -1,0 +1,53 @@
+
+.all{
+
+}
+  .part {
+
+
+    display: table-cell;
+
+ }
+
+ .part img {
+    width: 100%;
+   }
+
+   .danger img{
+       filter: saturate(3);
+      /* //Червено за много проблеми */
+   }
+    .avarage img{
+      filter: hue-rotate(220deg);
+      /* син филтер */
+    }
+    .little img{
+      filter: sepia(100%);
+       /* Жълто с малко прегледи */
+    }
+.infoBox{
+margin:55px;
+
+}
+.body-form{
+
+
+}
+.red-number{
+color:red}
+.blue-number{
+color:blue}
+.yellow-number{
+color:#CCCC00}
+
+
+
+
+    /*  */
+
+
+
+
+    /*  */
+
+

@@ -46,6 +46,8 @@ public class UserController {
         this.validationConfig = validationConfig;
     }
 
+
+
     @GetMapping("/profile")
     private String userProfile() {
 

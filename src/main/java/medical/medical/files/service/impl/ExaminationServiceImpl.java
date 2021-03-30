@@ -194,9 +194,21 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public ArrayList<ExaminationViewModel> findExaminationFoThisPatient(long patientId) {
-        List<ExaminationViewModel> examinationViewModels = this.examinationRepository.findAllByPatientIdOrderByDateDesc(patientId).
-                stream().
-                map(examinationEntity -> modelMapper.map(examinationEntity, ExaminationViewModel.class)).
+        List<ExaminationEntity> allByPatientIdOrderByDateDesc = this.examinationRepository.findAllByPatientIdOrderByDateDesc(patientId);
+        List<ExaminationViewModel> examinationViewModels = allByPatientIdOrderByDateDesc.
+                stream().filter(examinationEntity -> examinationEntity.getLocation() != null).
+                map(examinationEntity -> {
+
+
+                    ExaminationViewModel examinationViewModel = modelMapper.map(examinationEntity, ExaminationViewModel.class);
+                    LocationViewModel map = this.modelMapper.map(examinationEntity.getLocation(), LocationViewModel.class);
+                    map.setPartOfTheBody(examinationEntity.getLocation().getPartOfTheBody());
+                    map.setSideOfTheBody(examinationEntity.getLocation().getSideOfTheBody());
+
+                    examinationViewModel.setLocation(map);
+
+                    return examinationViewModel;
+                }).
                 collect(Collectors.toList());
         return (ArrayList) examinationViewModels;
     }
