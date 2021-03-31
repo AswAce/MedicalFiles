@@ -94,9 +94,12 @@
                             <div class="padding-30px background-white border-radius-20 box-shadow">
                                 <h3><i class="far fa-star margin-right-10px text-main-color"></i>Reviews: </h3>
                                 <hr>
-                                <th:block th:each="review : ${reviewsViews}" th:object="${review}">
-                                    <div th:insert="fragments/fragments :: reviews"></div>
-                                </th:block>
+                                <div >
+                                    <th:block th:each="review : ${reviewsViews}" th:object="${review}">
+                                        <div th:insert="fragments/fragments :: reviews"></div>
+                                    </th:block>
+                                </div>
+
                             </div>
                         </div>
                     </div>

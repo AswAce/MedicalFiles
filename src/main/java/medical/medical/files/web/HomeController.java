@@ -62,7 +62,7 @@ public class HomeController {
             }
             if (byUserNameView.getRole() != null && byUserNameView.getRole().equals("doctor")) {
                 model.addAttribute("isDoctor", true);
-            } else if (byUserNameView.getRole() != null && byUserNameView.getRole().equals("patient")) {
+            } else if ( byUserNameView.getRole() != null && byUserNameView.getRole().equals("patient")) {
                 model.addAttribute("isDoctor", false);
             }
             List<String> authorityList = getAuthorityList(securityService.getAuthorities());

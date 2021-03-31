@@ -23,4 +23,5 @@ public class DoctorRestController {
         return ResponseEntity.ok().body(this.doctorService.getAll());
 
     }
+
 }

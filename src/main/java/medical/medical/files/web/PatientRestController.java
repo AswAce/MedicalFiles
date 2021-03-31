@@ -23,8 +23,7 @@ import java.util.stream.Collectors;
 public class PatientRestController {
     private final ExaminationService examinationService;
     private final UserService userService;
-//Todo fix pgotos and add the page with Body
-    public PatientRestController(ExaminationService examinationService, UserService userService) {
+     public PatientRestController(ExaminationService examinationService, UserService userService) {
         this.examinationService = examinationService;
         this.userService = userService;
     }
@@ -44,6 +43,7 @@ public class PatientRestController {
             bodyVIewModel.setSide(examinationViewModel.getLocation().getSideOfTheBody().name().toLowerCase());
             return bodyVIewModel;
         }).collect(Collectors.toList());
+
         return ResponseEntity.ok().body(collect);
 
     }

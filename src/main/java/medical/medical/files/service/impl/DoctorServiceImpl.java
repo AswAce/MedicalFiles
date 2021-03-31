@@ -1,5 +1,6 @@
 package medical.medical.files.service.impl;
 
+import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.exeptions.DoctorNotFoundExeption;
 import medical.medical.files.model.enteties.*;
 import medical.medical.files.model.enums.DayEnum;
@@ -32,8 +33,9 @@ public class DoctorServiceImpl implements DoctorService {
     private final ScheduleService scheduleService;
     private final MedicalBranchesService medicalBranchesService;
     private final ExaminationRepository examinationRepository;
+    private final IAuthenticationFacade authenticationFacade;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository, ModelMapper modelMapper, CloudinaryService cloudinaryService, UserService userService, ScheduleService scheduleService, MedicalBranchesService medicalBranchesService, ExaminationRepository examinationRepository) {
+    public DoctorServiceImpl(DoctorRepository doctorRepository, ModelMapper modelMapper, CloudinaryService cloudinaryService, UserService userService, ScheduleService scheduleService, MedicalBranchesService medicalBranchesService, ExaminationRepository examinationRepository, IAuthenticationFacade authenticationFacade) {
         this.doctorRepository = doctorRepository;
         this.modelMapper = modelMapper;
         this.cloudinaryService = cloudinaryService;
@@ -42,6 +44,7 @@ public class DoctorServiceImpl implements DoctorService {
 
         this.medicalBranchesService = medicalBranchesService;
         this.examinationRepository = examinationRepository;
+        this.authenticationFacade = authenticationFacade;
     }
 
 
@@ -52,8 +55,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void saveDoctorToProfile(AddDoctorProfileServiceModel addDoctorProfileServiceModel) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userName = authentication.getName();
+
+        String userName = authenticationFacade.getAuthentication().getName();
         UserEntity byUsername = this.userService.findByUserName(userName);
         List<RoleEnum> collect = byUsername.getRoles().stream().map(roleEntity -> roleEntity.getRole()).collect(Collectors.toList());
         if (collect.contains(RoleEnum.DOCTOR)) {
@@ -141,8 +144,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     private DoctorEntity getDoctor() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+        UserEntity byUserName = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName());
         DoctorEntity docForDepartment = byUserName.getDoctorEntity();
         return docForDepartment;
     }

@@ -240,12 +240,20 @@ public class ExaminationController {
     }
 
     @GetMapping("/examination/{id}/complete")
-    public String completeExamination(@PathVariable long id) throws ExaminationNotFoundException {
+    private String completeExamination(@PathVariable long id) throws ExaminationNotFoundException {
 
 
         this.examinationService.completeExamination(id);
         return "redirect:/examinations/examination/{id}";
     }
+
+    @GetMapping("/examination/delete/{id}")
+    private  String deleteExaminations(@PathVariable long id){
+
+        this.examinationService.deleteExamination(id);
+        return "redirect:/admin/home";
+    }
+
 
     private AddDiseaseServiceModel getDiseaseMap(AddDiseaseBindingModel addDiseaseBindingModel, long id) throws ExaminationNotFoundException {
         AddDiseaseServiceModel addDiseaseServiceModel = this.modelMapper.map(addDiseaseBindingModel, AddDiseaseServiceModel.class);

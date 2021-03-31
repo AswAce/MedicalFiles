@@ -1,5 +1,6 @@
 package medical.medical.files.web;
 
+import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.model.bindingModels.AddPatientBindingModel;
 import medical.medical.files.model.serviceModels.PatientServiceModel;
 import medical.medical.files.model.viewModels.PatientViewModel;
@@ -31,9 +32,10 @@ public class PatientController {
     private final PatientService patientService;
     private final ExaminationService examinationService;
     private final ReviewService reviewService;
+    private final IAuthenticationFacade authenticationFacade;
 
 
-    public PatientController(ModelMapper modelMapper, UserService userService, PatientService patientService, ExaminationService examinationService, ReviewService reviewService) {
+    public PatientController(ModelMapper modelMapper, UserService userService, PatientService patientService, ExaminationService examinationService, ReviewService reviewService, IAuthenticationFacade authenticationFacade) {
         this.modelMapper = modelMapper;
         this.userService = userService;
         this.patientService = patientService;
@@ -41,6 +43,7 @@ public class PatientController {
 
 
         this.reviewService = reviewService;
+        this.authenticationFacade = authenticationFacade;
     }
 
 
@@ -91,9 +94,10 @@ public class PatientController {
     }
 
 
-    @GetMapping("/{id}/diseases")
-    private String getPatientDisease(@PathVariable("id") long id, Model model) {
-        PatientViewModel byId = this.patientService.findById(id);
+    @GetMapping("/patient/my/diseases")
+    private String getPatientDisease(  Model model) {
+        long patientId=getId();
+        PatientViewModel byId = this.patientService.findById(patientId);
 
         model.addAttribute("patientDiseases", byId.getDiseaseViewModels());
 
@@ -102,10 +106,10 @@ public class PatientController {
 
     }
 
-    @GetMapping("/{id}/comments")
-    private String getPatientComments(@PathVariable("id") long id, Model model) {
-
-        Set<ReviewViewModel> allByPatientId = this.reviewService.findAllByPatientId(id);
+    @GetMapping("/patient/my/comments")
+    private String getPatientComments( Model model) {
+        long patientId=getId();
+        Set<ReviewViewModel> allByPatientId = this.reviewService.findAllByPatientId(patientId);
 
         model.addAttribute("reviews", allByPatientId);
         return PATIENT_PROFILE + "user-comments.html";
@@ -113,9 +117,10 @@ public class PatientController {
 
     }
 
-    @GetMapping("/{id}/examinations")
-    private String getPatientExaminations(@PathVariable("id") long id, Model model) {
-        List<SetExaminationsForUserView> examinationFoThisPatient = this.examinationService.findAllExaminationsForThisUser(id);
+    @GetMapping("/patient/my/examinations")
+    private String getPatientExaminations( Model model) {
+        long patientId=getId();
+        List<SetExaminationsForUserView> examinationFoThisPatient = this.examinationService.findAllExaminationsForThisUser(patientId);
         model.addAttribute("examinations", examinationFoThisPatient);
 
         return "examination/user-examinations";
@@ -140,6 +145,10 @@ public class PatientController {
         //OK soso
 
     }
+    private long getId() {
+        String name = this.authenticationFacade.getAuthentication().getName();
+        return this.userService.findByUserNameView(name).getRoleId();
 
+    }
 
 }

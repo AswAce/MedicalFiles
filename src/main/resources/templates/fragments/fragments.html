@@ -39,6 +39,7 @@
     <link rel="stylesheet" href="/css/star.css">
     <link rel="stylesheet" href="/css/photo-zooom.css">
     <link rel="stylesheet" href="/css/body-style.css">
+    <link rel="stylesheet" href="/css/google-map-new.css">
     <script src="/js/jquery-3.2.1.min.js"></script>
 
 
@@ -60,7 +61,7 @@
     <nav class="container-fluid header-in">
         <div class="row">
             <div class="col-xl-2 col-lg-2">
-                <a id="logo" th:href="@{/home}" class="d-inline-block margin-tb-15px"><img src="img/logo-1.png" alt=""></a>
+                <a id="logo" th:href="@{/home}" class="d-inline-block margin-tb-15px"><img src="/img/logo-1.png" alt=""></a>
                 <a class="mobile-toggle padding-13px background-main-color" th:href="@{/home}"><i
                         class="fas fa-bars"></i></a>
             </div>
@@ -182,7 +183,6 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/backPage.js"></script>
     <script src="/js/zoom.js"></script>
-    <script src="/js/body.js"></script>
 
 
 </th:body>
@@ -211,7 +211,7 @@
                                             <li class="active"></li>
                                         </th:block>
 
-                                        <th:block th:if="${review.leftRating>0}"
+                                        <th:block th:if="${review.leftRating &gt; 0}"
                                                   th:each="i: ${#numbers.sequence(1, review.leftRating)}">
                                             <li></li>
                                         </th:block>
@@ -251,7 +251,6 @@
         </div>
     </div>
 </th:body>
-
 
 
 <th:body th:fragment="alert">
@@ -305,9 +304,9 @@
 
 <th:body th:fragment="examinations">
 
-    <div class="col-lg-6 margin-bottom-45px full-width">
+    <div class="col-lg-6 margin-bottom-45px ">
         <div class="background-white thum-hover box-shadow  hvr-float">
-            <div class="padding-30px full-width">
+            <div class="padding-30px full-width  width-350px max-width-350px height-300px ">
                 <img th:src="*{patientPhoto}"
                      width="50"
                      height="50"
@@ -321,41 +320,80 @@
                     <div class="d-block padding-tb-5px">Phone : <a href="#" class="text-main-color"
                                                                    th:text="*{phone}">0022219653258</a>
                     </div>
-                    <div class="d-block padding-tb-5px w-25 p-3">
-                        <p class="margin-top-15px text-grey-2 " position="relative" white-space="pre-wrap"
-                           th:text="|Complain:*{complain}|">
-                            Patient camplain. </p>
-                    </div>
-
-                    <a
-                            th:href="@{/examinations/examination/{id}(id=*{id})}"
-                            class="d-inline-block text-grey-2 text-up-small"><i
-                            class="far fa-file-alt"></i> See details</a>
-
-                    <th:block th:switch="${examination.progressionEnum.name}">
-
-                        <p th:case="'BOOKED'"
-                           class="d-inline-block margin-lr-20px text-grey-2 text-up-small text-warning font-weight-bold">
-                            <i class="fas fa-user-injured"></i>Booked</p>
-
-                        <p th:case="CURRENT"
-                           class="d-inline-block margin-lr-20px text-grey-2 text-up-small text-danger font-weight-bold">
-                            <i class="fas fa-user-injured"></i>Working on it </p>
-
-                        <p th:case="DONE"
-                           class="d-inline-block margin-lr-20px text-grey-2 text-up-small text-success font-weight-bold">
-                            <i class="far fa-user-shield"></i> Complete </p>
-
-                    </th:block>
-
+                </div>
+                <div>
+                    <textarea type="text" row="3" cols="30" class="margin-top-15px text-grey-2 overflow-auto"
+                              th:text="|Complain:*{complain}|"> </textarea>
 
                 </div>
+
+                <a
+                        th:href="@{/examinations/examination/{id}(id=*{id})}"
+                        class="d-inline-block text-grey-2 text-up-small"><i
+                        class="far fa-file-alt"></i> See details</a>
+
+                <th:block th:switch="${examination.progressionEnum.name}">
+
+                    <p th:case="'BOOKED'"
+                       class="d-inline-block margin-lr-20px text-grey-2 text-up-small text-warning font-weight-bold">
+                        <i class="fas fa-user-injured"></i>Booked</p>
+
+                    <p th:case="CURRENT"
+                       class="d-inline-block margin-lr-20px text-grey-2 text-up-small text-danger font-weight-bold">
+                        <i class="fas fa-user-injured"></i>Working on it </p>
+
+                    <p th:case="DONE"
+                       class="d-inline-block margin-lr-20px text-grey-2 text-up-small text-success font-weight-bold">
+                        <i class="far fa-user-shield"></i> Complete </p>
+
+                </th:block>
+                <th:block sec:authorize="hasRole('ROLE_ADMIN')">
+                    <a
+                            th:href="@{/examinations/examination/delete/{id}(id=*{id})}"
+                            class="d-inline-block text-black text-up-small"><i
+                            class="fas fa-trash-alt"></i>Delete Examination</a>
+
+                </th:block>
+
             </div>
         </div>
     </div>
 </th:body>
 
+<th:body th:fragment="doctors">
 
+    <div class="background-white box-shadow">
+        <div class="thum">
+            <!--
+                                             th:href="@{/doctors/doctor/{id}"-->
+            <a th:href="@{/doctors/doctor/{id} (id=*{id})}">
+                <!-- //if no image ->img src="http://placehold.it/400x400" -->
+
+
+                <img th:src="*{photo}" alt="..."
+                     class=" i   " style="">
+            </a>
+        </div>
+        <div class="padding-30px">
+                                <span class="text-grey-2"
+                                      th:text="|Department: *{medicalBranchesEnum}| ">Department</span>
+            <h5 class="margin-tb-15px"><a class="text-dark"
+
+                                          th:href="@{/doctors/doctor/{id} (id=*{id})}"
+                                          th:text="|Doctor: *{fullName}| ">Dr. Shahrzat Moh</a></h5>
+            <div class="rating clearfix">
+                <ul class="float-left">
+                    <li class="active"></li>
+                    <li class="active"></li>
+                    <li class="active"></li>
+                    <li class="active"></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</th:body>
 <th:body th:fragment="body-field">
     <div class="all">
         <div class=" infoBox ">

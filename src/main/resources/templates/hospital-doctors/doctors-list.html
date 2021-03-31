@@ -35,37 +35,8 @@
                     <!-- Doctor -->
                     <div class="col-lg-4 col-md-6 hvr-bob margin-bottom-45px"
                          th:each="doctor:${allDoctors}"
-                         th:object="${doctor}">
-                        <div class="background-white box-shadow">
-                            <div class="thum">
-                                <!--
-                                                                 th:href="@{/doctors/doctor/{id}"-->
-                                <a th:href="@{/doctors/doctor/{id} (id=*{id})}">
-                                    <!-- //if no image ->img src="http://placehold.it/400x400" -->
-
-
-                                    <img th:src="*{photo}" alt="..."
-                                         class=" i   " style="">
-                                </a>
-                            </div>
-                            <div class="padding-30px">
-                                <span class="text-grey-2"
-                                      th:text="|Department: *{medicalBranchesEnum}| ">Department</span>
-                                <h5 class="margin-tb-15px"><a class="text-dark"
-
-                                                              th:href="@{/doctors/doctor/{id} (id=*{id})}"
-                                                              th:text="|Doctor: *{fullName}| ">Dr. Shahrzat Moh</a></h5>
-                                <div class="rating clearfix">
-                                    <ul class="float-left">
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                         th:object="${doctor}" th:insert="fragments/fragments :: doctors">
+                      
                     </div>
                     <!-- // Doctor -->
 

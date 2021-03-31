@@ -34,15 +34,33 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 authorizeRequests().
                 // allow access to static resources to anyone
                         requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
+                antMatchers("/", "/users/login", "/users/register", "/home").permitAll().
+                antMatchers("/departments/all", "/departments/department/*/", "/doctors/all", "/doctors/doctor/*/").permitAll().
                 // allow access to index, user login and registration to anyone
+                        antMatchers("/doctors/create", "/patients/create").authenticated().
+                antMatchers("/patients/patient/profile",
+                        "/patients/*/",
+                        "/patients/*/diseases",
+                        "/patients/*/comments",
+                        "/patients/*/examinations"
+                ).hasRole("PATIENT").
 
-                        antMatchers("/", "/users/login", "/users/register", "/home").permitAll().
-                // protect all other pages
-                        antMatchers("/examinations/**").authenticated().
-                antMatchers("/admin/**").hasRole("ADMIN").
+                antMatchers(
+                        "/doctors/doctor/profile",
+                        "/examinations/examination/*/add-additional-data",
+                        "/examinations/examination/*/add-disease",
+                        "/doctors/doctor/*/examinations",
+                        "/doctors/doctor/*/reviews").hasRole("DOCTOR").
 
-//TODO ADD /examinations/examination/1/add-additional-data САМО ЗА ДОКТОРИ
-        and().
+                antMatchers("/admin/**","/doctor/*/delete").hasRole("ADMIN").
+//    /departments/department/*  permitAll(). трябва да е за всички а не работи  /doctors/doctor/* е същото но работи..
+
+                //трябва да е позволено само за логнат Doctor
+// http://localhost:8080/doctors/doctor/1/reviews -
+                //http://localhost:8080/doctors/doctor/1/examinations
+
+
+                        and().
                 // configure login with HTML form
                         formLogin().
                 // our login page will be served by the controller with mapping /users/login

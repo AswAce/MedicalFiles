@@ -254,6 +254,13 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     }
 
+    @Override
+
+    public void deleteExamination(long id) {
+
+        this.examinationRepository.deleteById(id);
+    }
+
 
     @Override
     public void addAdditionalData(AdditionalDataServiceModel additionalDataServiceModel) throws ExaminationNotFoundException, WrongDoctorException, IOException {

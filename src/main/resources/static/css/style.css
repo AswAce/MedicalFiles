@@ -22975,6 +22975,9 @@ video {
 .width-300px {
   width: 300px;
 }
+.width-400px {
+  width: 400px;
+}
 
 .width-auto {
   width: auto;
@@ -29950,6 +29953,9 @@ ul.pagination-style-2 li a .page-item:last-child .page-link {
   position: relative;
   overflow: hidden;
 }
+.overflow-auto{
+overflow: auto;
+}
 .with-hover:hover .hover-option {
   transform: translateY(0%);
   -webkit-transform: translateY(0%);
@@ -31837,7 +31843,8 @@ form.dark-form ::-ms-input-placeholder {
   display: block;
   content: "";
 }
-
+.max-width-350px{
+max-width:350px}
 .YouTubePopUp-Content iframe {
   max-width: 100% !important;
   width: 100% !important;

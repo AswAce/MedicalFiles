@@ -27,47 +27,51 @@
             <div class="col-lg-6">
 
                 <div class="map-distributors-in">
-                    <div id="map-distributors">
+<!--                    <div id="map-distributors">-->
 
-                        <script >
-                            $(function() {
-                                $("#map-distributors").goMap({
-                                    zoom: 6,
-                                    maptype: 'ROADMAP',
-                                    markers: [
+<!--                        <script >-->
+<!--                            $(function() {-->
+<!--                                $("#map-distributors").goMap({-->
+<!--                                    zoom: 6,-->
+<!--                                    maptype: 'ROADMAP',-->
+<!--                                    markers: [-->
 
-                                        {
-                                            address: '37.222350, -113.558284',
-                                            icon: '/static/assets/img/icon_marker_1.png',
-                                            html: '<div class="background-white width-250px"><div class="padding-top-50px padding-lr-20px"> <div class="z-index-2 position-relative"> <h5 class="margin-bottom-20px"><a class="text-dark" href="#">Alrayan Eye Clinic</a></h5> <div class="rating clearfix"> <span class="float-left text-grey-2"><i class="far fa-map"></i> California</span> <ul class="float-right"> <li class="active"></li> <li class="active"></li> <li class="active"></li> <li class="active"></li> <li></li> </ul> </div> </div> </div> </div> </div>'
-                                        },
-
-
-
-                                    ],
-                                    hideByClick: true
-                                });
-                                $("#default").click(function() {
-                                    $("#dump").html($.dump($.goMap.getMarkers()));
-                                });
-                                $("#clearall").click(function() {
-                                    $.goMap.clearMarkers();
-                                });
-                                $("#json").click(function() {
-                                    $("#dump").html($.goMap.getMarkers("json"));
-                                });
-                                $("#data").click(function() {
-                                    $("#dump").html($.goMap.getMarkers("data"));
-                                });
-
-                                $('.gm-style-iw').parent().css('width', 'auto');
+<!--                                        {-->
+<!--                                            address: '37.222350, -113.558284',-->
+<!--                                            icon: '/static/assets/img/icon_marker_1.png',-->
+<!--                                            html: '<div class="background-white width-250px"><div class="padding-top-50px padding-lr-20px"> <div class="z-index-2 position-relative"> <h5 class="margin-bottom-20px"><a class="text-dark" href="#">Alrayan Eye Clinic</a></h5> <div class="rating clearfix"> <span class="float-left text-grey-2"><i class="far fa-map"></i> California</span> <ul class="float-right"> <li class="active"></li> <li class="active"></li> <li class="active"></li> <li class="active"></li> <li></li> </ul> </div> </div> </div> </div> </div>'-->
+<!--                                        },-->
 
 
-                            });
 
-                        </script>
+<!--                                    ],-->
+<!--                                    hideByClick: true-->
+<!--                                });-->
+<!--                                $("#default").click(function() {-->
+<!--                                    $("#dump").html($.dump($.goMap.getMarkers()));-->
+<!--                                });-->
+<!--                                $("#clearall").click(function() {-->
+<!--                                    $.goMap.clearMarkers();-->
+<!--                                });-->
+<!--                                $("#json").click(function() {-->
+<!--                                    $("#dump").html($.goMap.getMarkers("json"));-->
+<!--                                });-->
+<!--                                $("#data").click(function() {-->
+<!--                                    $("#dump").html($.goMap.getMarkers("data"));-->
+<!--                                });-->
 
-                    </div>
+<!--                                $('.gm-style-iw').parent().css('width', 'auto');-->
+
+
+<!--                            });-->
+
+<!--                        </script>-->
+
+<!--                    </div>-->
+
+                    <h3>My Google Maps Demo</h3>
+                    <!--The div element for the map -->
+                    <div id="map"></div>
                 </div>
             </div>
 
@@ -147,14 +151,19 @@
             </div>
         </div>
     </footer>
-    <script  src="assets/js/sticky-sidebar.js"></script>
-    <script  src="assets/js/YouTubePopUp.jquery.js"></script>
-    <script  src="assets/js/owl.carousel.min.js"></script>
-    <script  src="assets/js/imagesloaded.min.js"></script>
-    <script  src="assets/js/wow.min.js"></script>
-    <script  src="assets/js/custom.js"></script>
-    <script  src="assets/js/popper.min.js"></script>
-    <script  src="assets/js/bootstrap.min.js"></script>
+    <script  src="/js/sticky-sidebar.js"></script>
+    <script  src="/js/YouTubePopUp.jquery.js"></script>
+    <script  src="/js/owl.carousel.min.js"></script>
+    <script  src="/js/imagesloaded.min.js"></script>
+    <script  src="/js/wow.min.js"></script>
+    <script  src="/js/custom.js"></script>
+    <script  src="/js/popper.min.js"></script>
+    <script  src="/js/bootstrap.min.js"></script>
+<script src="/js/google-map-new-js.js"></script>
+<script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCj6HyO4zq1F3U1dqXECetpJhalLLR6nY&callback=initMap&libraries=&v=weekly"
+        async
+></script>
 </body>
 
 </html>

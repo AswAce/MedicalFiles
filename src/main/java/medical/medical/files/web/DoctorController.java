@@ -1,5 +1,6 @@
 package medical.medical.files.web;
 
+import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.model.bindingModels.AddDoctorProfileBindingModel;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.serviceModels.AddDoctorProfileServiceModel;
@@ -32,14 +33,16 @@ public class DoctorController {
     private final DoctorService doctorService;
     private final UserService userService;
     private final ReviewService reviewService;
+    private final IAuthenticationFacade authenticationFacade;
 
 
-    public DoctorController(ExaminationService examinationService, ModelMapper modelMapper, DoctorService doctorService, UserService userService, ReviewService reviewService) {
+    public DoctorController(ExaminationService examinationService, ModelMapper modelMapper, DoctorService doctorService, UserService userService, ReviewService reviewService, IAuthenticationFacade authenticationFacade) {
         this.examinationService = examinationService;
         this.modelMapper = modelMapper;
         this.doctorService = doctorService;
         this.userService = userService;
         this.reviewService = reviewService;
+        this.authenticationFacade = authenticationFacade;
     }
 
 
@@ -83,6 +86,9 @@ public class DoctorController {
                 getContext().getAuthentication();
         String username = authentication.getName();
         UserViewModel byUserNameView = this.userService.findByUserNameView(username);
+        if (byUserNameView.getUsername().equals("admin")) {
+            return "redirect:/admin/home";
+        }
         model.addAttribute("user", byUserNameView);
         SingleDoctorView singleDoctorView = this.doctorService.findById(byUserNameView.getRoleId());
         model.addAttribute("doctor", singleDoctorView);
@@ -114,22 +120,24 @@ public class DoctorController {
         return "hospital-doctors/single-doctor";
     }
 
-    @GetMapping("/doctor/{id}/examinations")
-    private String getDoctorByIdExaminations(@PathVariable("id") long id, Model model) {
+    @GetMapping("/doctor/my/examinations")
+    private String getDoctorByIdExaminations(  Model model) {
 
-        List<SetExaminationsForUserView> setExaminations = this.examinationService.findAllExaminationsForThisUser(id);
+        long roleId = getId();
+        List<SetExaminationsForUserView> setExaminations = this.examinationService.findAllExaminationsForThisUser(roleId);
         model.addAttribute("examinations", setExaminations);
-
 
 
         return "examination/user-examinations";
     }
 
-    @GetMapping("/doctor/{id}/reviews")
-    private String getDoctorByIdReviews(@PathVariable("id") long id, Model model) {
-//
 
-        model.addAttribute("reviews", this.reviewService.findAllByDoctorId(id));
+
+    @GetMapping("/doctor/my/reviews")
+    private String getDoctorByIdReviews( Model model) {
+        long roleId = getId();
+
+        model.addAttribute("reviews", this.reviewService.findAllByDoctorId(roleId));
         return "patient-profile/user-comments";
     }
 
@@ -147,5 +155,10 @@ public class DoctorController {
         this.userService.deleteUser(id);
 
         return "redirect:/home";
+    }
+    private long getId() {
+        String name = this.authenticationFacade.getAuthentication().getName();
+        return this.userService.findByUserNameView(name).getRoleId();
+
     }
 }

@@ -51,4 +51,6 @@ public interface ExaminationService {
     void deleteExamiantionsForDoctor(DoctorEntity doctorEntity);
 
     ArrayList<SetExaminationsForUserView> getAll();
+
+    void deleteExamination(long id);
 }

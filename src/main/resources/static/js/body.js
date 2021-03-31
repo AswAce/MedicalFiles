@@ -1,9 +1,8 @@
-
- async function run() {
+run()
+  function run() {
   console.log("Run functions");
 
-  const allExaminations = getArray()
-  console.log(allExaminations);
+const sal=document.getElementById("patientBody");
   var head = document.getElementsByClassName("head");
   let head_count = 0;
 
@@ -41,58 +40,22 @@
   let other_count = 0;
 
 
-  getNumbers(allExaminations);
-
-
-addColor(head,head_count)
-
-
-addColor(neck,neck_count)
-
-
-addColor(right_shoulder,right_shoulder_count )
-
-
-addColor(chest,chest_count)
-
-addColor(left_shoulder,left_shoulder_count )
-
-addColor(back,back_count)
-
-addColor(stomach,stomach_count)
-
-addColor(right_hand,right_hand_count)
-
-addColor(left_hand,left_hand_count)
-
-
-addColor(left_leg,left_leg_count)
-console.log("left_leg:  "+left_leg_count)
-addColor(right_leg,right_leg_count)
-
-addColor(other,other_count)
+  const allExaminations = [];
+  fetch("http://localhost:8080/patient/body-examinations").
+       then(response => response.json()).
+       then(data => {
+         for (let examination of data) {
+           allExaminations.push(examination);
+         }
+       })
 
 
 
+sal.addEventListener('click',(e)=>{
 
- async function getArray(){
- const allExaminations = [];
 
-  await fetch("http://localhost:8080/patient/body-examinations").
-   then(response => response.json()).
-   then(data => {
-     for (let examination of data) {
-       allExaminations.push(examination);
-     }
-   })
-   return  allExaminations;
-}
+   for (let e of allExaminations) {
 
- async  function getNumbers(examinations) {
-    console.log("examinations working"+ examinations);
-  console.log( examinations);
-   for (let e of examinations) {
-    console.log(e)
       switch (e.part) {
         case "EYE":
         case "BRAIN":
@@ -172,10 +135,31 @@ addColor(other,other_count)
           }
           break;
       }
-    }
+
   }
 
- async  function addColor(part, number) {
+addColor(head,head_count)
+
+
+addColor(neck,neck_count)
+
+
+addColor(right_shoulder,right_shoulder_count )
+
+
+addColor(chest,chest_count)
+addColor(left_shoulder,left_shoulder_count )
+addColor(back,back_count)
+addColor(stomach,stomach_count)
+addColor(right_hand,right_hand_count)
+addColor(left_hand,left_hand_count)
+addColor(left_leg,left_leg_count)
+console.log("left_leg:  "+left_leg_count)
+addColor(right_leg,right_leg_count)
+addColor(other,other_count)
+})
+
+    function addColor(part, number) {
       console.log("add color")
     if (number >= 3 && number < 6) {
       for (let item of part) {
@@ -194,4 +178,6 @@ addColor(other,other_count)
       }
     }
   }
+
 }
+

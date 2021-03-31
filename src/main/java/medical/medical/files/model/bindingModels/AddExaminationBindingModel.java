@@ -29,7 +29,7 @@ public class AddExaminationBindingModel {
     @NotEmpty(message = "Choose doctor name")
     private String doctorName;
     @NotEmpty
-    @Size(min = 10,message = "enter your complain")
+    @Size(min = 10,max = 150,message = "enter your complain")
     private String complain;
 
 

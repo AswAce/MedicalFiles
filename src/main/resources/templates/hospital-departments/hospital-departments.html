@@ -37,7 +37,7 @@
                                 /></a>
                             </div>
                             <div class="padding-30px background-white">
-                                <a th:href="@{/doctors/doctor/{doctorId} (doctorId=*{doctorId})}">
+                                <a th:href="@{/departments/department/{id} (id=*{id})}">
                                     <i class="fas fa-stethoscope text-main-color"></i>
                                     <span th:text="|Department: *{medicalBranchesEnum}| "> Some longer sample text</span>
                                 </a>
@@ -46,7 +46,7 @@
                                     <i class="fas fa-user-md text-grey-2">
 
                                     </i>
-                    <a href="#"
+                    <a th:href="@{/doctors/doctor/{doctorId} (doctorId=*{doctorId})}"
                        th:text="|*{firstDoctorName}| ">
 
                     </a>
@@ -63,40 +63,10 @@
                 </div>
 
 
-                <!--            <ul class="pagination pagination-md">-->
-                <!--              <li class="page-item disabled">-->
-                <!--                <a class="page-link rounded-0" href="#" tabindex="-1"-->
-                <!--                  >Previous</a-->
-                <!--                >-->
-                <!--              </li>-->
-                <!--              <li class="page-item"><a class="page-link" href="#">1</a></li>-->
-                <!--              <li class="page-item"><a class="page-link" href="#">2</a></li>-->
-                <!--              <li class="page-item"><a class="page-link" href="#">3</a></li>-->
-                <!--              <li class="page-item">-->
-                <!--                <a class="page-link rounded-0" href="#">Next</a>-->
-                <!--              </li>-->
-                <!--            </ul>-->
+
             </div>
             <div class="col-lg-4">
 
-                <!--            <div class="background-white border-radius-10 margin-bottom-45px">-->
-                <!--                <div class="padding-25px">-->
-                <!--                    <h3 class="margin-lr-20px"><i class="fas fa-search margin-right-10px text-main-color"></i> Search Department</h3>-->
-                <!--                    &lt;!&ndash; Listing Search &ndash;&gt;-->
-                <!--                    <div class="listing-search">-->
-                <!--                        <form>-->
-                <!--                            <div class="keywords margin-bottom-20px">-->
-                <!--                                <input class="listing-form first border-radius-10" type="text" placeholder="Department name..." value="">-->
-                <!--                            </div>-->
-                <!--                             -->
-
-                <!--                            -->
-                <!--                            <a class="listing-bottom background-main-color box-shadow border-radius-10" href="#">Search Now</a>-->
-                <!--                        </form>-->
-                <!--                    </div>-->
-                <!--                    &lt;!&ndash; // Listing Search &ndash;&gt;-->
-                <!--                </div>-->
-                <!--            </div>-->
 
 
                 <div class="featured-categorey">

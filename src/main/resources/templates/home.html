@@ -52,9 +52,9 @@
                     </div>
                     <th:block sec:authorize="isAuthenticated()">
 
-                            <th:block th:if="isDoctor">
+                            <th:block th:if="${isDoctor}">
                                 <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
-                                <a th:href="@{patients/{id}/comments (id=${user.roleId})}"
+                                <a th:href="@{doctors/doctor/my/reviews}"
                                    class="d-block border-radius-15 hvr-float hvr-sh2">
                                     <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
                                         <div class="icon margin-bottom-15px pacity-7" >
@@ -65,7 +65,7 @@
                                 </a>
                                 </div>
                                 <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
-                                    <a th:href="@{doctors/doctor/{id}/examinations (id=${user.roleId})}"
+                                    <a th:href="@{doctors/doctor/my/examinations}"
                                             class="d-block border-radius-15 hvr-float hvr-sh2">
                                         <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
                                             <div class="icon margin-bottom-15px opacity-7">
@@ -76,9 +76,9 @@
                                     </a>
                                 </div>
                             </th:block>
-                            <th:block th:unless="isDoctor">
+                            <th:block th:unless="${isDoctor}">
                                 <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
-                                    <a th:href="@{doctors/doctor/{id}/reviews (id=${user.roleId})}"
+                                    <a th:href="@{patients/patient/my/comments}"
                                        class="d-block border-radius-15 hvr-float hvr-sh2">
                                         <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
                                             <div class="icon margin-bottom-15px">
@@ -90,7 +90,7 @@
                                 </div>
                                     <div class="col-md-3 col-6 wow fadeInUp" data-wow-delay="0.4s">
                                     <a
-                                       th:href="@{patient/patient/{id}/examinations (id=${user.roleId})}"
+                                       th:href="@{patients/patient/my/examinations}"
                                        class="d-block border-radius-15 hvr-float hvr-sh2">
                                         <div class="background-main-color text-white border-radius-15 padding-20px text-center opacity-hover-7">
                                             <div class="icon margin-bottom-15px opacity-7">
@@ -128,37 +128,8 @@
 
                     <!-- Doctor -->
                     <div class="col-lg-4 col-md-6 hvr-bob margin-bottom-45px" th:each="doctor:${doctorsCarousel}"
-                         th:object="${doctor}">
-                        <div class="background-white box-shadow">
-                            <div class="thum">
-                                <!--
-                                                                 th:href="@{/doctors/doctor/{id}"-->
-                                <a th:href="@{/doctors/doctor/{id} (id=*{id})}">
-                                    <!-- //if no image ->img src="http://placehold.it/400x400" -->
+                         th:object="${doctor}" th:insert="fragments/fragments :: doctors">
 
-
-                                    <img th:src="*{photo}" alt="..."
-                                         class=" i   " style="">
-                                </a>
-                            </div>
-                            <div class="padding-30px">
-                                <span class="text-grey-2"
-                                      th:text="|Department: *{medicalBranchesEnum}| ">Department</span>
-                                <h5 class="margin-tb-15px"><a class="text-dark"
-
-                                                              th:href="@{/doctors/doctor/{id} (id=*{id})}"
-                                                              th:text="|Doctor: *{fullName}| ">Dr. Shahrzat Moh</a></h5>
-                                <div class="rating clearfix">
-                                    <ul class="float-left">
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li class="active"></li>
-                                        <li></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <!-- // Doctor -->
 

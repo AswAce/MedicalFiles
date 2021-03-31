@@ -48,8 +48,8 @@
                             >Upload Image</a
                             >
                             <div class="padding-top-20px">
-                                <a
-                                       onclick="run()"
+                                <a id="patientBody"
+
                                         class="btn btn-sm text-white background-main-color btn-block"
                                 >Get data</a
                                 >
@@ -257,17 +257,17 @@
                                 </div>
 
                                 <a
-                                        th:href="@{/patients/{id}/diseases(id=${user.roleId})}"
+                                        th:href="@{/patients/patient/my/diseases}"
                                         class=" btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
                                 >Diseases</a
                                 >
                                 <a
-                                        th:href="@{/patients/{id}/examinations(id=${user.roleId})}"
+                                        th:href="@{/patients/patient/my/examinations}"
                                         class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
                                 >Examinations</a
                                 >
                                 <a
-                                        th:href="@{/patients/{id}/comments (id=${user.roleId})}"
+                                        th:href="@{/patients/patient/my/comments}"
                                         class="btn btn-md padding-lr-25px text-white background-main-color btn-inline-block"
                                 >Reviews</a
                                 >
@@ -303,5 +303,6 @@
 
 
 <div th:insert="fragments/fragments :: js"></div>
+<script src="/js/body.js"></script>
 </body>
 </html>
