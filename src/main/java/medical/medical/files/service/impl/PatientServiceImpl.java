@@ -1,5 +1,6 @@
 package medical.medical.files.service.impl;
 
+import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.exeptions.ExaminationNotFoundException;
 import medical.medical.files.model.enteties.*;
 import medical.medical.files.model.enums.BmiResultsEnum;
@@ -31,9 +32,10 @@ public class PatientServiceImpl implements PatientService {
     private final ExaminationService examinationService;
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
+    private final IAuthenticationFacade authenticationFacade;
 
 
-    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, ExaminationService examinationService, UserService userService, CloudinaryService cloudinaryService) {
+    public PatientServiceImpl(PatientRepository patientRepository, ModelMapper modelMapper, ExaminationService examinationService, UserService userService, CloudinaryService cloudinaryService, IAuthenticationFacade authenticationFacade) {
         this.patientRepository = patientRepository;
         this.modelMapper = modelMapper;
 
@@ -42,12 +44,13 @@ public class PatientServiceImpl implements PatientService {
         this.cloudinaryService = cloudinaryService;
 
 
+        this.authenticationFacade = authenticationFacade;
     }
 
     @Override
     public void savePatient(PatientServiceModel patientServiceModel) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity userEntity = this.userService.findByUserName(authentication.getName());
+
+        UserEntity userEntity = this.userService.findByUserName(authenticationFacade.getAuthentication().getName());
 
         List<RoleEnum> collect = userEntity.getRoles().stream().map(RoleEntity::getRole).collect(Collectors.toList());
         if (collect.contains(RoleEnum.PATIENT)) {
@@ -55,8 +58,7 @@ public class PatientServiceImpl implements PatientService {
             if (!patientServiceModel.getImg().getOriginalFilename().isEmpty()) {
                 String uploadImage = this.cloudinaryService.uploadImage(patientServiceModel.getImg());
                 patientEntity.setImageUrl(uploadImage);
-            }
-            else {
+            } else {
                 patientEntity.setImageUrl("https://res.cloudinary.com/aswace/image/upload/v1616342430/medicalApp/default-avatar-profile-icon-vector-social-media-user-photo-183042379_s17edi.jpg");
             }
 
@@ -71,9 +73,8 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void addExaminationToThePatient(AddExaminationServiceModel examinationServiceModel) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        PatientEntity patientEntity = this.userService.findByUserName(authentication.getName()).getPatientEntity();
+        PatientEntity patientEntity = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName()).getPatientEntity();
 
 
         this.patientRepository.save(patientEntity);
@@ -108,8 +109,7 @@ public class PatientServiceImpl implements PatientService {
     public void addDiseaseToThePatient(AddDiseaseServiceModel addDiseaseServiceModel) throws ExaminationNotFoundException {
 
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+        UserEntity byUserName = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName());
         if (byUserName.getDoctorEntity() != null) {
             long examinationId = addDiseaseServiceModel.getExaminationId();
 

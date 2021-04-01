@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -148,11 +149,13 @@ public class DoctorController {
         return DOCTOR_PROFILE_FOLDER + "doctor-profile";
     }
 
-    @GetMapping("/doctor/{id}/delete")
-    private String getDoctorByIdDelete(@PathVariable("id") long id) {
-
-
-        this.userService.deleteUser(id);
+    @GetMapping("/doctor/my/delete")
+    private String getDoctorByIdDelete() {
+        long id = this.getId();
+        ArrayList<ExaminationViewModel> byDoctorId = this.examinationService.findByDoctorId(id);
+        byDoctorId.forEach(examinationViewModel ->
+                this.examinationService.deleteExamination(examinationViewModel.getId()));
+        this.userService.deleteDoctor(id);
 
         return "redirect:/home";
     }

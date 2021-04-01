@@ -59,7 +59,7 @@ public class DbInit implements CommandLineRunner {
             UserEntity admin = new UserEntity();
             admin.setEmail("admin@abv.bg");
             admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("onepieceM9"));
+            admin.setPassword(passwordEncoder.encode("Asdasd12"));
             admin.getRoles().add((this.roleService.findByName(RoleEnum.ADMIN)));
             admin.getRoles().add((this.roleService.findByName(RoleEnum.PATIENT)));
             admin.getRoles().add((this.roleService.findByName(RoleEnum.DOCTOR)));

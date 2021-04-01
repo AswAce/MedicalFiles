@@ -1,5 +1,6 @@
 package medical.medical.files.service.impl;
 
+import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.exeptions.ExaminationNotFoundException;
 import medical.medical.files.exeptions.WrongDoctorException;
 import medical.medical.files.model.enteties.*;
@@ -28,14 +29,16 @@ public class ExaminationServiceImpl implements ExaminationService {
     private final DoctorService doctorService;
     private final UserService userService;
     private final CloudinaryService cloudinaryService;
+    private final IAuthenticationFacade authenticationFacade;
 
-    public ExaminationServiceImpl(ModelMapper modelMapper, ExaminationRepository examinationRepository, DoctorService doctorService, UserService userService, CloudinaryService cloudinaryService) {
+    public ExaminationServiceImpl(ModelMapper modelMapper, ExaminationRepository examinationRepository, DoctorService doctorService, UserService userService, CloudinaryService cloudinaryService, IAuthenticationFacade authenticationFacade) {
         this.modelMapper = modelMapper;
         this.examinationRepository = examinationRepository;
         this.doctorService = doctorService;
         this.userService = userService;
         this.cloudinaryService = cloudinaryService;
 
+        this.authenticationFacade = authenticationFacade;
     }
 
 
@@ -52,9 +55,9 @@ public class ExaminationServiceImpl implements ExaminationService {
             PrescriptionEntity newPrescription = new PrescriptionEntity(prescriptionServiceModel.getDoctorPrescription(), prescriptionServiceModel.getDays());
             examinationEntity.setPrescription(newPrescription);
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         ;
-        UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+        UserEntity byUserName = this.userService.findByUserName(authenticationFacade.getAuthentication().getName());
         ;
         if (byUserName.getDoctorEntity() != null &&
                 byUserName.getDoctorEntity().getId() == examinationEntity.getDoctor().getId()) {
@@ -67,8 +70,8 @@ public class ExaminationServiceImpl implements ExaminationService {
     @Override
     public void completeExamination(long examinationId) throws ExaminationNotFoundException {
         ExaminationEntity examinationEntity = this.examinationRepository.findById(examinationId).orElseThrow(ExaminationNotFoundException::new);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String name = authentication.getName();
+
+        String name = this.authenticationFacade.getAuthentication().getName();
         UserEntity byUserName = this.userService.findByUserName(name);
         if (byUserName.getDoctorEntity() != null && byUserName.getDoctorEntity().getId() == examinationEntity.getDoctor().getId()) {
             examinationEntity.setProgression(ProgressionEnum.DONE);
@@ -88,7 +91,7 @@ public class ExaminationServiceImpl implements ExaminationService {
         List<AddAdditionalDataViewModel> additionalDataViewModels = examination.getAdditionalData().stream().map(additionalDataEntity ->
                 this.modelMapper.map(additionalDataEntity, AddAdditionalDataViewModel.class)).collect(Collectors.toList());
         ExaminationViewModel examinationViewModel = this.modelMapper.map(examination, ExaminationViewModel.class);
-        if (examination.getProgression() != null) {
+        if (examination.getProgression() != null && examination.getPrescription() != null) {
             PrescriptionViewModel prescriptionViewModel = this.modelMapper.map(examination.getPrescription(), PrescriptionViewModel.class);
             examinationViewModel.setPrescription(prescriptionViewModel);
         }
@@ -151,9 +154,9 @@ public class ExaminationServiceImpl implements ExaminationService {
         String[] split = examinationServiceModel.getDoctorName().split("-");
         DoctorEntity byIdEntity = this.doctorService.findByIdEntity(Long.valueOf(split[1]));
         if (!isUserDoctorTrueOrPatientFalse()) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
             ;
-            UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+            UserEntity byUserName = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName());
 
             PatientEntity patientEntity = byUserName.getPatientEntity();
             examinationEntity.setPatient(patientEntity);
@@ -183,8 +186,8 @@ public class ExaminationServiceImpl implements ExaminationService {
             examinationEntity.setLocation(locationEntity);
         }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserViewModel byUserNameView = this.userService.findByUserNameView(authentication.getName());
+
+        UserViewModel byUserNameView = this.userService.findByUserNameView(this.authenticationFacade.getAuthentication().getName());
         ;
         if (byUserNameView.getRoleId() == examinationEntity.getDoctor().getId()) {
             this.examinationRepository.save(examinationEntity);
@@ -279,8 +282,8 @@ public class ExaminationServiceImpl implements ExaminationService {
 
 
         ExaminationEntity examinationEntity = this.examinationRepository.findById(additionalDataServiceModel.getExaminationId()).orElseThrow(ExaminationNotFoundException::new);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (this.userService.findByUserName(authentication.getName()).getDoctorEntity().getId() == examinationEntity.getDoctor().getId()) {
+
+        if (this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName()).getDoctorEntity().getId() == examinationEntity.getDoctor().getId()) {
 
 
             examinationEntity.getAdditionalData().add(additionalDataEntity);
@@ -292,8 +295,8 @@ public class ExaminationServiceImpl implements ExaminationService {
     }
 
     private boolean isUserDoctorTrueOrPatientFalse() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+
+        UserEntity byUserName = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName());
         if (byUserName.getDoctorEntity() != null) {
             return true;
         }

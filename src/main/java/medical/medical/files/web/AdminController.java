@@ -1,12 +1,15 @@
 package medical.medical.files.web;
 
 
+import medical.medical.files.model.viewModels.ExaminationViewModel;
 import medical.medical.files.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.ArrayList;
 
 @RequestMapping("/admin")
 @Controller
@@ -35,7 +38,7 @@ public class AdminController {
         model.addAttribute("patients", this.patientService.countAll());
         model.addAttribute("reviewsViews", this.reviewService.findAll());
 
-        model.addAttribute("allExamination",this.examinationService.getAll());
+        model.addAttribute("allExamination", this.examinationService.getAll());
         return "admin-panel/admin-home";
     }
 
@@ -61,9 +64,12 @@ public class AdminController {
         return "redirect:/home";
     }
 
-    @GetMapping("/delete/user/{id}")
+    @GetMapping("/delete/doctor/{id}")
     private String deleteDoctorUser(@PathVariable("id") long id) {
-       this.userService.deleteDoctor(id);
+        ArrayList<ExaminationViewModel> byDoctorId = this.examinationService.findByDoctorId(id);
+        byDoctorId.forEach(examinationViewModel ->
+                this.examinationService.deleteExamination(examinationViewModel.getId()));
+        this.userService.deleteDoctor(id);
 
         return "redirect:/home";
     }

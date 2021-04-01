@@ -82,7 +82,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // remove the session from the server
                         invalidateHttpSession(true).
                 // delete the session cookie
-                        deleteCookies("JSESSIONID");//bye! :-)
+                        deleteCookies("JSESSIONID")
+                .and()
+                .rememberMe().key(System.getenv("REMEMBER_ME")).tokenValiditySeconds(86400);//bye! :-)
 
     }
 

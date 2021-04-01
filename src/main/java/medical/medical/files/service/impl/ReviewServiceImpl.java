@@ -1,5 +1,6 @@
 package medical.medical.files.service.impl;
 
+import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.exeptions.PatientNoFoundException;
 import medical.medical.files.model.enteties.PatientEntity;
 import medical.medical.files.model.enteties.ReviewsEntity;
@@ -11,14 +12,12 @@ import medical.medical.files.model.viewModels.ReviewViewModel;
 import medical.medical.files.repositorie.ReviewRepository;
 import medical.medical.files.service.DoctorService;
 import medical.medical.files.service.ReviewService;
-import medical.medical.files.service.PatientService;
 import medical.medical.files.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -26,21 +25,21 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ReviewServiceImpl implements ReviewService {
     private final ModelMapper modelMapper;
     private final ReviewRepository reviewRepository;
     private final DoctorService doctorService;
-
+    private final IAuthenticationFacade authenticationFacade;
     private final UserService userService;
 
-    public ReviewServiceImpl(ModelMapper modelMapper, ReviewRepository reviewRepository, DoctorService doctorService, UserService userService) {
+    public ReviewServiceImpl(ModelMapper modelMapper, ReviewRepository reviewRepository, DoctorService doctorService, IAuthenticationFacade authenticationFacade, UserService userService) {
         this.modelMapper = modelMapper;
         this.reviewRepository = reviewRepository;
 
         this.doctorService = doctorService;
+        this.authenticationFacade = authenticationFacade;
 
         this.userService = userService;
     }
@@ -157,8 +156,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     private PatientEntity isUSerPatientReturn() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity byUserName = this.userService.findByUserName(authentication.getName());
+
+        UserEntity byUserName = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName());
         if (byUserName.getPatientEntity() != null) {
             return byUserName.getPatientEntity();
         }
