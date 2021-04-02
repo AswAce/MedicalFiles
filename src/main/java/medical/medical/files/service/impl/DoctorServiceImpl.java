@@ -4,6 +4,7 @@ import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.exeptions.DoctorNotFoundExeption;
 import medical.medical.files.model.enteties.*;
 import medical.medical.files.model.enums.DayEnum;
+import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.enums.RoleEnum;
 import medical.medical.files.model.serviceModels.AddDoctorProfileServiceModel;
 import medical.medical.files.model.viewModels.DoctorSetViewModel;
@@ -17,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,8 +47,11 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     @Override
-    public DoctorEntity findByName(String doctorName) {
-        return this.doctorRepository.findByFullName(doctorName).orElseThrow(() -> new DoctorNotFoundExeption("Doctor does not exist"));
+    public DoctorEntity findByName(String doctorName, MedicalBranchesEnum medicalBranchesEnum) {
+        ArrayList<Optional<DoctorEntity>> byFullName = this.doctorRepository.findByFullName(doctorName);
+
+        byFullName.stream().filter(Optional::isPresent).filter(doctorEntity -> doctorEntity.get().getMedicalBranch() == medicalBranchesEnum);
+  return byFullName.get(0).orElseThrow(()-> new DoctorNotFoundExeption("Doctor not found"));
     }
 
     @Override

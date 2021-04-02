@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalTime;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -90,30 +92,11 @@ public class DoctorServiceImplTest {
         );
     }
 
-    @Test
-    public void findByNameTest() {
-
-        Mockito.when(doctorRepositoryTest.findByFullName("name1")).
-                thenReturn(Optional.ofNullable((doctorTest)));
-
-        DoctorEntity name1 = doctorServiceTest.findByName("name1");
-        Assertions.assertEquals(name1.getFullName(), doctorTest.getFullName());
-        Assertions.assertEquals(doctorTest.getMedicalBranch(), name1.getMedicalBranch());
-        Assertions.assertEquals(doctorTest.getPhoto(), name1.getPhoto());
-        Assertions.assertEquals(doctorTest.getBio(), name1.getBio());
-        Assertions.assertEquals(doctorTest.getRoomNumber(), name1.getRoomNumber());
-        Assertions.assertEquals(doctorTest.getId(), name1.getId());
-        Assertions.assertEquals(doctorTest.getSchedule().getId(), name1.getSchedule().getId());
-        Assertions.assertEquals(doctorTest.getSchedule().getDays().size(), name1.getSchedule().getDays().size());
-        Assertions.assertEquals(doctorTest.getExperience(), name1.getExperience());
-
-
-    }
 
     @Test
     public void findByNameNotFoundDoctorTest() {
         Assertions.assertThrows(DoctorNotFoundExeption.class, () -> {
-            doctorServiceTest.findByName("Doctor fake name ");
+            doctorServiceTest.findByName("Doctor fake name ", MedicalBranchesEnum.DERMATOLOGY);
         });
     }
 

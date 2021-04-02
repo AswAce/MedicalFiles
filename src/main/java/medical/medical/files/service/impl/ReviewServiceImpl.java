@@ -50,7 +50,7 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewsEntity reviewsEntity = this.modelMapper.map(addReviewServiceModel, ReviewsEntity.class);
         reviewsEntity.
                 setDoctor(this.doctorService.
-                        findByName(addReviewServiceModel.getDoctorName()));
+                        findByName(addReviewServiceModel.getDoctorName(),addReviewServiceModel.getDepartment()));
         reviewsEntity.setPatient(isUSerPatientReturn());
         reviewsEntity.setLocalDateTime(LocalDateTime.now());
         if (reviewsEntity.getPatient() == null) {
