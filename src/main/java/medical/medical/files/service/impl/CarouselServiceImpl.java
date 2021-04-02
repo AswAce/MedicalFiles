@@ -39,14 +39,10 @@ public class CarouselServiceImpl implements CarouselService {
     public void refresh() {
         int count = (int) this.doctorService.getCount();
         if (count > 0) {
-            int n = 3;
 
 
-            if (count < 3) {
-                n = (int) count;
-            }
             doctorsCarousel.clear();
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < 3; i++) {
 
                 int random = checkRandomNumber(getRandomNumber());
                 DoctorEntity byIdSetViewDoctor1 = doctorService.findByIdSetViewDoctor(random);
@@ -55,7 +51,6 @@ public class CarouselServiceImpl implements CarouselService {
                             map(byIdSetViewDoctor1, DoctorSetViewModel.class);
                     doctorsCarousel.add(byIdSetViewDoctor);
                 }
-
 
 
             }

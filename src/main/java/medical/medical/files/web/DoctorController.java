@@ -37,7 +37,10 @@ public class DoctorController {
     private final IAuthenticationFacade authenticationFacade;
 
 
-    public DoctorController(ExaminationService examinationService, ModelMapper modelMapper, DoctorService doctorService, UserService userService, ReviewService reviewService, IAuthenticationFacade authenticationFacade) {
+    public DoctorController(ExaminationService examinationService, ModelMapper modelMapper,
+                            DoctorService doctorService, UserService userService,
+                            ReviewService reviewService,
+                            IAuthenticationFacade authenticationFacade) {
         this.examinationService = examinationService;
         this.modelMapper = modelMapper;
         this.doctorService = doctorService;
@@ -110,6 +113,7 @@ public class DoctorController {
         byId.setId(id);
         byId.setReviews(allForDepartments.stream().limit(5).collect(Collectors.toSet()));
         model.addAttribute("rating", allReviewsForDoctor);
+
         model.addAttribute("doctor", byId);
         model.addAttribute("monday", byId.getWorkingDays().get("MONDAY"));
         model.addAttribute("tuesday", byId.getWorkingDays().get("TUESDAY"));

@@ -28,15 +28,7 @@ public class DiseaseServiceImpl implements DiseaseService {
                 findAllByName(name);
     }
 
-    @Override
-    public DiseaseEntity findByNameAndType(String name, String type) {
-        if (this.diseaseRepository.findByNameAndType(name, type).size()>0) {
-            return this.diseaseRepository.findByNameAndType(name, type).get(0);
-        }
-        return null;
 
-
-    }
 
     @Override
     public Set<String> getAllDiseasesNames() {

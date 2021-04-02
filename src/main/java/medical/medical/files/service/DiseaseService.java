@@ -11,7 +11,5 @@ public interface DiseaseService {
 
     Set<DiseaseEntity> findAllByName(String name);
 
-    DiseaseEntity findByNameAndType(String name, String type);
-
     Set<String> getAllDiseasesNames();
 }

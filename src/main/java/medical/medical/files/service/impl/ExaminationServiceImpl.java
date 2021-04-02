@@ -106,6 +106,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public ArrayList<ExaminationViewModel> findByDoctorId(long doctorId) {
+        SingleDoctorView byId = this.doctorService.findById(doctorId);
         Set<ExaminationEntity> allByDoctorId = this.examinationRepository.
                 findAllByDoctorId(doctorId);
         return (ArrayList<ExaminationViewModel>) allByDoctorId.stream().map(this::getExamination).collect(Collectors.toList());
@@ -197,8 +198,8 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public ArrayList<ExaminationViewModel> findExaminationFoThisPatient(long patientId) {
-        List<ExaminationEntity> allByPatientIdOrderByDateDesc = this.examinationRepository.findAllByPatientIdOrderByDateDesc(patientId);
-        List<ExaminationViewModel> examinationViewModels = allByPatientIdOrderByDateDesc.
+        Set<ExaminationEntity> allByPatientId = this.examinationRepository.findAllByPatientId(patientId);
+        List<ExaminationViewModel> examinationViewModels = allByPatientId.
                 stream().filter(examinationEntity -> examinationEntity.getLocation() != null).
                 map(examinationEntity -> {
 

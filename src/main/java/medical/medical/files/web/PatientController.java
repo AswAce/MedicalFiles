@@ -3,10 +3,7 @@ package medical.medical.files.web;
 import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.model.bindingModels.AddPatientBindingModel;
 import medical.medical.files.model.serviceModels.PatientServiceModel;
-import medical.medical.files.model.viewModels.PatientViewModel;
-import medical.medical.files.model.viewModels.ReviewViewModel;
-import medical.medical.files.model.viewModels.SetExaminationsForUserView;
-import medical.medical.files.model.viewModels.UserViewModel;
+import medical.medical.files.model.viewModels.*;
 import medical.medical.files.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
@@ -19,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -127,12 +125,15 @@ public class PatientController {
 
     }
 
-    @GetMapping("/patient/{id}/delete")
-    private String deletePatient(@PathVariable("id") long id) {
+    @GetMapping("/patient/my/delete")
+    private String deletePatient( ) {
+        long id = getId();
+        ArrayList<SetExaminationsForUserView> byPatientId = (ArrayList<SetExaminationsForUserView>) this.examinationService.findAllExaminationsForThisUser(id);
+        byPatientId.forEach(examinationViewModel ->
+                this.examinationService.deleteExamination(examinationViewModel.getId()));
+        this.userService.deletePatient(id);
 
-        this.userService.deleteUser(id);
-
-        return "/";
+        return "redirect:/home";
         //OK soso
 
     }

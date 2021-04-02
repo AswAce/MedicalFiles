@@ -210,11 +210,15 @@
                                         <th:block th:each="i: ${#numbers.sequence(1, review.rating)}">
                                             <li class="active"></li>
                                         </th:block>
-
-                                        <th:block th:if="${review.leftRating &gt; 0}"
-                                                  th:each="i: ${#numbers.sequence(1, review.leftRating)}">
-                                            <li></li>
+                                        <th:block th:if="${review.leftRating > 0}">
+                                            <th:block
+                                                    th:each="i: ${#numbers.sequence(1, review.leftRating)}">
+                                                <li></li>
+                                            </th:block>
                                         </th:block>
+
+
+
 
                                         <span class="text-extra-small"
                                               th:text="|Date: *{localDateTime}|">Date :  </span>
@@ -291,8 +295,11 @@
             <th:block th:each="i: ${#numbers.sequence(1, rating.rating)}">
                 <li class="active"></li>
             </th:block>
-            <th:block th:each="i: ${#numbers.sequence(1, rating.leftField)}">
-                <li></li>
+            <th:block th:if="${rating.leftField > 0}">
+                <th:block
+                        th:each="i: ${#numbers.sequence(1, rating.leftField)}">
+                    <li></li>
+                </th:block>
             </th:block>
 
 

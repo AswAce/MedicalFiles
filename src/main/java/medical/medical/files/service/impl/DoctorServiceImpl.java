@@ -9,11 +9,10 @@ import medical.medical.files.model.serviceModels.AddDoctorProfileServiceModel;
 import medical.medical.files.model.viewModels.DoctorSetViewModel;
 import medical.medical.files.model.viewModels.SingleDoctorView;
 import medical.medical.files.repositorie.DoctorRepository;
-import medical.medical.files.repositorie.ExaminationRepository;
+
 import medical.medical.files.service.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,10 +31,10 @@ public class DoctorServiceImpl implements DoctorService {
     private final UserService userService;
     private final ScheduleService scheduleService;
     private final MedicalBranchesService medicalBranchesService;
-    private final ExaminationRepository examinationRepository;
+
     private final IAuthenticationFacade authenticationFacade;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository, ModelMapper modelMapper, CloudinaryService cloudinaryService, UserService userService, ScheduleService scheduleService, MedicalBranchesService medicalBranchesService, ExaminationRepository examinationRepository, IAuthenticationFacade authenticationFacade) {
+    public DoctorServiceImpl(DoctorRepository doctorRepository, ModelMapper modelMapper, CloudinaryService cloudinaryService, UserService userService, ScheduleService scheduleService, MedicalBranchesService medicalBranchesService, IAuthenticationFacade authenticationFacade) {
         this.doctorRepository = doctorRepository;
         this.modelMapper = modelMapper;
         this.cloudinaryService = cloudinaryService;
@@ -43,14 +42,14 @@ public class DoctorServiceImpl implements DoctorService {
         this.scheduleService = scheduleService;
 
         this.medicalBranchesService = medicalBranchesService;
-        this.examinationRepository = examinationRepository;
+
         this.authenticationFacade = authenticationFacade;
     }
 
 
     @Override
     public DoctorEntity findByName(String doctorName) {
-        return this.doctorRepository.findByFullName(doctorName);
+        return this.doctorRepository.findByFullName(doctorName).orElseThrow(() -> new DoctorNotFoundExeption("Doctor does not exist"));
     }
 
     @Override
@@ -118,18 +117,14 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void deleteDoctor(DoctorEntity doctorEntity) {
-
-        Set<ExaminationEntity> allByDoctorId = this.examinationRepository.findAllByDoctorId(doctorEntity.getId());
-        allByDoctorId.forEach(this.examinationRepository::delete);
-        this.doctorRepository.delete(doctorEntity);
-
-    }
-
-    @Override
     public long getCount() {
-
-        return this.doctorRepository.count();
+        try {
+            DoctorEntity topByOrderByIdDesc =
+                    this.doctorRepository.findTopByOrderByIdDesc().orElseThrow(() -> new DoctorNotFoundExeption("D0ctor not found"));
+            return topByOrderByIdDesc.getId();
+        } catch (DoctorNotFoundExeption doctorNotFoundExeption) {
+            return 0;
+        }
     }
 
     @Override

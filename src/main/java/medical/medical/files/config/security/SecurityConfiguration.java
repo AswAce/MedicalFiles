@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // allow access to static resources to anyone
                         requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll().
                 antMatchers("/", "/users/login", "/users/register", "/home").permitAll().
-                antMatchers("/departments/all", "/departments/department/*/", "/doctors/all", "/doctors/doctor/*/").permitAll().
+                antMatchers("/departments/department/*/ " , "/doctors/all", "/doctors/doctor/*/").permitAll().
                 // allow access to index, user login and registration to anyone
                         antMatchers("/doctors/create", "/patients/create").authenticated().
                 antMatchers("/patients/patient/profile",

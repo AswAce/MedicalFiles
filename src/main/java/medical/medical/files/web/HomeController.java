@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
-//Todo: add lert for login or registration into fragments.
+
 public class HomeController {
     private static final String ROLE_PATIENT = "ROLE_PATIENT";
     private static final String ROLE_DOCTOR = "ROLE_DOCTOR";
@@ -34,7 +34,6 @@ public class HomeController {
         this.carouselService = carouselService;
         this.doctorService = doctorService;
     }
-
 
 
     @GetMapping("/")
@@ -62,7 +61,7 @@ public class HomeController {
             }
             if (byUserNameView.getRole() != null && byUserNameView.getRole().equals("doctor")) {
                 model.addAttribute("isDoctor", true);
-            } else if ( byUserNameView.getRole() != null && byUserNameView.getRole().equals("patient")) {
+            } else if (byUserNameView.getRole() != null && byUserNameView.getRole().equals("patient")) {
                 model.addAttribute("isDoctor", false);
             }
             List<String> authorityList = getAuthorityList(securityService.getAuthorities());
@@ -75,11 +74,17 @@ public class HomeController {
 
 
     @GetMapping("/contact-us")
-    public String contactUs() {
+    private String contactUs() {
 
         return "contact-us";
     }
 
+    @GetMapping("/not-made")
+    private String notMade() {
+
+
+        return "errors/not-made";
+    }
 
     private String redirectNewUsersToFinishAccount(String username, List<String> authorities) {
 
@@ -125,5 +130,6 @@ public class HomeController {
         return authorities.stream().map(grantedAuthority -> grantedAuthority.toString()).collect(Collectors.toList());
 
     }
+
 
 }

@@ -1,8 +1,9 @@
 package medical.medical.files.service.impl;
 
 import medical.medical.files.exeptions.DoctorNotFoundExeption;
+import medical.medical.files.exeptions.PatientNoFoundException;
 import medical.medical.files.model.enteties.DoctorEntity;
-import medical.medical.files.model.enteties.ExaminationEntity;
+
 import medical.medical.files.model.enteties.PatientEntity;
 import medical.medical.files.model.enteties.UserEntity;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
 //
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, RoleService roleService, MedicalBranchesService medicalBranchesService ) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder, RoleService roleService, MedicalBranchesService medicalBranchesService) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.passwordEncoder = passwordEncoder;
@@ -177,16 +178,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(long id) {
-        UserEntity byId = this.userRepository.findById(id);
-
-        if (byId.getDoctorEntity() != null) {
-            MedicalBranchesEnum medicalBranch = byId.getDoctorEntity().getMedicalBranch();
-            this.medicalBranchesService.removeDoctorFromBranch(medicalBranch, byId.getDoctorEntity());
-
-
-        }
-        this.userRepository.deleteById(id);
+    public void deletePatient(long id) {
+        UserEntity byId = this.userRepository.findByPatientEntity_Id(id).orElseThrow(() -> new PatientNoFoundException("Patient not found"));
+        this.userRepository.deleteById(byId.getId());
 
 
     }
@@ -204,7 +198,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteById(byId.getId());
 
     }
-
+    @Override
     public boolean userExist(String email, String username) {
         UserEntity userEntity = this.userRepository.findByEmail(email).orElse(null);
         UserEntity userEntity1 = this.userRepository.findByUsername(username).orElse(null);

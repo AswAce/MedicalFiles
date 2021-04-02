@@ -1,16 +1,15 @@
 package medical.medical.files.web;
 
-import medical.medical.files.config.validation.ValidationErrorConfigImpl;
+
 import medical.medical.files.model.bindingModels.UserRegisterBindingModel;
 import medical.medical.files.model.enums.HospitalRoleEnum;
-import medical.medical.files.model.enums.RoleEnum;
+
 import medical.medical.files.model.serviceModels.UserServiceRegisterModel;
-import medical.medical.files.model.viewModels.UserViewModel;
+
 import medical.medical.files.service.UserService;
-import org.dom4j.rule.Mode;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +20,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/users")
@@ -36,16 +29,15 @@ public class UserController {
     private static final String FOLDER = "register-login/";
     private final UserService userService;
     private final ModelMapper modelMapper;
-    private final ValidationErrorConfigImpl validationConfig;
+
     private static final String REGISTER_REDIRECT = "redirect:/users/register";
 
 
-    public UserController(UserService userService, ModelMapper modelMapper, ValidationErrorConfigImpl validationConfig) {
+    public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
         this.modelMapper = modelMapper;
-        this.validationConfig = validationConfig;
-    }
 
+    }
 
 
     @GetMapping("/profile")

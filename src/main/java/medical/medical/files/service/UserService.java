@@ -34,7 +34,7 @@ public interface UserService {
 
     UserViewModel findByUserNameView(String username);
 
-    void deleteUser(long id);
+    void deletePatient(long id);
 
     void deleteDoctor(long id);
 }

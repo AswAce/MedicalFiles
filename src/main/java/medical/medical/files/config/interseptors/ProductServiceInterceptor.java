@@ -29,7 +29,9 @@ public class ProductServiceInterceptor implements HandlerInterceptor {
     public void afterCompletion
             (HttpServletRequest request, HttpServletResponse response, Object
                     handler, Exception exception) throws Exception {
+         StringBuffer requestURL =request.getRequestURL();
 
+        System.out.println("Url path:"+requestURL);
         System.out.println("Request and Response is completed. The status is:"+response.getStatus());
     }
 

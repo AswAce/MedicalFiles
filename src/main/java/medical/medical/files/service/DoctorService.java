@@ -17,7 +17,7 @@ public interface DoctorService {
 
     SingleDoctorView findById(long id);
 
-    void deleteDoctor(DoctorEntity doctorEntity);
+
 
     long getCount();
 

@@ -61,7 +61,7 @@ public class DbInit implements CommandLineRunner {
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("Asdasd12"));
             admin.getRoles().add((this.roleService.findByName(RoleEnum.ADMIN)));
-            admin.getRoles().add((this.roleService.findByName(RoleEnum.PATIENT)));
+            admin.getRoles().add((this.roleService.findByName(RoleEnum.USER)));
             admin.getRoles().add((this.roleService.findByName(RoleEnum.DOCTOR)));
 
             this.userRepository.saveAndFlush(admin);
