@@ -14,7 +14,6 @@ import java.util.*;
 
 @Service
 public class CarouselServiceImpl implements CarouselService {
-    private Logger LOGGER = LoggerFactory.getLogger(CarouselServiceImpl.class);
     private final static String CRON_TIME = "*/5 * * * * *";
     private final Random random = new Random();
     private List<DoctorSetViewModel> doctorsCarousel = new ArrayList<>();

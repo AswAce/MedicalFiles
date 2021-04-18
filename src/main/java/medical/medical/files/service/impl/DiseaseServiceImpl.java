@@ -16,10 +16,7 @@ public class DiseaseServiceImpl implements DiseaseService {
         this.diseaseRepository = diseaseRepository;
     }
 
-    @Override
-    public void save(DiseaseEntity diseaseEntity) {
 
-    }
 
 
     @Override
@@ -32,7 +29,7 @@ public class DiseaseServiceImpl implements DiseaseService {
 
     @Override
     public Set<String> getAllDiseasesNames() {
-        Set<String> collectDiseaseNames = this.diseaseRepository.findAll().stream().map(diseaseEntity -> diseaseEntity.getName()).collect(Collectors.toSet());
-        return collectDiseaseNames;
+        return this.diseaseRepository.findAll().stream().map(DiseaseEntity::getName).collect(Collectors.toSet());
+
     }
 }

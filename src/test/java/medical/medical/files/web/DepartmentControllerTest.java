@@ -8,6 +8,8 @@ import medical.medical.files.model.enums.DayEnum;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.repositorie.DoctorRepository;
 import medical.medical.files.repositorie.MedicalBranchesRepository;
+import medical.medical.files.repositorie.ScheduleRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,9 @@ public class DepartmentControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    ScheduleRepository scheduleRepository;
+
 
     private long depId;
 
@@ -39,7 +44,7 @@ public class DepartmentControllerTest {
     public void init() {
 
         medicalBranchesRepository.deleteAll();
-
+        scheduleRepository.deleteAll();
 
         MedicalBranchEntity medicalBranchEntity = new MedicalBranchEntity();
         medicalBranchEntity.setPhoto("photo");
@@ -56,6 +61,12 @@ public class DepartmentControllerTest {
         depId = save.getId();
     }
 
+    @AfterEach
+    public void delete() {
+        medicalBranchesRepository.deleteAll();
+        scheduleRepository.deleteAll();
+    }
+
     @Test
     @WithMockUser(value = "username", roles = {"USER", "PATIENT"})
     public void shouldReturnCorrectStatusAllDepartmentTest
@@ -69,19 +80,5 @@ public class DepartmentControllerTest {
                 andExpect(model().attributeExists("departments"));
     }
 
-    @Test
-    @WithMockUser(value = "username", roles = {"USER", "PATIENT"})
-    public void shouldReturnCorrectStatusSingleDepartmentTest
-            () throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.
-                get("/departments" +
-                        "/department/{id}", depId)).
-                andExpect(status().isOk()).
-                andExpect(view().
-                        name("hospital-departments/single-department")).
-                andExpect(model().attributeExists("department"));
-
-
-    }
 
 }

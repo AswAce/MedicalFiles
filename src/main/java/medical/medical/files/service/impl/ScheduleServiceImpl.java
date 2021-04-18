@@ -9,10 +9,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -38,7 +36,6 @@ public class ScheduleServiceImpl implements ScheduleService {
         daySchedule.setDay(day);
         String pattern = "H:mm";
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern(pattern);
-        LocalTime.parse(start, dtf);
         daySchedule.setStartTime(LocalTime.parse(start, dtf));
         daySchedule.setEndTime(LocalTime.parse(end, dtf));
 

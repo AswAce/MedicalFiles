@@ -10,7 +10,6 @@ import medical.medical.files.model.enums.MedicalBranchesEnum;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.*;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

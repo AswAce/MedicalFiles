@@ -12,7 +12,7 @@ import medical.medical.files.model.serviceModels.UserServiceRegisterModel;
 import medical.medical.files.model.viewModels.UserViewModel;
 import medical.medical.files.model.viewModels.UserViewPosition;
 import medical.medical.files.repositorie.UserRepository;
-import medical.medical.files.service.ExaminationService;
+
 import medical.medical.files.service.MedicalBranchesService;
 import medical.medical.files.service.RoleService;
 import medical.medical.files.service.UserService;
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
         }
 
 
-        UserEntity save = this.userRepository.save(userEntity);
+        this.userRepository.save(userEntity);
         return false;
     }
 
@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
                     UserViewModel userViewModel = this.modelMapper.map(userEntity, UserViewModel.class);
                     userViewModel.setId(userEntity.getId());
 
-                    ;
+
                     String collect = userEntity.
                             getRoles().
                             stream().
@@ -173,7 +173,9 @@ public class UserServiceImpl implements UserService {
             userViewModel.setFullName(patientEntity.getFullName());
             userViewModel.setRole("patient");
         }
-
+        userViewModel.setOldPassword("");
+        userViewModel.setPassword("");
+        userViewModel.setRepeatPassword("");
         return userViewModel;
     }
 
@@ -198,6 +200,30 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteById(byId.getId());
 
     }
+
+    @Override
+    public boolean checkPassword(String name, String oldPassword) {
+        UserEntity byUserName = this.findByUserName(name);
+
+        return passwordEncoder.matches(oldPassword, byUserName.getPassword());
+
+    }
+
+    @Override
+    public void editUser(long id, String email, String username, String password) {
+
+        UserEntity byId = this.userRepository.findById(id);
+        byId.setUsername(username);
+        byId.setEmail(email);
+        if (password!=null){
+            byId.setPassword(passwordEncoder.encode(password));
+        }
+
+
+
+        this.userRepository.save(byId);
+    }
+
     @Override
     public boolean userExist(String email, String username) {
         UserEntity userEntity = this.userRepository.findByEmail(email).orElse(null);

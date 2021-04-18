@@ -1,15 +1,10 @@
 package medical.medical.files.web;
 
 
-import medical.medical.files.model.enteties.PatientEntity;
-import medical.medical.files.model.enteties.RoleEntity;
-import medical.medical.files.model.enteties.UserEntity;
+import medical.medical.files.model.enteties.*;
 import medical.medical.files.model.enums.*;
-import medical.medical.files.repositorie.ExaminationRepository;
-import medical.medical.files.repositorie.PatientRepository;
+import medical.medical.files.repositorie.*;
 
-import medical.medical.files.repositorie.RoleRepository;
-import medical.medical.files.repositorie.UserRepository;
 import medical.medical.files.service.impl.CloudinaryServiceImpl;
 import medical.medical.files.service.impl.PatientServiceImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -23,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.time.LocalDateTime;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
@@ -48,6 +45,9 @@ public class PatientControllerTest {
     private MockMvc mockMvc;
     @Autowired
     CloudinaryServiceImpl cloudinaryService;
+    @Autowired
+    DiseaseRepository diseaseRepository;
+
 
     @Autowired
     private PatientRepository patientRepository;
@@ -63,6 +63,16 @@ public class PatientControllerTest {
         userRepository.deleteAll();
         patientRepository.deleteAll();
         roleRepository.deleteAll();
+        diseaseRepository.deleteAll();
+
+
+
+        DiseaseEntity diseaseEntity = new DiseaseEntity();
+        diseaseEntity.setDescription("test");
+        diseaseEntity.setName("Cancer");
+        diseaseEntity.setType("A");
+        diseaseEntity.setCurable(true);
+        diseaseEntity.setChronic(true);
         RoleEntity user = new RoleEntity();
         user.setRole(RoleEnum.USER);
         roleRepository.save(user);
@@ -72,6 +82,7 @@ public class PatientControllerTest {
 
 
         PatientEntity p1 = new PatientEntity();
+        p1.getDiseases().add(diseaseEntity);
         p1.setImageUrl("patientURL");
         p1.setFullName("patient1");
         p1.setSmoking(SmokingEnum.NONE);
@@ -82,7 +93,10 @@ public class PatientControllerTest {
         p1.setDrinking(DrinkingEnum.NONE);
         p1.setAge(20);
         p1.setPhone("0877-11-22-33");
-        PatientEntity patientEntity = patientRepository.save(p1);
+
+
+
+//        PatientEntity patientEntity = patientRepository.save(p1);
 
         UserEntity user1 = new UserEntity();
         user1.setUsername("username");
@@ -92,8 +106,8 @@ public class PatientControllerTest {
         user1.getRoles().add(user);
 
         user1.setPatientEntity(p1);
-
-        patientId = patientEntity.getId();
+        UserEntity s = userRepository.save(user1);
+        patientId = s.getPatientEntity().getId();
     }
 
     @Test
@@ -108,6 +122,21 @@ public class PatientControllerTest {
                         name("patient-profile/patient-profile")).
                 andExpect(model().attributeExists("patient")).
                 andExpect(model().attributeExists("user"));
+
+    }
+
+    @Test
+    @WithMockUser(value = "username", roles = {"USER", "PATIENT"})
+    public void shouldReturnOkTestDiseases() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.
+                get(PATIENTS_CONTROLLER_PREFIX +
+                        "/patient/my/diseases", patientId)).
+                andExpect(status().isOk()).
+                andExpect(view().
+                        name("patient-profile/patient-diseases")).
+
+                andExpect(model().attributeExists("patientDiseases"));
 
     }
 

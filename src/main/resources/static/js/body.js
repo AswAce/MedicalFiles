@@ -41,7 +41,10 @@ const sal=document.getElementById("patientBody");
 
 
   const allExaminations = [];
-  fetch("http://localhost:8080/patient/body-examinations").
+  let ex = async () => {
+ return fetch("http://localhost:8080/patient/body-examinations")
+  };
+  ex().
        then(response => response.json()).
        then(data => {
          for (let examination of data) {
@@ -49,13 +52,11 @@ const sal=document.getElementById("patientBody");
          }
        })
 
-
+console.log(allExaminations)
 
 sal.addEventListener('click',(e)=>{
-
-
    for (let e of allExaminations) {
-
+console.log(e)
       switch (e.part) {
         case "EYE":
         case "BRAIN":
@@ -158,6 +159,14 @@ console.log("left_leg:  "+left_leg_count)
 addColor(right_leg,right_leg_count)
 addColor(other,other_count)
 })
+
+
+
+
+
+
+
+
 
     function addColor(part, number) {
       console.log("add color")

@@ -3,7 +3,7 @@ package medical.medical.files.model.bindingModels;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import medical.medical.files.model.enums.MedicalBranchesEnum;
+
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

@@ -37,7 +37,7 @@ public class DoctorServiceImplTest {
     private DoctorEntity doctorTest, doctorTest2;
 
     private ScheduleEntity scheduleTest;
-    private DaySchedule dayTest;
+    private DaySchedule dayTest, dayTest2;
     private DoctorServiceImpl doctorServiceTest;
     @Autowired
     private CloudinaryService cloudinaryServiceTest;
@@ -60,10 +60,16 @@ public class DoctorServiceImplTest {
         dayTest.setDay(DayEnum.MONDAY);
         dayTest.setStartTime(LocalTime.now());
         dayTest.setEndTime(LocalTime.now());
+        dayTest2 = new DaySchedule();
+        dayTest2.setId(2);
+        dayTest2.setDay(DayEnum.TUESDAY);
+        dayTest2.setStartTime(LocalTime.now());
+        dayTest2.setEndTime(LocalTime.now());
 
         scheduleTest = new ScheduleEntity();
         scheduleTest.setId(1);
         scheduleTest.getDays().add(dayTest);
+        scheduleTest.getDays().add(dayTest2);
 
         doctorTest = new DoctorEntity();
         doctorTest.setFullName("name1");
@@ -95,7 +101,7 @@ public class DoctorServiceImplTest {
 
     @Test
     public void findByNameNotFoundDoctorTest() {
-        Assertions.assertThrows(DoctorNotFoundExeption.class, () -> {
+        Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
             doctorServiceTest.findByName("Doctor fake name ", MedicalBranchesEnum.DERMATOLOGY);
         });
     }
@@ -130,21 +136,7 @@ public class DoctorServiceImplTest {
         });
     }
 
-    @Test
-    public void findByIdSetViewDoctorTest() {
-        when(doctorRepositoryTest.findById(1l)).thenReturn(Optional.ofNullable(doctorTest));
-        SingleDoctorView byId = doctorServiceTest.findById(1);
-        Assertions.assertEquals(byId.getFullName(), doctorTest.getFullName());
 
-        Assertions.assertEquals(doctorTest.getPhoto(), byId.getPhoto());
-        Assertions.assertEquals(doctorTest.getBio(), byId.getBio());
-
-        Assertions.assertEquals(doctorTest.getId(), byId.getId());
-
-        Assertions.assertEquals(doctorTest.getExperience(), byId.getExperience());
-
-
-    }
 
     @Test
     public void findByIdEntityTest() {

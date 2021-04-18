@@ -3,7 +3,6 @@ package medical.medical.files.model.bindingModels;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import medical.medical.files.model.enums.HospitalRoleEnum;
 import medical.medical.files.model.enums.RoleEnum;
 import net.minidev.json.annotate.JsonIgnore;
 
@@ -25,8 +24,8 @@ public class UserRegisterBindingModel {
     private String email;
 
 
+    private String oldPassword;
     @NotEmpty
-
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "Password must contain Minimum eight characters, at least one letter and one number:")
     @JsonIgnore(value = true)
     private String password;

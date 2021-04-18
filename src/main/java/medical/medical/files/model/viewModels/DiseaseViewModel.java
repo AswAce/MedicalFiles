@@ -1,11 +1,11 @@
 package medical.medical.files.model.viewModels;
 
-import jdk.jfr.DataAmount;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
+
 
 @Data
 @AllArgsConstructor

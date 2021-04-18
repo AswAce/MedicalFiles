@@ -14,10 +14,7 @@ import medical.medical.files.service.DoctorService;
 import medical.medical.files.service.ReviewService;
 import medical.medical.files.service.UserService;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
@@ -79,8 +76,8 @@ public class ReviewServiceImpl implements ReviewService {
     public AllReviewStartView getAllReviewsRatingForDepartment(MedicalBranchesEnum name) {
         AllReviewStartView allReviewStartView = new AllReviewStartView();
         Set<ReviewsEntity> allByDepartmentOrderByLocalDateTimeAsc = this.reviewRepository.findAllByDepartmentOrderByLocalDateTimeAsc(name);
-        if (allByDepartmentOrderByLocalDateTimeAsc != null && allByDepartmentOrderByLocalDateTimeAsc.size() > 0) {
-            int sum = allByDepartmentOrderByLocalDateTimeAsc.stream().mapToInt(reviewsEntity -> reviewsEntity.getRating()).sum();
+        if (allByDepartmentOrderByLocalDateTimeAsc != null && !allByDepartmentOrderByLocalDateTimeAsc.isEmpty()) {
+            int sum = allByDepartmentOrderByLocalDateTimeAsc.stream().mapToInt(ReviewsEntity::getRating).sum();
 
             allReviewStartView.setRating(sum / allByDepartmentOrderByLocalDateTimeAsc.size());
             allReviewStartView.setLeftField(5 - allReviewStartView.getRating());
@@ -111,7 +108,7 @@ public class ReviewServiceImpl implements ReviewService {
         Set<ReviewViewModel> allByDoctorId = findAllByDoctorId(id);
         int sum = allByDoctorId.stream().mapToInt(ReviewViewModel::getRating).sum();
         AllReviewStartView allReviewStartView = new AllReviewStartView();
-        if (allByDoctorId.size() > 0) {
+        if (!allByDoctorId.isEmpty()) {
             allReviewStartView.setRating(sum / allByDoctorId.size());
             allReviewStartView.setLeftField(5 - allReviewStartView.getRating());
         }

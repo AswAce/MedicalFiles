@@ -1,7 +1,7 @@
 solve();
 function solve(){
 console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-const doctorList = document.getElementById('doctorsRow')
+const doctoList = document.getElementById('dorctorsRow')
 const searchBar = document.getElementById('searchDoctor')
 
 const allDoctors = [];

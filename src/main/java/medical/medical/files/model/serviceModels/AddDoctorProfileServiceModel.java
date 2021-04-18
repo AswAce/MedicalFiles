@@ -7,7 +7,6 @@ import medical.medical.files.model.enums.DayEnum;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

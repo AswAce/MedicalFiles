@@ -9,12 +9,8 @@ import medical.medical.files.model.enums.SexEnum;
 import medical.medical.files.model.enums.SmokingEnum;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
-import java.util.LinkedHashMap;
-import java.util.Map;
+
 
 @Data
 @AllArgsConstructor

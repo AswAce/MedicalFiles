@@ -4,7 +4,7 @@ import medical.medical.files.exeptions.ExaminationNotFoundException;
 import medical.medical.files.exeptions.WrongDoctorException;
 import medical.medical.files.model.enteties.DoctorEntity;
 import medical.medical.files.model.enteties.ExaminationEntity;
-import medical.medical.files.model.enteties.PatientEntity;
+
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.serviceModels.*;
 import medical.medical.files.model.viewModels.ExaminationViewModel;
@@ -53,4 +53,6 @@ public interface ExaminationService {
     ArrayList<SetExaminationsForUserView> getAll();
 
     void deleteExamination(long id);
+
+
 }

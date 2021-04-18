@@ -63,12 +63,12 @@
 
             <div class="col-12">
 
-<!--                <div class="alert alert-info  margin-bottom-35px border-radius-10 padding-30px">-->
-<!--                    <strong>Success!</strong> Indicates a successful or positive action.-->
-<!--                    <hr>-->
-<!--                    <p class="margin-0px">Lorem Ipsum is simply dummy text of the printing and typesetting industry.-->
-<!--                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>-->
-<!--                </div>-->
+                <!--                <div class="alert alert-info  margin-bottom-35px border-radius-10 padding-30px">-->
+                <!--                    <strong>Success!</strong> Indicates a successful or positive action.-->
+                <!--                    <hr>-->
+                <!--                    <p class="margin-0px">Lorem Ipsum is simply dummy text of the printing and typesetting industry.-->
+                <!--                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>-->
+                <!--                </div>-->
 
                 <div class="row">
                     <div class="col-lg-6">
@@ -77,15 +77,32 @@
                                 <h3><i class="far fa-bell margin-right-10px text-main-color"></i> Latest Examinations
                                 </h3>
                                 <hr>
+                                <div class="padding-25px">
+                                    <h3 class="margin-lr-20px"><i
+                                            class="fas fa-search margin-right-10px text-main-color"></i>
+                                        Search Examinations</h3>
+                                    <!-- Listing Search -->
+                                    <div class="listing-search">
+                                        <form>
+                                            <div class="keywords margin-bottom-20px">
+                                                <input class="listing-form first border-radius-10" type="text"
+                                                       placeholder="Patient or Doctor name..." id="searchExamination">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- // Listing Search -->
+                                </div>
 
                             </div>
-                            <!-- -->
+
                         </div>
-                        <th:block
-                                th:each="examination:${allExamination}"
-                                th:object="${examination}">
-                            <div th:insert="fragments/fragments :: examinations"></div>
-                        </th:block>
+                        <div id="ExaminationName">
+                            <th:block
+                                    th:each="examination:${allExamination}"
+                                    th:object="${examination}">
+                                <div th:insert="fragments/fragments :: examinations"></div>
+                            </th:block>
+                        </div>
                     </div>
 
                     <div class="col-lg-6">
@@ -94,7 +111,22 @@
                             <div class="padding-30px background-white border-radius-20 box-shadow">
                                 <h3><i class="far fa-star margin-right-10px text-main-color"></i>Reviews: </h3>
                                 <hr>
-                                <div >
+                                <div class="padding-25px">
+                                    <h3 class="margin-lr-20px"><i
+                                            class="fas fa-search margin-right-10px text-main-color"></i>
+                                        Search reviews by doctor</h3>
+                                    <!-- Listing Search -->
+                                    <div class="listing-search">
+                                        <form>
+                                            <div class="keywords margin-bottom-20px">
+                                                <input class="listing-form first border-radius-10" type="text"
+                                                       placeholder="Doctor name..." id="searchReview">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <!-- // Listing Search -->
+                                </div>
+                                <div id="reviewsList">
                                     <th:block th:each="review : ${reviewsViews}" th:object="${review}">
                                         <div th:insert="fragments/fragments :: reviews"></div>
                                     </th:block>
@@ -126,6 +158,9 @@
 
 
 <div th:insert="fragments/fragments :: js"></div>
+<script src="/js/admin-home.js"></script>
+
+
 </body>
 
 </html>

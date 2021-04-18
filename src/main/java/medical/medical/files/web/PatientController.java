@@ -2,6 +2,7 @@ package medical.medical.files.web;
 
 import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.model.bindingModels.AddPatientBindingModel;
+import medical.medical.files.model.bindingModels.UserRegisterBindingModel;
 import medical.medical.files.model.serviceModels.PatientServiceModel;
 import medical.medical.files.model.viewModels.*;
 import medical.medical.files.service.*;
@@ -46,20 +47,64 @@ public class PatientController {
 
 
     @GetMapping(value = "/patient/profile")
-    private String patientProfile(Model model) {
+    public String patientProfile(Model model) {
         Authentication authentication = SecurityContextHolder.
                 getContext().getAuthentication();
         String username = authentication.getName();
         UserViewModel byUserNameView = this.userService.findByUserNameView(username);
+
         model.addAttribute("user", byUserNameView);
         PatientViewModel byId = this.patientService.findById(byUserNameView.getRoleId());
         model.addAttribute("patient", byId);
+        model.addAttribute("oldPasswordAsw", false);
+
 
         return "patient-profile/patient-profile";
     }
 
+    @PostMapping(value = "/patient/profile")
+    public String updatePatient(@Valid
+                                @ModelAttribute("patientBindingModel") AddPatientBindingModel patientBindingModel,
+                                @ModelAttribute("user") UserRegisterBindingModel editUser,
+
+
+                                BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        String name = authenticationFacade.getAuthentication().getName();
+        boolean checkPassword = this.userService.checkPassword(name, editUser.getOldPassword());
+
+        if (!checkPassword) {
+            redirectAttributes.addFlashAttribute("oldPasswordAsw", true);
+
+            return "redirect:/patients/patient/profile";
+        } else if (checkPassword) {
+            UserViewModel byUserNameView = this.userService.findByUserNameView(name);
+            long id = byUserNameView.getId();
+            long roleId = byUserNameView.getRoleId();
+
+            this.patientService.editPatient(roleId,patientBindingModel);
+
+            editUser.setId(id);
+            String password = null;
+            if (editUser.passwordMatch()
+                    && !editUser.getPassword().isEmpty()
+                    && !editUser.getRepeatPassword().isEmpty()) {
+                password = editUser.getPassword();
+            }
+
+
+            this.userService.editUser(id, editUser.getEmail(), editUser.getUsername(), password);
+
+
+            return "redirect:/patients/patient/profile";
+        }
+
+
+        return "patient-profile/patient-profile";
+    }
+
+
     @GetMapping(value = "/create")
-    private String createPatient(Model model) {
+    public String createPatient(Model model) {
         if (!model.containsAttribute("patientBindingModel")) {
             model.addAttribute("patientBindingModel", new AddPatientBindingModel());
         }
@@ -68,7 +113,7 @@ public class PatientController {
     }
 
     @PostMapping(value = "/create")
-    private String createPatientPost(@Valid @ModelAttribute("patientBindingModel") AddPatientBindingModel patientBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
+    public String createPatientPost(@Valid @ModelAttribute("patientBindingModel") AddPatientBindingModel patientBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("patientBindingModel", patientBindingModel);
@@ -82,19 +127,10 @@ public class PatientController {
         return "redirect:/home";
     }
 
-    @PostMapping("/update")
-    private String updatePatient(@Valid @RequestBody AddPatientBindingModel patientBindingModel, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-
-
-        }
-        return null;
-    }
-
 
     @GetMapping("/patient/my/diseases")
-    private String getPatientDisease(  Model model) {
-        long patientId=getId();
+    public String getPatientDisease(Model model) {
+        long patientId = getId();
         PatientViewModel byId = this.patientService.findById(patientId);
 
         model.addAttribute("patientDiseases", byId.getDiseaseViewModels());
@@ -105,19 +141,19 @@ public class PatientController {
     }
 
     @GetMapping("/patient/my/comments")
-    private String getPatientComments( Model model) {
-        long patientId=getId();
+    public String getPatientComments(Model model) {
+        long patientId = getId();
         Set<ReviewViewModel> allByPatientId = this.reviewService.findAllByPatientId(patientId);
 
         model.addAttribute("reviews", allByPatientId);
         return PATIENT_PROFILE + "user-comments.html";
-        //OK soso
+
 
     }
 
     @GetMapping("/patient/my/examinations")
-    private String getPatientExaminations( Model model) {
-        long patientId=getId();
+    public String getPatientExaminations(Model model) {
+        long patientId = getId();
         List<SetExaminationsForUserView> examinationFoThisPatient = this.examinationService.findAllExaminationsForThisUser(patientId);
         model.addAttribute("examinations", examinationFoThisPatient);
 
@@ -126,7 +162,7 @@ public class PatientController {
     }
 
     @GetMapping("/patient/my/delete")
-    private String deletePatient( ) {
+    public String deletePatient() {
         long id = getId();
         ArrayList<SetExaminationsForUserView> byPatientId = (ArrayList<SetExaminationsForUserView>) this.examinationService.findAllExaminationsForThisUser(id);
         byPatientId.forEach(examinationViewModel ->
@@ -139,13 +175,14 @@ public class PatientController {
     }
 
     @PostMapping("/id/edit")
-    private String editPatient() {
+    public String editPatient() {
 
         // TODO: 14-Mar-21
         return "redirect:/home";
         //OK soso
 
     }
+
     private long getId() {
         String name = this.authenticationFacade.getAuthentication().getName();
         return this.userService.findByUserNameView(name).getRoleId();

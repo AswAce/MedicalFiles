@@ -10,7 +10,7 @@ import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.viewModels.DepartmentView;
 import medical.medical.files.model.viewModels.SingleDepartmentView;
 import medical.medical.files.repositorie.MedicalBranchesRepository;
-import medical.medical.files.service.ReviewService;
+
 import medical.medical.files.service.MedicalBranchesService;
 import medical.medical.files.service.ScheduleService;
 import org.modelmapper.ModelMapper;
@@ -108,7 +108,7 @@ public class MedicalBranchesServiceImpl implements MedicalBranchesService {
 
     @Override
     public void deleteDoctorFromBrnach(DoctorEntity doctorEntity) {
-//        this.medicalBranchesRepository.removeDoctor(doctorEntity.getId());
+
     }
 
     @Override

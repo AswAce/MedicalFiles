@@ -2,6 +2,7 @@ package medical.medical.files.service.impl;
 
 import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.exeptions.ExaminationNotFoundException;
+import medical.medical.files.model.bindingModels.AddPatientBindingModel;
 import medical.medical.files.model.enteties.*;
 import medical.medical.files.model.enums.BmiResultsEnum;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -55,7 +57,8 @@ public class PatientServiceImpl implements PatientService {
         List<RoleEnum> collect = userEntity.getRoles().stream().map(RoleEntity::getRole).collect(Collectors.toList());
         if (collect.contains(RoleEnum.PATIENT)) {
             PatientEntity patientEntity = this.modelMapper.map(patientServiceModel, PatientEntity.class);
-            if (!patientServiceModel.getImg().getOriginalFilename().isEmpty()) {
+            boolean empty = Objects.requireNonNull(patientServiceModel.getImg().getOriginalFilename()).isEmpty();
+            if (!empty) {
                 String uploadImage = this.cloudinaryService.uploadImage(patientServiceModel.getImg());
                 patientEntity.setImageUrl(uploadImage);
             } else {
@@ -68,16 +71,6 @@ public class PatientServiceImpl implements PatientService {
         }
 
 
-    }
-
-    @Override
-    public void addExaminationToThePatient(AddExaminationServiceModel examinationServiceModel) {
-
-
-        PatientEntity patientEntity = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName()).getPatientEntity();
-
-
-        this.patientRepository.save(patientEntity);
     }
 
     @Override
@@ -146,7 +139,6 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Set<String> findPatientDoctorsForThisDepartment(MedicalBranchesEnum name) {
         if (getIfUserIsPatient() != null) {
-            getIfUserIsPatient().getId();
             ArrayList<ExaminationViewModel> allByPatientIdAndDepartment = this.examinationService.findAllByPatientIdAndDepartment(getIfUserIsPatient().getId(), name);
             Set<String> doctors = allByPatientIdAndDepartment.
                     stream().
@@ -160,6 +152,39 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public int countAll() {
         return (int) this.patientRepository.count();
+    }
+
+    @Override
+    public ArrayList<PatientViewModel> getAll() {
+        return (ArrayList<PatientViewModel>) this.patientRepository.findAll().
+                stream().
+                map(patientEntity ->
+                        {
+                            PatientViewModel map = this.modelMapper.map(patientEntity, PatientViewModel.class);
+                            map.setUserId(patientEntity.getId());
+                            return map;
+                        }
+                ).
+                collect(Collectors.toList());
+
+    }
+
+    @Override
+    public void deletePatientById(long id) {
+
+        this.patientRepository.deleteById(id);
+    }
+
+    @Override
+    public void editPatient(long roleId, AddPatientBindingModel patientBindingModel) {
+        PatientEntity editPatient = this.modelMapper.map(patientBindingModel, PatientEntity.class);
+        PatientEntity byId = this.patientRepository.findById(roleId);
+        editPatient.setId(roleId);
+        editPatient.setImageUrl(byId.getImageUrl());
+
+        this.patientRepository.save(editPatient);
+
+
     }
 
 
@@ -176,7 +201,7 @@ public class PatientServiceImpl implements PatientService {
     private String bmiIndex(double weight, double height) {
 
         double bmi = weight / (height * height);
-        String result = " Your Body Mass Index is  " + String.valueOf(bmi) + ". This is considered: ";
+        String result = " Your Body Mass Index is  " + (bmi) + ". This is considered: ";
         if (bmi < 15) {
             result += BmiResultsEnum.VERY_SEVERELY_UNDERWEIGHT.name();
         } else if (bmi >= 15 && bmi < 16) {

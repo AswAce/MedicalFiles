@@ -2,6 +2,8 @@ package medical.medical.files.web;
 
 import medical.medical.files.config.currentUser.IAuthenticationFacade;
 import medical.medical.files.model.bindingModels.AddDoctorProfileBindingModel;
+import medical.medical.files.model.bindingModels.AddPatientBindingModel;
+import medical.medical.files.model.bindingModels.UserRegisterBindingModel;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.serviceModels.AddDoctorProfileServiceModel;
 import medical.medical.files.model.viewModels.*;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 @Controller
 public class DoctorController {
     private static final String DOCTOR_PROFILE_FOLDER = "doctor-profile/";
+    private static final String MODEL_DOCTOR="addDoctorProfile";
     private final ExaminationService examinationService;
     private final ModelMapper modelMapper;
     private final DoctorService doctorService;
@@ -51,21 +54,21 @@ public class DoctorController {
 
 
     @GetMapping("/create")
-    private String createDoctor(Model model) {
-        if (!model.containsAttribute("addDoctorProfile")) {
-            model.addAttribute("addDoctorProfile", new AddDoctorProfileBindingModel());
+    public String createDoctor(Model model) {
+        if (!model.containsAttribute(MODEL_DOCTOR)) {
+            model.addAttribute(MODEL_DOCTOR, new AddDoctorProfileBindingModel());
         }
         model.addAttribute("departments", MedicalBranchesEnum.values());
         return DOCTOR_PROFILE_FOLDER + "add-doctor-profile";
     }
 
-    //// TODO: 21-Mar-21  finish picture to cloud and for user
+
     @PostMapping("/create")
-    private String createDoctorPost(@Valid @ModelAttribute("addDoctorProfile") AddDoctorProfileBindingModel addDoctorProfileBindingModel
+    public String createDoctorPost(@Valid @ModelAttribute(MODEL_DOCTOR) AddDoctorProfileBindingModel addDoctorProfileBindingModel
             , BindingResult bindingResult,
                                     RedirectAttributes redirectAttributes) throws IOException {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("addDoctorProfile", addDoctorProfileBindingModel);
+            redirectAttributes.addFlashAttribute(MODEL_DOCTOR, addDoctorProfileBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addDoctorProfile", bindingResult);
 
             return "redirect:/doctors/create";
@@ -78,14 +81,14 @@ public class DoctorController {
     }
 
     @GetMapping("/all")
-    private String getAllDoctors(Model model) {
+    public String getAllDoctors(Model model) {
         model.addAttribute("allDoctors", this.doctorService.getAll());
 
         return "hospital-doctors/doctors-list";
     }
 
     @GetMapping("/doctor/profile")
-    private String getProfileDoctor(Model model) {
+    public String getProfileDoctor(Model model) {
         Authentication authentication = SecurityContextHolder.
                 getContext().getAuthentication();
         String username = authentication.getName();
@@ -104,9 +107,23 @@ public class DoctorController {
         return "doctor-profile/doctor-profile";
     }
 
+    @PostMapping("/doctor/profile")
+    public String editDoctor(@Valid
+                                 @ModelAttribute("doctor") AddDoctorProfileBindingModel editDoctor,
+                             @ModelAttribute("user") UserRegisterBindingModel editUser
+            , BindingResult bindingResult,
+                                   RedirectAttributes redirectAttributes){
+
+
+        System.out.println();
+
+        return "doctor-profile/doctor-profile";
+
+    }
+
 
     @GetMapping("/doctor/{id}")
-    private String getViewDoctorById(@PathVariable("id") long id, Model model) {
+    public String getViewDoctorById(@PathVariable("id") long id, Model model) {
         SingleDoctorView byId = this.doctorService.findById(id);
         Set<ReviewViewModel> allForDepartments = this.reviewService.findAllByDoctorId(id);
         AllReviewStartView allReviewsForDoctor = this.reviewService.getAllReviewsForDoctor(id);
@@ -126,7 +143,7 @@ public class DoctorController {
     }
 
     @GetMapping("/doctor/my/examinations")
-    private String getDoctorByIdExaminations(  Model model) {
+    public String getDoctorByIdExaminations(  Model model) {
 
         long roleId = getId();
         List<SetExaminationsForUserView> setExaminations = this.examinationService.findAllExaminationsForThisUser(roleId);
@@ -139,7 +156,7 @@ public class DoctorController {
 
 
     @GetMapping("/doctor/my/reviews")
-    private String getDoctorByIdReviews( Model model) {
+    public String getDoctorByIdReviews( Model model) {
         long roleId = getId();
 
         model.addAttribute("reviews", this.reviewService.findAllByDoctorId(roleId));
@@ -147,14 +164,13 @@ public class DoctorController {
     }
 
     @GetMapping("/doctor/Id/edit")
-    private String getDoctorByIdEdit(Model model) {
-//        @PathVariable("id") long id, IMPLEMENT
-        //ToDo edid same page like doctor profile
+    public String getDoctorByIdEdit(Model model) {
+//
         return DOCTOR_PROFILE_FOLDER + "doctor-profile";
     }
 
     @GetMapping("/doctor/my/delete")
-    private String getDoctorByIdDelete() {
+    public String getDoctorByIdDelete() {
         long id = this.getId();
         ArrayList<ExaminationViewModel> byDoctorId = this.examinationService.findByDoctorId(id);
         byDoctorId.forEach(examinationViewModel ->

@@ -2,7 +2,7 @@ package medical.medical.files.repositorie;
 
 import medical.medical.files.model.enteties.ExaminationEntity;
 import medical.medical.files.model.enums.MedicalBranchesEnum;
-import medical.medical.files.model.viewModels.ExaminationViewModel;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

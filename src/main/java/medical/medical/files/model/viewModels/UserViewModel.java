@@ -3,11 +3,8 @@ package medical.medical.files.model.viewModels;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import medical.medical.files.model.enums.RoleEnum;
+import org.springframework.data.domain.PageRequest;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -20,5 +17,8 @@ public class UserViewModel {
     private long roleId;
     private String photo;
     private String fullName;
+    private String password;
+    private String oldPassword;
+    private String repeatPassword;
 
 }

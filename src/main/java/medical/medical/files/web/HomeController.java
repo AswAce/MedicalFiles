@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
+
 import java.util.stream.Collectors;
 
 @Controller
@@ -56,8 +56,8 @@ public class HomeController {
             String username = securityService.getUsername();
             UserViewModel byUserNameView = this.userService.findByUserNameView(username);
             model.addAttribute("user", byUserNameView);
-            if (username == "admin") {
-                return "redirect:/admin-panel/admin-home";
+            if (username.equals("admin") ) {
+                return "redirect:/admin/home";
             }
             if (byUserNameView.getRole() != null && byUserNameView.getRole().equals("doctor")) {
                 model.addAttribute("isDoctor", true);
@@ -65,8 +65,8 @@ public class HomeController {
                 model.addAttribute("isDoctor", false);
             }
             List<String> authorityList = getAuthorityList(securityService.getAuthorities());
-            String redirect = redirectNewUsersToFinishAccount(username, authorityList);
-            return redirect;
+            return redirectNewUsersToFinishAccount(username, authorityList);
+
         }
 
         return "home";
@@ -74,13 +74,13 @@ public class HomeController {
 
 
     @GetMapping("/contact-us")
-    private String contactUs() {
+    public String contactUs() {
 
         return "contact-us";
     }
 
     @GetMapping("/not-made")
-    private String notMade() {
+    public String notMade() {
 
 
         return "errors/not-made";
@@ -89,7 +89,7 @@ public class HomeController {
     private String redirectNewUsersToFinishAccount(String username, List<String> authorities) {
 
         String newDoctorOrPatient = isNewDoctorOrPatient(username, authorities);
-        if (username == "admin") {
+        if (username.equals("admin")  ) {
             return "redirect:/admin/home";
         }
         switch (newDoctorOrPatient) {
@@ -127,7 +127,7 @@ public class HomeController {
     }
 
     private List<String> getAuthorityList(Collection<? extends GrantedAuthority> authorities) {
-        return authorities.stream().map(grantedAuthority -> grantedAuthority.toString()).collect(Collectors.toList());
+        return authorities.stream().map(Object::toString).collect(Collectors.toList());
 
     }
 

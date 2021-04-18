@@ -14,8 +14,6 @@ import medical.medical.files.service.DiseaseService;
 import medical.medical.files.service.ExaminationService;
 import medical.medical.files.service.PatientService;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,17 +30,17 @@ public class ExaminationController {
     private final ModelMapper modelMapper;
     private final PatientService patientService;
     private final ExaminationService examinationService;
-    private final DiseaseService diseaseService;
 
-    public ExaminationController(ModelMapper modelMapper, PatientService patientService, ExaminationService examinationService, DiseaseService diseaseService) {
+
+    public ExaminationController(ModelMapper modelMapper, PatientService patientService, ExaminationService examinationService ) {
         this.modelMapper = modelMapper;
         this.patientService = patientService;
         this.examinationService = examinationService;
-        this.diseaseService = diseaseService;
+
     }
 
     @GetMapping("/add")
-    private String addExamination(Model model) {
+    public String addExamination(Model model) {
         if (!model.containsAttribute("addExamination")) {
             model.addAttribute("addExamination", new AddExaminationBindingModel());
         }
@@ -50,7 +48,7 @@ public class ExaminationController {
     }
 
     @PostMapping("/add")
-    private String addExaminationPost(@Valid @ModelAttribute("addExamination") AddExaminationBindingModel addExaminationBindingModel
+    public String addExaminationPost(@Valid @ModelAttribute("addExamination") AddExaminationBindingModel addExaminationBindingModel
             , BindingResult bindingResult,
                                       RedirectAttributes redirectAttributes) {
 
@@ -63,7 +61,7 @@ public class ExaminationController {
         String doctorName = addExaminationBindingModel.getDoctorName();
         boolean equals = doctorName.equals("Still no doctors for this department");
 
-        if (doctorName.equals("Still no doctors for this department")) {
+        if (equals) {
             redirectAttributes.addFlashAttribute("addExamination", addExaminationBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.addExamination", bindingResult);
             redirectAttributes.addFlashAttribute("noDoc", true);
@@ -79,7 +77,7 @@ public class ExaminationController {
 
 
     @GetMapping("/examination/{id}")
-    private String getExaminationViewById(Model model, @PathVariable long id) throws ExaminationNotFoundException {
+    public String getExaminationViewById(Model model, @PathVariable long id) throws ExaminationNotFoundException {
         ExaminationViewModel examinationView = this.examinationService.getExaminationView(id);
 
         model.addAttribute("examinationDetails", examinationView);
@@ -94,7 +92,7 @@ public class ExaminationController {
 
         model.addAttribute("patientDiseases", patientViewModel.getDiseaseViewModels());
         ArrayList<ExaminationViewModel> examinationFoThisPatient = this.examinationService.findExaminationFoThisPatient(examinationView.getPatientId());
-        if (examinationFoThisPatient.size() >= 0 && examinationFoThisPatient.contains(examinationView)) {
+        if (!examinationFoThisPatient.isEmpty()&& examinationFoThisPatient.contains(examinationView)) {
             examinationFoThisPatient.remove(examinationView);
         }
 
@@ -109,9 +107,9 @@ public class ExaminationController {
 
 
     @PostMapping("/examination/{id}")
-    private String getExaminationViewByIdPost(@PathVariable long id,
+    public String getExaminationViewByIdPost(@PathVariable long id,
                                               @Valid @ModelAttribute("examinationByDoctorBindingModel")
-                                                      ExaminationByDoctorBindingModel examinationByDoctorBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException, ExaminationNotFoundException {
+                                                      ExaminationByDoctorBindingModel examinationByDoctorBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws  ExaminationNotFoundException {
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("examinationByDoctorBindingModel", examinationByDoctorBindingModel);
@@ -127,10 +125,10 @@ public class ExaminationController {
 
 
     @GetMapping("examination/{id}/add-additional-data")
-    private String addAdditionalData(@PathVariable long id,
+    public String addAdditionalData(@PathVariable long id,
 
                                      Model model) throws ExaminationNotFoundException {
-        ;
+
         model.addAttribute("doctorId", this.examinationService.getExaminationView(id).getDoctorId());
         model.addAttribute("examinationId", id);
         if (!model.containsAttribute("additionalDataBindingModel")) {
@@ -142,7 +140,7 @@ public class ExaminationController {
     }
 
     @PostMapping("examination/{id}/add-additional-data")
-    private String addAdditionalDataPost(@PathVariable long id,
+    public String addAdditionalDataPost(@PathVariable long id,
                                          @Valid @ModelAttribute("additionalDataBindingModel") AddAdditionalDataBindingModel additionalDataBindingModel,
                                          BindingResult bindingResult,
                                          RedirectAttributes redirectAttributes
@@ -165,7 +163,7 @@ public class ExaminationController {
     }
 
     @GetMapping("/examination/{id}/add-prescription")
-    private String addPrescription(@PathVariable long id,
+    public String addPrescription(@PathVariable long id,
                                    Model model) throws ExaminationNotFoundException {
         model.addAttribute("examinationId", id);
         model.addAttribute("pastPrescriptionExist", false);
@@ -185,7 +183,7 @@ public class ExaminationController {
     }
 
     @PostMapping("/examination/{id}/add-prescription")
-    private String addPrescriptionPost(@PathVariable long id,
+    public String addPrescriptionPost(@PathVariable long id,
                                        @Valid @ModelAttribute("addPrescriptionBindingModel") AddPrescriptionBindingModel addPrescriptionBindingModel,
                                        BindingResult bindingResult,
                                        RedirectAttributes redirectAttributes) throws
@@ -206,7 +204,7 @@ public class ExaminationController {
     }
 
     @GetMapping("/examination/{id}/add-disease")
-    private String addDiseaseForPatient(@PathVariable long id, Model model) {
+    public String addDiseaseForPatient(@PathVariable long id, Model model) {
         model.addAttribute("examinationId", id);
 
 
@@ -218,7 +216,7 @@ public class ExaminationController {
     }
 
     @PostMapping("/examination/{id}/add-disease")
-    private String addDiseaseForPatientPost(@PathVariable long id,
+    public String addDiseaseForPatientPost(@PathVariable long id,
                                             @Valid @ModelAttribute("addDisease") AddDiseaseBindingModel addDiseaseBindingModel,
                                             BindingResult bindingResult,
                                             RedirectAttributes redirectAttributes) throws ExaminationNotFoundException, ExaminationDoneExeption {
@@ -240,7 +238,7 @@ public class ExaminationController {
     }
 
     @GetMapping("/examination/{id}/complete")
-    private String completeExamination(@PathVariable long id) throws ExaminationNotFoundException {
+    public String completeExamination(@PathVariable long id) throws ExaminationNotFoundException {
 
 
         this.examinationService.completeExamination(id);
@@ -248,7 +246,7 @@ public class ExaminationController {
     }
 
     @GetMapping("/examination/delete/{id}")
-    private  String deleteExaminations(@PathVariable long id){
+    public   String deleteExaminations(@PathVariable long id){
 
         this.examinationService.deleteExamination(id);
         return "redirect:/admin/home";
@@ -285,7 +283,7 @@ public class ExaminationController {
     }
 
     private boolean setBooleanForDisease(String bool) {
-        if (bool == "true") {
+        if (bool.equals("true") ) {
             return true;
         }
         return false;

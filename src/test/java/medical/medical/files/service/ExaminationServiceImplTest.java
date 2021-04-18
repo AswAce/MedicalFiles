@@ -100,7 +100,7 @@ public class ExaminationServiceImplTest {
         when(examinationRepositoryTest.findAllByDoctorId(1)).
                 thenReturn(Set.of(examination1, examination2));
         ArrayList<ExaminationViewModel> byDoctorId = serviceTest.findByDoctorId(1);
-        Assertions.assertEquals(byDoctorId.size(), 2);
+        Assertions.assertEquals(2,byDoctorId.size());
 
     }
 
@@ -109,7 +109,7 @@ public class ExaminationServiceImplTest {
         when(examinationRepositoryTest.findAllByPatientIdAndTypeOfBranch(1, MedicalBranchesEnum.DERMATOLOGY)).thenReturn(List.of(examination1, examination2));
         ArrayList<ExaminationViewModel> allByPatientIdAndDepartment = serviceTest.findAllByPatientIdAndDepartment(1, MedicalBranchesEnum.DERMATOLOGY);
 
-        Assertions.assertEquals(allByPatientIdAndDepartment.size(), 2);
+        Assertions.assertEquals(2,allByPatientIdAndDepartment.size());
         Assertions.assertEquals(allByPatientIdAndDepartment.get(0).getId(), examination1.getId());
         Assertions.assertEquals(allByPatientIdAndDepartment.get(0).getPatientId(), examination1.getPatient().getId());
         Assertions.assertEquals(allByPatientIdAndDepartment.get(0).getDoctorId(), examination1.getDoctor().getId());
@@ -125,7 +125,7 @@ public class ExaminationServiceImplTest {
 
         ArrayList<SetExaminationsForUserView> all = serviceTest.getAll();
 
-        Assertions.assertEquals(all.size(), 2);
+        Assertions.assertEquals(2,all.size());
 
         Assertions.assertEquals(all.get(0).getId(), examination1.getId());
         Assertions.assertEquals(all.get(0).getComplain(), examination1.getComplain());

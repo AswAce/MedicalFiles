@@ -9,8 +9,7 @@ import medical.medical.files.model.enums.SexEnum;
 import medical.medical.files.model.enums.SmokingEnum;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+
 
 @Data
 @AllArgsConstructor

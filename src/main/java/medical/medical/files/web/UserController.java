@@ -41,7 +41,7 @@ public class UserController {
 
 
     @GetMapping("/profile")
-    private String userProfile() {
+    public String userProfile() {
 
         Authentication authentication = SecurityContextHolder.
                 getContext().getAuthentication();
@@ -59,18 +59,17 @@ public class UserController {
 
 
     @GetMapping("/login")
-    private String login() {
+    public String login() {
         return FOLDER + "page-login";
     }
 
     @GetMapping("/register")
-    private String register(Model model) {
+    public String register(Model model) {
 
         if (!model.containsAttribute("registerUserBindingModel")) {
             model.addAttribute("registerUserBindingModel", new UserRegisterBindingModel());
 
-//            model.addAttribute("userExist", false);
-//            model.addAttribute("passwordDontMatch", false);
+//
 //
         }
 
@@ -79,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    private String registerPost(@Valid @ModelAttribute("registerUserBindingModel") UserRegisterBindingModel registerUserBindingModel
+    public String registerPost(@Valid @ModelAttribute("registerUserBindingModel") UserRegisterBindingModel registerUserBindingModel
             , BindingResult bindingResult,
                                 RedirectAttributes redirectAttributes
     ) {
@@ -96,7 +95,7 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("registerUserBindingModel", registerUserBindingModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.registerUserBindingModel", bindingResult);
-            System.out.println();
+
             return REGISTER_REDIRECT;
         }
         if (!registerUserBindingModel.passwordMatch()) {
@@ -119,7 +118,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.addObject("bad_credentials", true);
-//        modelAndView.addObject("username", username);
+
 
         modelAndView.setViewName(FOLDER + "/page-login");
 

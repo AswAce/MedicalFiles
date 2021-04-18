@@ -3,17 +3,16 @@ package medical.medical.files.model.bindingModels;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import medical.medical.files.model.enteties.*;
+
 import medical.medical.files.model.enums.MedicalBranchesEnum;
-import medical.medical.files.model.enums.ProgressionEnum;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+
 import javax.validation.constraints.*;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Data
 @AllArgsConstructor

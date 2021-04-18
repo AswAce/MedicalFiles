@@ -13,10 +13,5 @@ public interface MedicalBranchesRepository extends JpaRepository<MedicalBranchEn
     Optional<MedicalBranchEntity> findByName(MedicalBranchesEnum medicalBranchEnumExist);
 
 
-//    @Query(value =" DELETE medical_branches_doctors\n" +
-//            "    FROM    medical_branches_doctors\n" +
-//            "    INNER JOIN doctors\n" +
-//            "    ON medical_branches_doctors.doctors_id = doctors.id\n" +
-//            "    WHERE   id=1", nativeQuery = true)
-//    void removeDoctor(long id);
+
 }

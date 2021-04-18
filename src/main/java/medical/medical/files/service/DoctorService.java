@@ -1,8 +1,8 @@
 package medical.medical.files.service;
 
-import medical.medical.files.model.bindingModels.AddDoctorProfileBindingModel;
+
 import medical.medical.files.model.enteties.DoctorEntity;
-import medical.medical.files.model.enteties.MedicalBranchEntity;
+
 import medical.medical.files.model.enums.MedicalBranchesEnum;
 import medical.medical.files.model.serviceModels.AddDoctorProfileServiceModel;
 import medical.medical.files.model.viewModels.DoctorSetViewModel;

@@ -14,19 +14,18 @@ public class DbInit implements CommandLineRunner {
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final MedicalBranchesInit medicalBranchesInit;
-    private final DiseaseService diseaseService;
     private final UserRepository userRepository;
 
     public DbInit(RoleService roleService,
                   PasswordEncoder passwordEncoder,
                   UserService userService,
                   MedicalBranchesInit medicalBranchesInit,
-                  DiseaseService diseaseService, UserRepository userRepository) {
+                 UserRepository userRepository) {
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.medicalBranchesInit = medicalBranchesInit;
-        this.diseaseService = diseaseService;
+
         this.userRepository = userRepository;
 
 

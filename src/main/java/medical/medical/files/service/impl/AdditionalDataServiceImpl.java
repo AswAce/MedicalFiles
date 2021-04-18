@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AdditionalDataServiceImpl implements AdditionalDataService {
-    private final ModelMapper modelMapper;
+
     private final AdditionalDataRepository additionalDataRepository;
 
     public AdditionalDataServiceImpl(ModelMapper modelMapper, AdditionalDataRepository additionalDataRepository) {
-        this.modelMapper = modelMapper;
+
         this.additionalDataRepository = additionalDataRepository;
     }
 

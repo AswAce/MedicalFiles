@@ -11,13 +11,12 @@ import medical.medical.files.model.viewModels.*;
 import medical.medical.files.repositorie.ExaminationRepository;
 import medical.medical.files.service.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -106,7 +105,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public ArrayList<ExaminationViewModel> findByDoctorId(long doctorId) {
-        SingleDoctorView byId = this.doctorService.findById(doctorId);
+
         Set<ExaminationEntity> allByDoctorId = this.examinationRepository.
                 findAllByDoctorId(doctorId);
         return (ArrayList<ExaminationViewModel>) allByDoctorId.stream().map(this::getExamination).collect(Collectors.toList());
@@ -116,7 +115,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 
     @Override
     public List<SetExaminationsForUserView> findAllExaminationsForThisUser(long id) {
-        Set<ExaminationEntity> examinations = new LinkedHashSet<>();
+        Set<ExaminationEntity> examinations;
         if (isUserDoctorTrueOrPatientFalse()) {
             examinations = this.examinationRepository.findAllByDoctorId(id);
         } else {

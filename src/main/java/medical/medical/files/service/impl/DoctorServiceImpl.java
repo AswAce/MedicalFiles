@@ -23,7 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
-
+    private static final String NOT_FOUND = "Doctor not found";
+    private static final String DEFAULT_PHOTO = "https://res.cloudinary.com/aswace/image/upload/v1616319777/medicalApp/docPhoto_rvp0w4.jpg";
     private final DoctorRepository doctorRepository;
     private final ModelMapper modelMapper;
     private final CloudinaryService cloudinaryService;
@@ -51,7 +52,7 @@ public class DoctorServiceImpl implements DoctorService {
         ArrayList<Optional<DoctorEntity>> byFullName = this.doctorRepository.findByFullName(doctorName);
 
         byFullName.stream().filter(Optional::isPresent).filter(doctorEntity -> doctorEntity.get().getMedicalBranch() == medicalBranchesEnum);
-  return byFullName.get(0).orElseThrow(()-> new DoctorNotFoundExeption("Doctor not found"));
+        return byFullName.get(0).orElseThrow(() -> new DoctorNotFoundExeption(NOT_FOUND));
     }
 
     @Override
@@ -59,18 +60,23 @@ public class DoctorServiceImpl implements DoctorService {
 
         String userName = authenticationFacade.getAuthentication().getName();
         UserEntity byUsername = this.userService.findByUserName(userName);
-        List<RoleEnum> collect = byUsername.getRoles().stream().map(roleEntity -> roleEntity.getRole()).collect(Collectors.toList());
+        List<RoleEnum> collect = byUsername.getRoles().stream().map(RoleEntity::getRole).collect(Collectors.toList());
         if (collect.contains(RoleEnum.DOCTOR)) {
             DoctorEntity doctorEntity = this.modelMapper.
                     map(addDoctorProfileServiceModel, DoctorEntity.class);
-            MultipartFile img = addDoctorProfileServiceModel.getImg();
-            String originalFilename = img.getOriginalFilename();
 
-            if (!originalFilename.isEmpty()) {
-                String imageUrl = cloudinaryService.uploadImage(img);
-                doctorEntity.setPhoto(imageUrl);
+            if (addDoctorProfileServiceModel.getImg().getOriginalFilename() != null) {
+                MultipartFile img = addDoctorProfileServiceModel.getImg();
+                String originalFilename = img.getOriginalFilename();
+                if (!originalFilename.isEmpty()) {
+                    String imageUrl = cloudinaryService.uploadImage(img);
+                    doctorEntity.setPhoto(imageUrl);
+                } else {
+                    doctorEntity.setPhoto(DEFAULT_PHOTO);
+                }
             } else {
-                doctorEntity.setPhoto("https://res.cloudinary.com/aswace/image/upload/v1616319777/medicalApp/docPhoto_rvp0w4.jpg");
+                doctorEntity.setPhoto(DEFAULT_PHOTO);
+
             }
             Map<DayEnum, String> createScheduleFromService = addDoctorProfileServiceModel.makeSchedule();
             ScheduleEntity schedule = this.scheduleService.createSchedule(createScheduleFromService);
@@ -96,7 +102,7 @@ public class DoctorServiceImpl implements DoctorService {
                 map(doctorEntity -> {
                     DoctorSetViewModel doctorSetViewModel = this.modelMapper.map(doctorEntity, DoctorSetViewModel.class);
                     if (doctorSetViewModel.getPhoto() == null) {
-                        doctorSetViewModel.setPhoto("https://res.cloudinary.com/aswace/image/upload/v1616319777/medicalApp/docPhoto_rvp0w4.jpg");
+                        doctorSetViewModel.setPhoto(DEFAULT_PHOTO);
                     }
 
                     return doctorSetViewModel;
@@ -107,13 +113,13 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public SingleDoctorView findById(long id) {
-        DoctorEntity doctorEntity = this.doctorRepository.findById(id).orElseThrow(() -> new DoctorNotFoundExeption("Doctor not found"));
+        DoctorEntity doctorEntity = this.doctorRepository.findById(id).orElseThrow(() -> new DoctorNotFoundExeption(NOT_FOUND));
 
         SingleDoctorView singleDoctorView = this.modelMapper.map(doctorEntity, SingleDoctorView.class);
         Map<String, String> workingDaysView = this.scheduleService.getWorkingDaysView(doctorEntity.getSchedule());
         singleDoctorView.setWorkingDays(workingDaysView);
         if (singleDoctorView.getPhoto() == null) {
-            singleDoctorView.setPhoto("https://res.cloudinary.com/aswace/image/upload/v1616319777/medicalApp/docPhoto_rvp0w4.jpg");
+            singleDoctorView.setPhoto(DEFAULT_PHOTO);
         }
         return singleDoctorView;
     }
@@ -122,7 +128,7 @@ public class DoctorServiceImpl implements DoctorService {
     public long getCount() {
         try {
             DoctorEntity topByOrderByIdDesc =
-                    this.doctorRepository.findTopByOrderByIdDesc().orElseThrow(() -> new DoctorNotFoundExeption("D0ctor not found"));
+                    this.doctorRepository.findTopByOrderByIdDesc().orElseThrow(() -> new DoctorNotFoundExeption(NOT_FOUND));
             return topByOrderByIdDesc.getId();
         } catch (DoctorNotFoundExeption doctorNotFoundExeption) {
             return 0;
@@ -131,19 +137,13 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorEntity findByIdSetViewDoctor(int randomNumber) {
-        DoctorEntity byId = this.doctorRepository.findById((long) randomNumber).orElse(null);
-        return byId;
+        return this.doctorRepository.findById((long) randomNumber).orElse(null);
+
     }
 
     @Override
     public DoctorEntity findByIdEntity(Long valueOf) {
-        return this.doctorRepository.findById(valueOf).orElseThrow(() -> new DoctorNotFoundExeption("Doctor not found"));
-    }
-
-    private DoctorEntity getDoctor() {
-        UserEntity byUserName = this.userService.findByUserName(this.authenticationFacade.getAuthentication().getName());
-        DoctorEntity docForDepartment = byUserName.getDoctorEntity();
-        return docForDepartment;
+        return this.doctorRepository.findById(valueOf).orElseThrow(() -> new DoctorNotFoundExeption(NOT_FOUND));
     }
 
 

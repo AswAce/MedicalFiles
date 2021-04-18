@@ -7,14 +7,12 @@ import medical.medical.files.model.enums.DrinkingEnum;
 import medical.medical.files.model.enums.ExerciseEnum;
 import medical.medical.files.model.enums.SexEnum;
 import medical.medical.files.model.enums.SmokingEnum;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+
 
 import javax.persistence.*;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
+
 import java.util.LinkedHashSet;
-import java.util.List;
+
 import java.util.Set;
 
 @Data

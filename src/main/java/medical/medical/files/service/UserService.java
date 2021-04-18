@@ -1,7 +1,7 @@
 package medical.medical.files.service;
 
 import medical.medical.files.model.enteties.UserEntity;
-import medical.medical.files.model.serviceModels.PatientServiceModel;
+
 import medical.medical.files.model.serviceModels.UserServiceRegisterModel;
 import medical.medical.files.model.viewModels.UserViewModel;
 import medical.medical.files.model.viewModels.UserViewPosition;
@@ -37,4 +37,9 @@ public interface UserService {
     void deletePatient(long id);
 
     void deleteDoctor(long id);
+
+    boolean checkPassword(String name, String oldPassword);
+
+    void editUser(long id, String email, String username, String password);
+
 }

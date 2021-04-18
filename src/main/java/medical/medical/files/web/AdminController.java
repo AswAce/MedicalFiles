@@ -2,6 +2,8 @@ package medical.medical.files.web;
 
 
 import medical.medical.files.model.viewModels.ExaminationViewModel;
+import medical.medical.files.model.viewModels.ReviewViewModel;
+import medical.medical.files.model.viewModels.SetExaminationsForUserView;
 import medical.medical.files.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/admin")
 @Controller
@@ -31,7 +35,7 @@ public class AdminController {
 
 
     @GetMapping("/home")
-    private String adminHomePage(Model model) {
+    public String adminHomePage(Model model) {
         model.addAttribute("examinations", this.examinationService.countAll());
         model.addAttribute("reviews", this.reviewService.countAll());
         model.addAttribute("doctors", this.doctorService.getCount());
@@ -42,35 +46,43 @@ public class AdminController {
         return "admin-panel/admin-home";
     }
 
-    @GetMapping("/reviews")
-    private String adminReviews() {
+    @GetMapping("/patients")
+    public String adminReviews() {
 
 
-        return "admin-panel/all-reviews";
-    }
-
-    @GetMapping("/examinations")
-    private String adminRExaminations() {
-
-
-        return "admin-panel/admin-all-examinations";
+        return "admin-panel/all-patients";
     }
 
 
     @GetMapping("/delete/review/{id}")
-    private String deleteReview(@PathVariable("id") long id) {
+    public String deleteReview(@PathVariable("id") long id) {
         this.reviewService.deleteReview(id);
 
         return "redirect:/home";
     }
 
     @GetMapping("/delete/doctor/{id}")
-    private String deleteDoctorUser(@PathVariable("id") long id) {
+    public String deleteDoctorUser(@PathVariable("id") long id) {
         ArrayList<ExaminationViewModel> byDoctorId = this.examinationService.findByDoctorId(id);
         byDoctorId.forEach(examinationViewModel ->
                 this.examinationService.deleteExamination(examinationViewModel.getId()));
         this.userService.deleteDoctor(id);
 
+        return "redirect:/home";
+    }
+
+    @GetMapping("delete-patient/{id}")
+    public String deletePatient(@PathVariable("id") long id) {
+
+
+        ArrayList<ExaminationViewModel> byUserId = this.examinationService.findExaminationFoThisPatient(id);
+        byUserId.forEach(examinationViewModel ->
+                this.examinationService.deleteExamination(examinationViewModel.getId()));
+
+        Set<ReviewViewModel> allByPatientId = this.reviewService.findAllByPatientId(id);
+        allByPatientId.
+                forEach(reviewViewModel -> this.reviewService.deleteReview(reviewViewModel.getId()));
+        userService.deletePatient(id);
         return "redirect:/home";
     }
 

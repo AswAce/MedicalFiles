@@ -9,13 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
+
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,7 +30,7 @@ public class PatientRestController {
     @GetMapping("/body-examinations")
     public ResponseEntity<ArrayList<BodyVIewModel>> getAll() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        ;
+
         UserViewModel byUserNameView = this.userService.findByUserNameView(authentication.getName());
         long r = byUserNameView.getRoleId();
         ArrayList<ExaminationViewModel> examinationFoThisPatient =

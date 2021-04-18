@@ -42,14 +42,14 @@ public class DepartmentController {
     }
 
     @GetMapping("/all")
-    private String getAllDepartments(Model model) {
-        ;
+    public String getAllDepartments(Model model) {
+
         model.addAttribute("departments", this.medicalBranchesService.getAllDepartments());
         return "hospital-departments/hospital-departments";
     }
 
     @GetMapping("/department/{id}")
-    private String getAllDepartmentById(@PathVariable("id") long id, Model model) {
+    public String getAllDepartmentById(@PathVariable("id") long id, Model model) {
         SingleDepartmentView byId = this.medicalBranchesService.findById(id);
         Set<ReviewViewModel> allForDepartments = this.reviewService.findAllForDepartments(byId.getName());
         byId.setReviews(allForDepartments.stream().limit(5).collect(Collectors.toSet()));
@@ -69,8 +69,8 @@ public class DepartmentController {
     }
 
     @PostMapping("/department/{id}")
-    private String getAllDepartmentByIdPost(@PathVariable("id") long id, @Valid @ModelAttribute("review")
-            AddReviewBindingModel addReviewBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException, ExaminationNotFoundException {
+    public String getAllDepartmentByIdPost(@PathVariable("id") long id, @Valid @ModelAttribute("review")
+            AddReviewBindingModel addReviewBindingModel, BindingResult bindingResult, RedirectAttributes redirectAttributes){
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("review", addReviewBindingModel);

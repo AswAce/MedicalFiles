@@ -13,6 +13,6 @@ public class DoctorSetViewModel {
     private String fullName;
     private MedicalBranchesEnum medicalBranchesEnum;
     private String photo;
-    // TODO: 21-Mar-21   private String reviews;
+
 
 }
